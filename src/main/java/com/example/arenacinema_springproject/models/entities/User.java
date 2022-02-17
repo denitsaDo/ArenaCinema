@@ -1,6 +1,7 @@
 package com.example.arenacinema_springproject.models.entities;
 
 
+import com.example.arenacinema_springproject.exceptions.BadRequestException;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -30,7 +31,7 @@ public class User {
     @Column
     private String gender;
     @Column
-    @Email                       //added validation dependency
+    @Email(message = "Invalid email!") //added validation dependency
     private String email;
     @Column
     private String password;
