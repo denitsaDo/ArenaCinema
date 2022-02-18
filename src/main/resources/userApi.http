@@ -7,10 +7,11 @@ Content-Type: application/json
   "secondName" : "d",
   "lastName" : "do",
   "gender" : "f",
-  "email" : "grapes@gmail.bg",
+  "email" : "basecamp2@abv.bg",
   "password" : "Groups99%",
   "password2" : "Groups99%",
-  "dateOfBirth" : "2022-23-23"
+  "dateOfBirth" : "2022-23-23",
+  "isAdmin" : "false"
 
 }
 
@@ -19,12 +20,12 @@ POST localhost:9999/login
 Content-Type: application/json
 
 {
-  "email" : "grapes@gmail.bg",
+  "email" : "basecamp@abv.bg",
   "password" : "Groups99%"
 }
 
 ### logout
-POST localhost:9999/users
+POST localhost:9999/logout
 
 ### edit
 
@@ -32,5 +33,21 @@ POST localhost:9999/users
 GET localhost:9999/users/1
 Content-Type: application/json
 
+### get all
+GET localhost:9999/users
+
 ### delete
-DELETE localhost:9999/users/17
+DELETE localhost:9999/users/18
+
+###edit
+PUT localhost:9999/users
+Content-Type: application/json
+
+{
+  "id" : 22,
+  "firstName" : "deni",
+  "secondName" : "radoslavova",
+  "lastName" : "dochkova",
+  "gender" : "f",
+  "dateOfBirth" : "2022-23-23"
+}

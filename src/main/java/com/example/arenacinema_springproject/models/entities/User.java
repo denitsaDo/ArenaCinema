@@ -5,6 +5,7 @@ import com.example.arenacinema_springproject.exceptions.BadRequestException;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.Entity;
 import javax.persistence.*;
@@ -17,6 +18,7 @@ import java.util.Date;
 @Getter
 @Setter
 @NoArgsConstructor
+@ToString
 public class User {
 
     @Id
@@ -39,4 +41,6 @@ public class User {
     private Date dateOfBirth;
     @Column
     private boolean isAdmin;
+
+
 }

@@ -9,15 +9,11 @@ import java.util.Date;
 @Getter
 @Setter
 @NoArgsConstructor
-public class UserRegisterDTO {
-
+public class UserEditDTO {
+    private int id;
     private String firstName;
     private String secondName;
     private String lastName;
     private String gender;
-    private String email;
-    private String password;
-    private String password2;
     private Date dateOfBirth;
-    private String isAdmin;
 }

@@ -1,6 +1,7 @@
 package com.example.arenacinema_springproject.controllers;
 
 import com.example.arenacinema_springproject.exceptions.UnauthorizedException;
+import com.example.arenacinema_springproject.models.dto.UserEditDTO;
 import com.example.arenacinema_springproject.models.dto.UserRegisterDTO;
 import com.example.arenacinema_springproject.models.dto.UserResponseDTO;
 import com.example.arenacinema_springproject.models.entities.User;
@@ -13,6 +14,7 @@ import org.modelmapper.ModelMapper;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.Date;
+import java.util.List;
 
 @RestController
 public class UserController {
@@ -20,6 +22,7 @@ public class UserController {
     public static final String LOGGED = "logged";
     public static final String LOGGED_FROM = "logged_from";
     public static final String USER_ID = "user_id";
+    public static final String ADMIN = "admin";
     @Autowired
     private UserService userService;
     @Autowired
@@ -37,6 +40,7 @@ public class UserController {
         session.setAttribute(LOGGED, true);
         session.setAttribute(LOGGED_FROM, request.getRemoteAddr()); //chechk ip
         session.setAttribute(USER_ID, u.getId());
+        session.setAttribute(ADMIN,u.isAdmin());
         UserResponseDTO dto = modelMapper.map(u, UserResponseDTO.class);
         return dto;
     }
@@ -48,16 +52,22 @@ public class UserController {
         return ResponseEntity.ok(dto);
     }
 
+    @GetMapping("/users")
+    public List getAll(HttpServletRequest request){
+        validateLogin(request);
+        adminLogin(request);
+        return userService.getAllUsers();
+    }
     @PostMapping("/logout")
-    public void logOut(HttpSession session){
-        session.invalidate();
+    public void logOut(HttpServletRequest request){
+        request.getSession().invalidate();
     }
 
     @DeleteMapping("/users/{id}")
-    public void deleteUserById(@PathVariable int id, HttpSession session, HttpServletRequest request) {
-        validateLogin(session, request);
+    public void deleteUserById(@PathVariable int id, HttpServletRequest request) {
+        validateLogin(request);
         User u = userService.getById(id);
-        userService.deleteUserById(u,id);
+         userService.deleteUserById(u,id);
     }
 
     @PostMapping("/reg")
@@ -70,19 +80,36 @@ public class UserController {
         String password = user.getPassword();
         String confirmPassword = user.getPassword2();
         Date dateOfBirth = user.getDateOfBirth();
-        boolean isAdmin = false;                //registered user is not admin by default
+        boolean isAdmin = Boolean.parseBoolean(user.getIsAdmin());                //registered user is not admin by default
         User u = userService.register(firstName, secondName, lastName,
                 gender, email, password,confirmPassword, dateOfBirth, isAdmin);
         UserResponseDTO dto = modelMapper.map(u, UserResponseDTO.class);
         return ResponseEntity.ok(dto);
     }
+//TODO edit only some fields
+    @PutMapping("/users")
+    public ResponseEntity<UserResponseDTO> edit(@RequestBody UserEditDTO user, HttpServletRequest request) {
+        validateLogin(request);
+        User u = userService.edit(user);
+        UserResponseDTO dto = modelMapper.map(u, UserResponseDTO.class);
+        return ResponseEntity.ok(dto);
+    }
 
-    private void validateLogin(HttpSession session, HttpServletRequest request) {
-        if(session.isNew() ||
-                (session.getAttribute(LOGGED)==null)||
-                (!(Boolean) session.getAttribute(LOGGED)) ||
-                (!request.getRemoteAddr().equals(session.getAttribute(LOGGED_FROM)))) {   //this checks IP and is used against hijacking
+    private void validateLogin(HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        boolean isNewSession = session.isNew();
+        boolean isLogged = session.getAttribute(LOGGED)!=null && ((Boolean)session.getAttribute(LOGGED));
+        boolean isSameIP = request.getRemoteAddr().equals(session.getAttribute(LOGGED_FROM)); //this checks IP and is used against hijacking
+        if(isNewSession || !isLogged || !isSameIP ) {
             throw new UnauthorizedException("You have to login.");
+        }
+    }
+
+    private void adminLogin(HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        boolean isAdminSession = (Boolean) session.getAttribute(ADMIN);
+        if(!isAdminSession) {
+            throw new UnauthorizedException("You should have admin rights.");
         }
     }
 

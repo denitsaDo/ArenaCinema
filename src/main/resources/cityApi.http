@@ -1,0 +1,26 @@
+### add
+POST localhost:9999/cities
+Content-Type: application/json
+
+{
+  "name" : "vidin"
+}
+
+### edit
+PUT localhost:9999/cities
+Content-Type: application/json
+
+{
+  "id" : 7,
+  "name" : "kazanlyk"
+
+}
+
+### remove
+DELETE localhost:9999/cities/7
+
+### get by id
+GET localhost:9999/cities/8
+
+### get all
+GET localhost:9999/cities

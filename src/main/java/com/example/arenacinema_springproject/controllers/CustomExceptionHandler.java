@@ -1,6 +1,8 @@
 package com.example.arenacinema_springproject.controllers;
 
 import com.example.arenacinema_springproject.exceptions.BadRequestException;
+import com.example.arenacinema_springproject.exceptions.NoContentException;
+import com.example.arenacinema_springproject.exceptions.NotFoundException;
 import com.example.arenacinema_springproject.exceptions.UnauthorizedException;
 import com.example.arenacinema_springproject.models.dto.ErrorDTO;
 import org.springframework.http.HttpStatus;
@@ -23,6 +25,16 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
         return dto;
     }
 
+    @ExceptionHandler(value = {NotFoundException.class})
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ResponseBody
+    public ErrorDTO handleNotFound(Exception e) {
+        ErrorDTO dto = new ErrorDTO();
+        dto.setMsg(e.getMessage());
+        dto.setStatus(HttpStatus.NOT_FOUND.value());
+        return dto;
+    }
+
     @ExceptionHandler(value = {BadRequestException.class})
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ResponseBody
@@ -32,6 +44,16 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
         dto.setStatus(HttpStatus.BAD_REQUEST.value());
         return dto;
     }
+    @ExceptionHandler(value = {NoContentException.class})
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @ResponseBody
+    public ErrorDTO handleNoContent(Exception e) {
+        ErrorDTO dto = new ErrorDTO();
+        dto.setMsg(e.getMessage());
+        dto.setStatus(HttpStatus.NO_CONTENT.value());
+        return dto;
+    }
+
 
     @ExceptionHandler(value = {Exception.class})
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
