@@ -14,11 +14,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-public class CityController {
+public class CityController extends BaseController{
 
-    public static final String LOGGED = "logged";
-    public static final String LOGGED_FROM = "logged_from";
-    public static final String ADMIN = "admin";
 
     @Autowired
     private CityService cityService;
@@ -60,23 +57,5 @@ public class CityController {
          return cityService.getAll();
     }
 
-
-    private void validateLogin(HttpServletRequest request) {
-        HttpSession session = request.getSession();
-        boolean isNewSession = session.isNew();
-        boolean isLogged = session.getAttribute(LOGGED)!=null && ((Boolean)session.getAttribute(LOGGED));
-        boolean isSameIP = request.getRemoteAddr().equals(session.getAttribute(LOGGED_FROM)); //this checks IP and is used against hijacking
-        if(isNewSession || !isLogged || !isSameIP ) {
-            throw new UnauthorizedException("You have to login.");
-        }
-    }
-
-    private void adminLogin(HttpServletRequest request) {
-        HttpSession session = request.getSession();
-        boolean isAdminSession = (Boolean) session.getAttribute(ADMIN);
-        if(!isAdminSession) {
-            throw new UnauthorizedException("You should have admin rights.");
-        }
-    }
 
 }

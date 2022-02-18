@@ -17,7 +17,7 @@ Content-Type: application/json
 }
 
 ### remove
-DELETE localhost:9999/cities/7
+DELETE localhost:9999/cities/9
 
 ### get by id
 GET localhost:9999/cities/8
