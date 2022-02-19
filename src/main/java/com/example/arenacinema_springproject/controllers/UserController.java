@@ -1,6 +1,6 @@
 package com.example.arenacinema_springproject.controllers;
 
-import com.example.arenacinema_springproject.exceptions.BadRequestException;
+
 import com.example.arenacinema_springproject.exceptions.ConstraintValidationException;
 import com.example.arenacinema_springproject.models.dto.UserEditDTO;
 import com.example.arenacinema_springproject.models.dto.UserRegisterDTO;

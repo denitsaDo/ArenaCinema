@@ -1,0 +1,32 @@
+### add
+POST localhost:9999/movies
+Content-Type: application/json
+
+{
+  "title" : "title",
+  "duration" : 120,
+  "description" : "description",
+  "actors" : "Georg Georg",
+  "premiere" : "2022-02-18",
+  "director" : "director",
+  "category_id" : 1,
+  "poster_url" : "https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__480.jpg"
+
+}
+
+
+### delete
+DELETE localhost:9999/movies/1
+
+### edit
+PUT localhost:9999/movies
+Content-Type: application/json
+
+{
+  "title" : "NewTitle",
+  "duration" : 125
+}
+
+
+### get by id
+GET localhost:9999/movies/1

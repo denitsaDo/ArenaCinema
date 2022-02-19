@@ -13,6 +13,7 @@ Content-Type: application/json
   "dateOfBirth" : "2020-10-10",
   "isAdmin" : "false"
 
+
 }
 
 ### login
@@ -26,8 +27,6 @@ Content-Type: application/json
 
 ### logout
 POST localhost:9999/logout
-
-### edit
 
 ### get by id
 GET localhost:9999/users/1
