@@ -20,7 +20,7 @@ Content-Type: application/json
 DELETE localhost:9999/cities/9
 
 ### get by id
-GET localhost:9999/cities/8
+GET localhost:9999/cities/4
 
 ### get all
 GET localhost:9999/cities

@@ -1,9 +1,6 @@
 package com.example.arenacinema_springproject.controllers;
 
-import com.example.arenacinema_springproject.exceptions.BadRequestException;
-import com.example.arenacinema_springproject.exceptions.NoContentException;
-import com.example.arenacinema_springproject.exceptions.NotFoundException;
-import com.example.arenacinema_springproject.exceptions.UnauthorizedException;
+import com.example.arenacinema_springproject.exceptions.*;
 import com.example.arenacinema_springproject.models.dto.ErrorDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -11,6 +8,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
+
+import javax.validation.ConstraintViolationException;
 
 @ControllerAdvice
 public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
@@ -35,6 +34,16 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
         return dto;
     }
 
+    @ExceptionHandler(value = {CreatedException.class})
+    @ResponseStatus(HttpStatus.CREATED)
+    @ResponseBody
+    public ErrorDTO handleCreated(Exception e) {
+        ErrorDTO dto = new ErrorDTO();
+        dto.setMsg(e.getMessage());
+        dto.setStatus(HttpStatus.CREATED.value());
+        return dto;
+    }
+
     @ExceptionHandler(value = {BadRequestException.class})
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ResponseBody
@@ -44,6 +53,17 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
         dto.setStatus(HttpStatus.BAD_REQUEST.value());
         return dto;
     }
+
+    @ExceptionHandler(value = {ConstraintViolationException.class})
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseBody
+    public ErrorDTO handleValidation(Exception e) {
+        ErrorDTO dto = new ErrorDTO();
+        dto.setMsg(e.getMessage());
+        dto.setStatus(HttpStatus.BAD_REQUEST.value());
+        return dto;
+    }
+
     @ExceptionHandler(value = {NoContentException.class})
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ResponseBody
@@ -55,6 +75,7 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
 
+
     @ExceptionHandler(value = {Exception.class})
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ResponseBody
@@ -62,6 +83,8 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
         ErrorDTO dto = new ErrorDTO();
         dto.setMsg(e.getMessage());
         dto.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
+        System.out.println(e.getClass().getName());
+        e.printStackTrace();
         return dto;
     }
 }

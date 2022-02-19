@@ -1,0 +1,41 @@
+### add
+POST localhost:9999/cinemas
+Content-Type: application/json
+
+{
+  "name" : "cinema",
+  "cityId" : 1,
+  "phoneNumber" : "0899878787",
+  "address" : "okolovrysten pyt 77",
+  "email" : "cinemaring@abv.bg"
+
+}
+
+### edit
+PUT localhost:9999/cinemas
+Content-Type: application/json
+
+{
+  "id" : 3,
+  "name" : "cinema",
+  "cityId" : 4,
+  "phoneNumber" : "0899888888",
+  "address" : "okolovrysten pyt 77",
+  "email" : "cinemaring@abv.bg"
+
+}
+
+### remove
+DELETE localhost:9999/cinemas/9
+
+### get by id
+GET localhost:9999/cinemas/3
+
+
+### get all by city id
+GET localhost:9999/cinemas
+Content-Type: application/json
+
+{
+  "cityId" : 4
+}

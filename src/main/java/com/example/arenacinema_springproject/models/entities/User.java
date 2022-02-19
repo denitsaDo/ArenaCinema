@@ -6,11 +6,12 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-
 import javax.persistence.Entity;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
+import java.time.LocalDate;
 import java.util.Date;
+
 
 
 @Entity
@@ -19,6 +20,7 @@ import java.util.Date;
 @Setter
 @NoArgsConstructor
 @ToString
+
 public class User {
 
     @Id
@@ -33,7 +35,6 @@ public class User {
     @Column
     private String gender;
     @Column
-    @Email(message = "Invalid email!") //added validation dependency
     private String email;
     @Column
     private String password;
@@ -41,6 +42,7 @@ public class User {
     private Date dateOfBirth;
     @Column
     private boolean isAdmin;
+
 
 
 }

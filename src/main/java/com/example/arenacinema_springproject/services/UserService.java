@@ -2,10 +2,12 @@ package com.example.arenacinema_springproject.services;
 import com.example.arenacinema_springproject.exceptions.NoContentException;
 import com.example.arenacinema_springproject.exceptions.NotFoundException;
 import com.example.arenacinema_springproject.models.dto.UserEditDTO;
+import com.example.arenacinema_springproject.models.dto.UserRegisterDTO;
 import com.example.arenacinema_springproject.models.dto.UserResponseDTO;
 import com.example.arenacinema_springproject.models.entities.City;
 import com.example.arenacinema_springproject.models.entities.User;
 import com.example.arenacinema_springproject.models.repositories.UserRepository;
+import org.apache.tomcat.jni.Local;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -15,6 +17,8 @@ import com.example.arenacinema_springproject.exceptions.UnauthorizedException;
 
 import java.time.LocalDate;
 import java.time.Year;
+import java.time.chrono.ChronoLocalDate;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -29,18 +33,17 @@ public class UserService {
     private PasswordEncoder passwordEncoder;
 
 
-    public User login(String email, String password){
-        if (email == null || email.isBlank()){
+    public User login(String email, String password) {
+        if (email == null || email.isBlank()) {
             throw new BadRequestException("Email is mandatory!");
         }
-        if (password == null || password .isBlank()){
+        if (password == null || password.isBlank()) {
             throw new BadRequestException("Password is mandatory!");
         }
-        User u  = userRepository.findByEmail(email);
+        User u = userRepository.findByEmail(email);
         if (u == null) {
             throw new NotFoundException("Wrong credentials.");
-        }
-        else {
+        } else {
             if (!passwordEncoder.matches(password, u.getPassword())) {
                 throw new UnauthorizedException("Wrong credentials.");
             }
@@ -52,8 +55,7 @@ public class UserService {
         Optional<User> user = userRepository.findById(id);
         if (user.isPresent()) {
             return user.get();
-        }
-        else {
+        } else {
             throw new NotFoundException("User not found");
         }
     }
@@ -64,53 +66,61 @@ public class UserService {
 
     public void deleteUserById(User user, int id) {
         Optional<User> optional = userRepository.findById(user.getId());   //check if id is >0
-        if (optional.isPresent() ) {
+        if (optional.isPresent()) {
             userRepository.delete(user);
             throw new NoContentException();
-        }
-        else {
+        } else {
             throw new NotFoundException("No such user.");
         }
     }
 
-    public User register(String firstName, String secondName, String lastName, String gender,
-                         String email, String password, String confirmPassword, Date dateOfBirth, boolean isAdmin) {
-        if (firstName==null || firstName.isBlank() || secondName==null || secondName.isBlank() || lastName==null || lastName.isBlank() ||
-            gender==null || gender.isBlank() || email==null || email.isBlank() || dateOfBirth==null || email.isBlank()) {
+    public User register(UserRegisterDTO user) {
+        if (user.getFirstName() == null || user.getFirstName().isBlank() || user.getSecondName() == null || user.getSecondName().isBlank() || user.getLastName() == null || user.getLastName().isBlank() ||
+                user.getGender() == null || user.getGender().isBlank() || user.getEmail() == null || user.getEmail().isBlank() || user.getDateOfBirth() == null) {
             throw new BadRequestException("All fields are mandatory");
         }
 
-//        if (dateOfBirth.compareTo(LocalDate.now().) < LocalDate.now().va && now.getFullYear() - date.getFullYear() < 120) {                       //TODO check if date is before local date time
-//            throw new BadRequestException("Date of birth is incorrect");
-//        }
 
-        if (!password.matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$")) {
+
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(user.getDateOfBirth());
+
+        if (Calendar.getInstance().before(cal)) {
+            throw new BadRequestException("Please enter a valid birth date.");
+        }
+        if ((Calendar.getInstance().get(Calendar.YEAR) - cal.get(Calendar.YEAR)) <16){
+            throw new BadRequestException("You should be at least 16yo.");
+        }
+
+
+
+        if (!user.getPassword().matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$")) {
             throw new BadRequestException("Your password must be at least 8 symbols and have at least one lowercase letter , " +
                     "one uppercase letter, one digit and one special character");
         }
 
-        if (!password.equals(confirmPassword)) {
+        if (!user.getPassword().equals(user.getPassword2())) {
             throw new BadRequestException("Passwords mismatch.");
         }
-        if (userRepository.findByEmail(email) != null) {
+        if (userRepository.findByEmail(user.getEmail()) != null) {
             throw new BadRequestException("User already exists!");
         }
 
         User u = new User();
-        u.setFirstName(firstName);
-        u.setSecondName(secondName);
-        u.setLastName(lastName);
-        u.setGender(gender);
-        u.setEmail(email);
-        u.setDateOfBirth(dateOfBirth);
-        u.setAdmin(isAdmin);
-        u.setPassword(passwordEncoder.encode(password));  // bcrypt password
+        u.setFirstName(user.getFirstName());
+        u.setSecondName(user.getSecondName());
+        u.setLastName(user.getLastName());
+        u.setGender(user.getGender());
+        u.setEmail(user.getEmail());
+        u.setDateOfBirth(user.getDateOfBirth());
+        u.setAdmin(user.isAdmin());
+        u.setPassword(passwordEncoder.encode(user.getPassword()));  // bcrypt password
         userRepository.save(u);
         return u;
     }
 
 
-    public User edit(UserEditDTO userEdited) {
+    public User edit(UserEditDTO userEdited) { // todo check if logged one is admin ot is the person with same id
         Optional<User> opt = userRepository.findById(userEdited.getId());
         if(opt.isPresent()){
             User u = opt.get();
@@ -118,7 +128,6 @@ public class UserService {
             u.setSecondName(userEdited.getSecondName());
             u.setLastName(userEdited.getLastName());
             u.setGender(userEdited.getGender());
-
             u.setDateOfBirth(userEdited.getDateOfBirth());
             userRepository.save(u);
             return u;
@@ -128,4 +137,6 @@ public class UserService {
         }
 
     }
+
+
 }
