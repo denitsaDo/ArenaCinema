@@ -4,7 +4,6 @@ import com.example.arenacinema_springproject.exceptions.BadRequestException;
 import com.example.arenacinema_springproject.exceptions.NoContentException;
 import com.example.arenacinema_springproject.exceptions.NotFoundException;
 import com.example.arenacinema_springproject.models.entities.City;
-import com.example.arenacinema_springproject.models.entities.User;
 import com.example.arenacinema_springproject.models.repositories.CityRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -64,13 +63,7 @@ public class CityService {
     }
 
     public City getCityById(int id) {
-        Optional<City> city = cityRepository.findById(id);
-        if (city.isPresent()) {
-            return city.get();
-        }
-        else {
-            throw new NotFoundException("City not found");
-        }
+        return  cityRepository.findById(id).orElseThrow(()-> new NotFoundException("City not found"));
     }
 
     public List<City> getAll() {

@@ -2,12 +2,7 @@ package com.example.arenacinema_springproject.controllers;
 
 
 import com.example.arenacinema_springproject.models.dto.CinemaAddDTO;
-import com.example.arenacinema_springproject.models.dto.CinemaResponseDTO;
-import com.example.arenacinema_springproject.models.dto.CityAddDto;
-import com.example.arenacinema_springproject.models.dto.UserResponseDTO;
 import com.example.arenacinema_springproject.models.entities.Cinema;
-import com.example.arenacinema_springproject.models.entities.City;
-import com.example.arenacinema_springproject.models.entities.User;
 import com.example.arenacinema_springproject.services.CinemaService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,12 +24,7 @@ public class CinemaController extends BaseController{
     public ResponseEntity<Cinema> add(@RequestBody CinemaAddDTO cinema, HttpServletRequest request) {
         validateLogin(request);
         adminLogin(request);
-        String name = cinema.getName();
-        Integer cityId = cinema.getCityId();
-        String phoneNumber = cinema.getPhoneNumber();
-        String address = cinema.getAddress();
-        String email = cinema.getEmail();
-        Cinema c = cinemaService.add(name, cityId, phoneNumber, address, email);
+        Cinema c = cinemaService.add(cinema);
         return ResponseEntity.ok(c);
     }
 
@@ -57,11 +47,9 @@ public class CinemaController extends BaseController{
     }
 
     @GetMapping("/cinemas/{id}")
-    public Cinema getById(@PathVariable int id){
+    public ResponseEntity <Cinema> getById(@PathVariable int id){
         Cinema c = cinemaService.getCinemaById(id);
-//        CinemaResponseDTO dto = modelMapper.map(c, CinemaResponseDTO.class);
-//        return ResponseEntity.ok(dto);
-        return c;
+        return ResponseEntity.ok(c);
     }
 
 

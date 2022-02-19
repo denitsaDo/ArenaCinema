@@ -3,7 +3,7 @@ POST localhost:9999/movies
 Content-Type: application/json
 
 {
-  "title" : "title",
+  "title" : "title32",
   "duration" : 120,
   "description" : "description",
   "actors" : "Georg Georg",
@@ -29,4 +29,4 @@ Content-Type: application/json
 
 
 ### get by id
-GET localhost:9999/movies/1
+GET localhost:9999/movies/2

@@ -1,0 +1,28 @@
+### add
+POST localhost:9999/halls
+Content-Type: application/json
+
+{
+  "name" : "zala VIP",
+  "capacity" : 20,
+  "cinemaId" : 1
+}
+
+### edit
+PUT localhost:9999/halls
+Content-Type: application/json
+
+{
+  "id" : 5,
+  "capacity" : 20,
+  "cinemaId" : 1
+}
+
+### remove
+DELETE localhost:9999/halls/3
+
+### get by id
+GET localhost:9999/halls/1
+
+### get all
+GET localhost:9999/halls

@@ -3,15 +3,14 @@ package com.example.arenacinema_springproject.services;
 import com.example.arenacinema_springproject.exceptions.BadRequestException;
 import com.example.arenacinema_springproject.exceptions.NoContentException;
 import com.example.arenacinema_springproject.exceptions.NotFoundException;
+import com.example.arenacinema_springproject.models.dto.CinemaAddDTO;
 import com.example.arenacinema_springproject.models.entities.Cinema;
-import com.example.arenacinema_springproject.models.entities.City;
 import com.example.arenacinema_springproject.models.repositories.CinemaRepository;
+import com.example.arenacinema_springproject.models.repositories.CityRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
+
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -19,50 +18,45 @@ public class CinemaService {
 
     @Autowired
     private CinemaRepository cinemaRepository;
+    @Autowired
+    private CityRepository cityRepository;
 
 
-    public Cinema add(String name, Integer cityId, String phoneNumber, String address, String email) {
-        if (name == null || name.isBlank()) {
+    public Cinema add(CinemaAddDTO cinema) {
+        if (cinema.getName() == null || cinema.getName().isBlank()) {
             throw new BadRequestException("Cinema name is mandatory!");
         }
-        if (cinemaRepository.findByName(name)!= null) {
+        if (cinemaRepository.findByName(cinema.getName())!= null) {
             throw new BadRequestException("Cinema already exists!");
         }
-        if (cityId == null || cityId == 0) {
+        if (cinema.getCityId() == 0 ) {
             throw new BadRequestException("City is mandatory!");
         }
-        if (phoneNumber == null || phoneNumber.isBlank()) {
+        if (cinema.getPhoneNumber() == null || cinema.getPhoneNumber().isBlank()) {
             throw new BadRequestException("Phone number is mandatory!");
         }
-        if (!phoneNumber.matches("[0-9]{10}")) {
+        if (!cinema.getPhoneNumber().matches("[0-9]{10}")) {
             throw new BadRequestException("Invalid phone number!");
         }
-        if (address == null || address.isBlank()) {
+        if (cinema.getAddress() == null || cinema.getAddress().isBlank()) {
             throw new BadRequestException("Address is mandatory!");
         }
-        if (email == null || email.isBlank()) {
+        if (cinema.getEmail() == null || cinema.getEmail().isBlank()) {
             throw new BadRequestException("Email is mandatory!");
         }
 
         Cinema c = new Cinema();
-        c.setName(name);
-        c.setCitySelected(new City());
-        c.setPhoneNumber(phoneNumber);
-        c.setAddress(address);
-        c.setEmail(email);
+        c.setName(cinema.getName());
+        c.setCitySelected(cityRepository.findById(cinema.getCityId()).orElseThrow(() -> new NotFoundException("City not found")));
+        c.setPhoneNumber(cinema.getPhoneNumber());
+        c.setAddress(cinema.getAddress());
+        c.setEmail(cinema.getEmail());
         cinemaRepository.save(c);
         return c;
     }
 
     public Cinema getCinemaById(int id) {
-//        return  cinemaRepository.findById(id).orElseThrow(()-> new NotFoundException("Cinema not found"));
-        Optional<Cinema> cinema = cinemaRepository.findById(id);
-        if (cinema.isPresent()) {
-            return cinema.get();
-        }
-        else {
-            throw new NotFoundException("Cinema not found");
-        }
+        return  cinemaRepository.findById(id).orElseThrow(()-> new NotFoundException("Cinema not found"));
     }
 
     public void delete(Cinema cinema) {

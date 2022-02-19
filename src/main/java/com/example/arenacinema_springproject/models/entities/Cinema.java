@@ -1,11 +1,13 @@
 package com.example.arenacinema_springproject.models.entities;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
+import java.util.Set;
 
 @Entity
 @Table(name = "cinemas")
@@ -23,7 +25,6 @@ public class Cinema {
     @JoinColumn(name = "city_id")
     @JsonBackReference     //this helps to overcome circular reference problem   city->cinema
     private City citySelected;
-
     @Column
     private String phoneNumber;
     @Column
@@ -32,5 +33,8 @@ public class Cinema {
     @Email(message = "Invalid email!")
     private String email;
 
-
+    @OneToMany(mappedBy = "cinemaIn")
+    @JsonManagedReference
+    private Set<Hall> halls;
+    
 }

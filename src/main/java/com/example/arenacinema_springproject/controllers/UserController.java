@@ -16,10 +16,8 @@ import org.modelmapper.ModelMapper;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import javax.validation.ConstraintViolationException;
 import javax.validation.Valid;
 
-import java.util.Date;
 import java.util.List;
 
 @RestController

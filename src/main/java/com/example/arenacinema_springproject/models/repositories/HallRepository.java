@@ -1,12 +1,9 @@
 package com.example.arenacinema_springproject.models.repositories;
 
-import com.example.arenacinema_springproject.models.entities.Cinema;
+import com.example.arenacinema_springproject.models.entities.Hall;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface CinemaRepository extends JpaRepository<Cinema, Integer> {
-
-    Cinema findByName(String name);
-
+public interface HallRepository extends JpaRepository<Hall, Integer> {
 }
