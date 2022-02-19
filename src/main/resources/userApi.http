@@ -7,11 +7,11 @@ Content-Type: application/json
   "secondName" : "d",
   "lastName" : "do",
   "gender" : "f",
-  "email" : "basecamp2@abv.bg",
+  "email" : "basecamp@abv.bg",
   "password" : "Groups99%",
   "password2" : "Groups99%",
   "dateOfBirth" : "2022-23-23",
-  "isAdmin" : "false"
+  "isAdmin" : "true"
 
 }
 
@@ -26,8 +26,6 @@ Content-Type: application/json
 
 ### logout
 POST localhost:9999/logout
-
-### edit
 
 ### get by id
 GET localhost:9999/users/1

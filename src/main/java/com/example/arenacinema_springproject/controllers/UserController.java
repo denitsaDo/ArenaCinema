@@ -1,6 +1,5 @@
 package com.example.arenacinema_springproject.controllers;
 
-import com.example.arenacinema_springproject.exceptions.UnauthorizedException;
 import com.example.arenacinema_springproject.models.dto.UserEditDTO;
 import com.example.arenacinema_springproject.models.dto.UserRegisterDTO;
 import com.example.arenacinema_springproject.models.dto.UserResponseDTO;
