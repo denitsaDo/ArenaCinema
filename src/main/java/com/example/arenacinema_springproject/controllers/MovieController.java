@@ -43,8 +43,6 @@ public class MovieController extends BaseController {
 
     @GetMapping("/movies/{id}")
     public Movie getById(@PathVariable int id, HttpServletRequest request) {
-        validateLogin(request);
-        adminLogin(request);
         return movieService.getById(id);
     }
 

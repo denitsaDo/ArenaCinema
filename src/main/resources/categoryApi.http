@@ -1,0 +1,26 @@
+### add
+POST localhost:9999/categories
+Content-Type: application/json
+
+{
+  "name" : "comedy",
+  "description" : "Super funny ha ha"
+}
+
+### edit
+PUT localhost:9999/categories
+Content-Type: application/json
+
+{
+  "id" : 2,
+  "name" : "comedy",
+  "description" : "Not super funny"
+
+}
+
+
+### delete
+DELETE localhost:9999/categories/7
+
+### get by id
+GET localhost:9999/categories/2

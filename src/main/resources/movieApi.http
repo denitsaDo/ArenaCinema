@@ -16,14 +16,14 @@ Content-Type: application/json
 
 
 ### delete
-DELETE localhost:9999/movies/1
+DELETE localhost:9999/movies/5
 
 ### edit
 PUT localhost:9999/movies
 Content-Type: application/json
 
 {
-  "title" : "NewTitle",
+  "title" : "title",
   "duration" : 125
 }
 

@@ -3,8 +3,8 @@ POST localhost:9999/cinemas
 Content-Type: application/json
 
 {
-  "name" : "cinema555",
-  "cityId" : 5,
+  "name" : "cinema",
+  "cityId" : 1,
   "phoneNumber" : "0899878787",
   "address" : "okolovrysten pyt 77",
   "email" : "cinemaring@abv.bg"
@@ -32,7 +32,6 @@ DELETE localhost:9999/cinemas/9
 GET localhost:9999/cinemas/3
 
 
-//TODO
 ### get all by city id
 GET localhost:9999/cinemas
 Content-Type: application/json
