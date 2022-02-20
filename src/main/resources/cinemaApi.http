@@ -37,5 +37,5 @@ GET localhost:9999/cinemas
 Content-Type: application/json
 
 {
-  "name" : "pleven"
+  "name" : "burgas"
 }

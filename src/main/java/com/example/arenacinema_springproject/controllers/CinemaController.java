@@ -65,5 +65,16 @@ public class CinemaController extends BaseController{
         return ResponseEntity.ok(dto);
     }
 
+    @GetMapping("/cinemas")
+    public List<CinemaResponseDTO> getAllCinemasByCityName (@RequestBody City city) {
+        Optional<List<Cinema>> opt = cinemaRepository.findAllByCitySelected_Name(city.getName());
+        if (opt.isPresent()) {
+            if (opt.get().size() == 0) {
+                throw new BadRequestException("No cinemas in this city");
+            } else
+                return opt.get().stream().map(cinema -> modelMapper.map(cinema, CinemaResponseDTO.class)).collect(Collectors.toList());
 
+        }
+        else throw new BadRequestException("No cinemas");
+    }
 }
