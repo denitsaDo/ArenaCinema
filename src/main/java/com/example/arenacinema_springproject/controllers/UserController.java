@@ -4,6 +4,7 @@ package com.example.arenacinema_springproject.controllers;
 import com.example.arenacinema_springproject.exceptions.ConstraintValidationException;
 import com.example.arenacinema_springproject.exceptions.UnauthorizedException;
 import com.example.arenacinema_springproject.models.dto.UserEditDTO;
+import com.example.arenacinema_springproject.models.dto.UserPasswordEditDTO;
 import com.example.arenacinema_springproject.models.dto.UserRegisterDTO;
 import com.example.arenacinema_springproject.models.dto.UserResponseDTO;
 import com.example.arenacinema_springproject.models.entities.User;
@@ -71,7 +72,7 @@ public class UserController extends BaseController{
         validateLogin(request);
         validateAccountOwner(id, request);
         User u = userService.getById(id);
-         userService.deleteUserById(u,id);
+        userService.deleteUserById(u);
     }
 
     @PostMapping("/reg")
@@ -84,8 +85,7 @@ public class UserController extends BaseController{
         UserResponseDTO dto = modelMapper.map(u, UserResponseDTO.class);
         return ResponseEntity.ok(dto);
     }
-
-
+    
 
 //TODO edit only some fields
     @PutMapping("/users")
@@ -98,11 +98,20 @@ public class UserController extends BaseController{
         return ResponseEntity.ok(dto);
     }
 
+    @PutMapping("/users/changePassword")
+    public ResponseEntity<UserResponseDTO> editPassword(@RequestBody UserPasswordEditDTO user, HttpServletRequest request) {
+        validateLogin(request);
+        validateAccountOwner(user.getId(), request);
+
+        User u = userService.editPassword(user);
+        UserResponseDTO dto = modelMapper.map(u, UserResponseDTO.class);
+        return ResponseEntity.ok(dto);
+    }
+
     private void validateAccountOwner(int id, HttpServletRequest request) {
         if((Integer) request.getSession().getAttribute(USER_ID) != id) {
             throw new UnauthorizedException("You can edit or delete only own account!");
         }
     }
 
-    
 }

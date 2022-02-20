@@ -2,9 +2,11 @@ package com.example.arenacinema_springproject.services;
 import com.example.arenacinema_springproject.exceptions.NoContentException;
 import com.example.arenacinema_springproject.exceptions.NotFoundException;
 import com.example.arenacinema_springproject.models.dto.UserEditDTO;
+import com.example.arenacinema_springproject.models.dto.UserPasswordEditDTO;
 import com.example.arenacinema_springproject.models.dto.UserRegisterDTO;
 import com.example.arenacinema_springproject.models.entities.User;
 import com.example.arenacinema_springproject.models.repositories.UserRepository;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -28,6 +30,8 @@ public class UserService {
     private UserRepository userRepository;
     @Autowired
     private PasswordEncoder passwordEncoder;
+    @Autowired
+    private ModelMapper modelMapper;
 
 
     public User login(String email, String password) {
@@ -61,7 +65,7 @@ public class UserService {
         return userRepository.findAll();
     }
 
-    public void deleteUserById(User user, int id) {
+    public void deleteUserById(User user) {
         Optional<User> optional = userRepository.findById(user.getId());   //check if id is >0
         if (optional.isPresent()) {
             userRepository.delete(user);
@@ -72,36 +76,17 @@ public class UserService {
     }
 
     public User register(UserRegisterDTO user) {
-        if (user.getFirstName() == null || user.getFirstName().isBlank() || user.getSecondName() == null || user.getSecondName().isBlank() || user.getLastName() == null || user.getLastName().isBlank() ||
-                user.getGender() == null || user.getGender().isBlank() || user.getEmail() == null || user.getEmail().isBlank() || user.getDateOfBirth() == null) {
+        validateMandatoryFields(user);
+        if (user.getEmail() == null || user.getEmail().isBlank()) {
             throw new BadRequestException("All fields are mandatory");
-        }
-
-
-
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(user.getDateOfBirth());
-
-        if (Calendar.getInstance().before(cal)) {
-            throw new BadRequestException("Please enter a valid birth date.");
-        }
-        if ((Calendar.getInstance().get(Calendar.YEAR) - cal.get(Calendar.YEAR)) <16){
-            throw new BadRequestException("You should be at least 16yo.");
-        }
-
-
-
-        if (!user.getPassword().matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$")) {
-            throw new BadRequestException("Your password must be at least 8 symbols and have at least one lowercase letter , " +
-                    "one uppercase letter, one digit and one special character");
-        }
-
-        if (!user.getPassword().equals(user.getPassword2())) {
-            throw new BadRequestException("Passwords mismatch.");
         }
         if (userRepository.findByEmail(user.getEmail()) != null) {
             throw new BadRequestException("User already exists!");
         }
+
+        validateStrongPassword(user.getPassword());
+        validateMatchingPasswords(user.getPassword(), user.getPassword2());
+
 
         User u = new User();
         u.setFirstName(user.getFirstName());
@@ -117,24 +102,72 @@ public class UserService {
     }
 
 
-    public User edit(UserEditDTO userEdited) { // todo check if logged one is admin ot is the person with same id
 
-        Optional<User> opt = userRepository.findById(userEdited.getId());
+    public User edit(UserEditDTO user) {
+        Optional<User> opt = userRepository.findById(user.getId());
         if(opt.isPresent()){
+            validateMandatoryFields(modelMapper.map(user, UserRegisterDTO.class));
             User u = opt.get();
-            u.setFirstName(userEdited.getFirstName());
-            u.setSecondName(userEdited.getSecondName());
-            u.setLastName(userEdited.getLastName());
-            u.setGender(userEdited.getGender());
-            u.setDateOfBirth(userEdited.getDateOfBirth());
+            u.setFirstName(user.getFirstName());
+            u.setSecondName(user.getSecondName());
+            u.setLastName(user.getLastName());
+            u.setGender(user.getGender());
+            u.setDateOfBirth(user.getDateOfBirth());
             userRepository.save(u);
             return u;
         }
         else{
             throw new NotFoundException("User not found");
         }
-
     }
 
 
+    public User editPassword(UserPasswordEditDTO user) {
+        Optional<User> opt = userRepository.findById(user.getId());
+        if(opt.isPresent()){
+            User u = opt.get();
+
+            if(!passwordEncoder.matches(user.getOldPassword(),u.getPassword())){
+                throw new BadRequestException("Wrong password!");
+            }
+            validateMatchingPasswords(user.getNewPassword(), user.getNewPassword2());
+            validateStrongPassword(user.getNewPassword());
+
+
+            u.setPassword(passwordEncoder.encode(user.getNewPassword())); // bcrypt password
+            userRepository.save(u);
+            return u;
+        }
+        else{
+            throw new NotFoundException("User not found");
+        }
+    }
+
+    private void validateMandatoryFields(UserRegisterDTO user) {
+        if (user.getFirstName() == null || user.getFirstName().isBlank() || user.getSecondName() == null || user.getSecondName().isBlank() || user.getLastName() == null || user.getLastName().isBlank() ||
+                user.getGender() == null || user.getGender().isBlank()  || user.getDateOfBirth() == null) {
+            throw new BadRequestException("All fields are mandatory");
+        }
+
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(user.getDateOfBirth());
+
+        if (Calendar.getInstance().before(cal)) {
+            throw new BadRequestException("Please enter a valid birth date.");
+        }
+        if ((Calendar.getInstance().get(Calendar.YEAR) - cal.get(Calendar.YEAR)) <16){
+            throw new BadRequestException("You should be at least 16yo.");
+        }
+    }
+    private void validateStrongPassword(String password) {
+        if (!password.matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$")) {
+            throw new BadRequestException("Your password must be at least 8 symbols and have at least one lowercase letter , " +
+                    "one uppercase letter, one digit and one special character");
+        }
+    }
+    private void validateMatchingPasswords(String password, String password2) {
+        if (!password.equals(password2)) {
+            throw new BadRequestException("Passwords mismatch.");
+        }
+    }
 }
