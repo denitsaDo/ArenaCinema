@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import com.example.arenacinema_springproject.exceptions.BadRequestException;
 import com.example.arenacinema_springproject.exceptions.UnauthorizedException;
 
+import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDate;
 import java.time.Year;
 import java.time.chrono.ChronoLocalDate;
@@ -117,6 +118,7 @@ public class UserService {
 
 
     public User edit(UserEditDTO userEdited) { // todo check if logged one is admin ot is the person with same id
+
         Optional<User> opt = userRepository.findById(userEdited.getId());
         if(opt.isPresent()){
             User u = opt.get();

@@ -3,14 +3,14 @@ POST localhost:9999/reg
 Content-Type: application/json
 
 {
-  "firstName" : "d",
-  "secondName" : "d",
+  "firstName" : "deni",
+  "secondName" : "r",
   "lastName" : "do",
   "gender" : "f",
-  "email" : "batmanforever@abv.bg",
+  "email" : "denito@abv.bg",
   "password" : "Groups99%",
   "password2" : "Groups99%",
-  "dateOfBirth" : "2020-10-10",
+  "dateOfBirth" : "2005-10-10",
   "isAdmin" : "false"
 
 
@@ -21,7 +21,7 @@ POST localhost:9999/login
 Content-Type: application/json
 
 {
-  "email" : "bambito@abv.bg",
+  "email" : "base@abv.bg",
   "password" : "Groups99%"
 }
 
@@ -36,7 +36,7 @@ Content-Type: application/json
 GET localhost:9999/users
 
 ### delete
-DELETE localhost:9999/users/18
+DELETE localhost:9999/users/23
 
 ###edit
 PUT localhost:9999/users
@@ -45,8 +45,8 @@ Content-Type: application/json
 {
   "id" : 22,
   "firstName" : "deni",
-  "secondName" : "radoslavova",
+  "secondName" : "r",
   "lastName" : "dochkova",
   "gender" : "f",
-  "dateOfBirth" : "2022-23-23"
+  "dateOfBirth" : "1991-02-14"
 }

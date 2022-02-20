@@ -2,6 +2,7 @@ package com.example.arenacinema_springproject.controllers;
 
 
 import com.example.arenacinema_springproject.exceptions.ConstraintValidationException;
+import com.example.arenacinema_springproject.exceptions.UnauthorizedException;
 import com.example.arenacinema_springproject.models.dto.UserEditDTO;
 import com.example.arenacinema_springproject.models.dto.UserRegisterDTO;
 import com.example.arenacinema_springproject.models.dto.UserResponseDTO;
@@ -68,6 +69,7 @@ public class UserController extends BaseController{
     @DeleteMapping("/users/{id}")
     public void deleteUserById(@PathVariable int id, HttpServletRequest request) {
         validateLogin(request);
+        validateAccountOwner(id, request);
         User u = userService.getById(id);
          userService.deleteUserById(u,id);
     }
@@ -89,11 +91,16 @@ public class UserController extends BaseController{
     @PutMapping("/users")
     public ResponseEntity<UserResponseDTO> edit(@RequestBody UserEditDTO user, HttpServletRequest request) {
         validateLogin(request);
+        validateAccountOwner(user.getId(), request);
+
         User u = userService.edit(user);
         UserResponseDTO dto = modelMapper.map(u, UserResponseDTO.class);
         return ResponseEntity.ok(dto);
     }
 
-
-
+    private void validateAccountOwner(int id, HttpServletRequest request) {
+        if((Integer) request.getSession().getAttribute(USER_ID) != id) {
+            throw new UnauthorizedException("You can edit or delete only own account!");
+        }
+    }
 }
