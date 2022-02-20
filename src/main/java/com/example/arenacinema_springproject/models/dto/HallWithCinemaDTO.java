@@ -8,11 +8,9 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class CinemaWithCityDTO {
+public class HallWithCinemaDTO {
     private int id;
     private String name;
-    private String phoneNumber;
-    private String address;
-    private String email;
-    private CityWithoutCinemasDTO cityForCinema;
+    private int capacity;
+    private CinemaWithoutHallDTO cinemaForThisHall;
 }

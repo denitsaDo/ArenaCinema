@@ -1,28 +1,37 @@
 package com.example.arenacinema_springproject.controllers;
 
-import com.example.arenacinema_springproject.models.dto.HallAddDTO;
+import com.example.arenacinema_springproject.exceptions.BadRequestException;
+import com.example.arenacinema_springproject.models.dto.*;
+import com.example.arenacinema_springproject.models.entities.Cinema;
+import com.example.arenacinema_springproject.models.entities.City;
 import com.example.arenacinema_springproject.models.entities.Hall;
 import com.example.arenacinema_springproject.services.HallService;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 public class HallController extends BaseController{
 
     @Autowired
     private HallService hallService;
+    @Autowired
+    private ModelMapper modelMapper;
 
     @PostMapping("/halls")
-    public ResponseEntity<Hall> add(@RequestBody HallAddDTO hall, HttpServletRequest request) {
+    public ResponseEntity<HallWithCinemaDTO> add(@RequestBody HallAddDTO hall, HttpServletRequest request) {
         validateLogin(request);
         adminLogin(request);
-        Hall h = hallService.addHall(hall);
+        HallWithCinemaDTO h = hallService.addHall(hall);
         return ResponseEntity.ok(h);
     }
+
 
     @DeleteMapping("/halls/{id}")
     public void delete(@PathVariable int id, HttpServletRequest request) {
@@ -35,22 +44,23 @@ public class HallController extends BaseController{
 
 
     @PutMapping("/halls")
-    public ResponseEntity<Hall> edit(@RequestBody Hall hall, HttpServletRequest request) {
+    public ResponseEntity<HallWithCinemaDTO> edit(@RequestBody HallEditDTO hall, HttpServletRequest request) {
         validateLogin(request);
         adminLogin(request);
-        Hall h = hallService.edit(hall);
+        HallWithCinemaDTO h = hallService.edit(hall);
         return ResponseEntity.ok(h);
     }
 
     @GetMapping("/halls/{id}")
-    public ResponseEntity <Hall> getById(@PathVariable int id){
+    public ResponseEntity <HallWithCinemaDTO> getById(@PathVariable int id){
         Hall h = hallService.getHallById(id);
-        return ResponseEntity.ok(h);
+        HallWithCinemaDTO dto = new HallWithCinemaDTO();
+        dto.setId(h.getId());
+        dto.setName(h.getName());
+        dto.setCapacity(h.getCapacity());
+        dto.setCinemaForThisHall(modelMapper.map(h.getCinemaIn(), CinemaWithoutHallDTO.class));
+        return ResponseEntity.ok(dto);
     }
 
-    @GetMapping("/halls")
-    public List getAll(HttpServletRequest request){
-        validateLogin(request);
-        return hallService.getAllHalls();
-    }
+
 }

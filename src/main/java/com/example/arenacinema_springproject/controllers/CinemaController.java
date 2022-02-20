@@ -2,7 +2,6 @@ package com.example.arenacinema_springproject.controllers;
 
 
 import com.example.arenacinema_springproject.exceptions.BadRequestException;
-import com.example.arenacinema_springproject.exceptions.NotFoundException;
 import com.example.arenacinema_springproject.models.dto.*;
 import com.example.arenacinema_springproject.models.entities.Cinema;
 import com.example.arenacinema_springproject.models.entities.City;
@@ -28,10 +27,10 @@ public class CinemaController extends BaseController{
     private ModelMapper modelMapper;
 
     @PostMapping("/cinemas")
-    public ResponseEntity<CinemaWithCityDTO> add(@RequestBody CinemaAddDTO cinema, HttpServletRequest request) {
+    public ResponseEntity<CinemaWithCityAndHallsDTO> add(@RequestBody CinemaAddDTO cinema, HttpServletRequest request) {
         validateLogin(request);
         adminLogin(request);
-        CinemaWithCityDTO c = cinemaService.add(cinema);
+        CinemaWithCityAndHallsDTO c = cinemaService.add(cinema);
 
         return ResponseEntity.ok(c);
     }
@@ -46,25 +45,28 @@ public class CinemaController extends BaseController{
     }
 
     @PutMapping("/cinemas")
-    public ResponseEntity<CinemaWithCityDTO> edit(@RequestBody CinemaEditDTO cinema, HttpServletRequest request) {
+    public ResponseEntity<CinemaWithCityAndHallsDTO> edit(@RequestBody CinemaEditDTO cinema, HttpServletRequest request) {
         validateLogin(request);
         adminLogin(request);
-        CinemaWithCityDTO c = cinemaService.edit(cinema);
+        CinemaWithCityAndHallsDTO c = cinemaService.edit(cinema);
         return ResponseEntity.ok(c);
     }
 
     @GetMapping("/cinemas/{id}")
-    public ResponseEntity <CinemaWithCityDTO> getById(@PathVariable int id){
+    public ResponseEntity <CinemaWithCityAndHallsDTO> getById(@PathVariable int id){
         Cinema c = cinemaService.getCinemaById(id);
-        CinemaWithCityDTO dto = new CinemaWithCityDTO();
+        CinemaWithCityAndHallsDTO dto = new CinemaWithCityAndHallsDTO();
         dto.setId(c.getId());
         dto.setName(c.getName());
         dto.setPhoneNumber(c.getPhoneNumber());
         dto.setAddress(c.getAddress());
         dto.setEmail(c.getEmail());
         dto.setCityForCinema(modelMapper.map(c.getCitySelected(), CityWithoutCinemasDTO.class));
+        dto.setHalls(c.getHalls().stream().map(hall -> modelMapper.map(hall, HallWithoutCinemaDTO.class)).collect(Collectors.toList()));
         return ResponseEntity.ok(dto);
     }
+
+
 
     @GetMapping("/cinemas")
     public List<CinemaResponseDTO> getAllCinemasByCityName (@RequestBody City city) {

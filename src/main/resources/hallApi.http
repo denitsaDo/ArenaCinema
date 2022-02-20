@@ -3,9 +3,9 @@ POST localhost:9999/halls
 Content-Type: application/json
 
 {
-  "name" : "zala VIP",
-  "capacity" : 30,
-  "cinemaId" : 10
+  "name" : "zala VIP2",
+  "capacity" : 40,
+  "cinemaId" : 26
 }
 
 ### edit
@@ -13,16 +13,15 @@ PUT localhost:9999/halls
 Content-Type: application/json
 
 {
-  "id" : 5,
-  "capacity" : 20,
-  "cinemaId" : 10
+  "id" : 11,
+  "name" : "Zala 3",
+  "capacity" : 40,
+  "cinemaId" : 11
 }
 
 ### remove
-DELETE localhost:9999/halls/3
+DELETE localhost:9999/halls/12
 
 ### get by id
-GET localhost:9999/halls/1
+GET localhost:9999/halls/10
 
-### get all
-GET localhost:9999/halls

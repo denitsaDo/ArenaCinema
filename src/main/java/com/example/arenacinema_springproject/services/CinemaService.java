@@ -13,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class CinemaService {
@@ -26,7 +25,7 @@ public class CinemaService {
     private ModelMapper modelMapper;
 
 
-    public CinemaWithCityDTO add(CinemaAddDTO cinema) {
+    public CinemaWithCityAndHallsDTO add(CinemaAddDTO cinema) {
         if (cinema.getName() == null || cinema.getName().isBlank()) {
             throw new BadRequestException("Cinema name is mandatory!");
         }
@@ -56,20 +55,20 @@ public class CinemaService {
         c.setAddress(cinema.getAddress());
         c.setEmail(cinema.getEmail());
         cinemaRepository.save(c);
-        CinemaWithCityDTO dto = new CinemaWithCityDTO();
+        CinemaWithCityAndHallsDTO dto = new CinemaWithCityAndHallsDTO();
         modelMapper.map(c,dto);
         dto.setCityForCinema(modelMapper.map(c.getCitySelected(), CityWithoutCinemasDTO.class));
         return dto;
     }
 
-    public CinemaWithCityDTO edit(CinemaEditDTO cinema) {
+    public CinemaWithCityAndHallsDTO edit(CinemaEditDTO cinema) {
         Optional<Cinema> opt = cinemaRepository.findById(cinema.getId());
         if(opt.isPresent()){
 
             Cinema c = modelMapper.map(cinema, Cinema.class);
             c.setCitySelected(cityRepository.findById(cinema.getCityId()).orElseThrow(()-> new BadRequestException("No such city.")));
             cinemaRepository.save(c);
-            CinemaWithCityDTO dto = new CinemaWithCityDTO();
+            CinemaWithCityAndHallsDTO dto = new CinemaWithCityAndHallsDTO();
             modelMapper.map(c,dto);
             dto.setCityForCinema(modelMapper.map(c.getCitySelected(), CityWithoutCinemasDTO.class));
             return dto;
