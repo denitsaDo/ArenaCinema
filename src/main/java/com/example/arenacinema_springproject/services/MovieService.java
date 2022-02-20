@@ -35,7 +35,6 @@ public class MovieService {
         movieRepository.save(movie1);
         MovieResponseDTO dto = modelMapper.map(movieAddDTO, MovieResponseDTO.class);
         return dto;
-
     }
 
     public Movie getById(int id) {

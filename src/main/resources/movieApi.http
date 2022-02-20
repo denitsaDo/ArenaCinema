@@ -7,10 +7,10 @@ Content-Type: application/json
   "duration" : 120,
   "description" : "description",
   "actors" : "Georg Georg",
-  "premiere" : "2022-02-18",
+  "premiere" : "2022-03-18",
   "director" : "director",
   "category_id" : 1,
-  "poster_url" : "https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__480.jpg"
+  "poster_url" : ".."
 
 }
 

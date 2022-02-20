@@ -46,6 +46,7 @@ public class MovieController extends BaseController {
         return movieService.getById(id);
     }
 
+
     //TODO add getRatingById
 
 

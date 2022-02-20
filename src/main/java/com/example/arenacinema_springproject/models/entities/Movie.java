@@ -1,6 +1,5 @@
 package com.example.arenacinema_springproject.models.entities;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -34,7 +33,6 @@ public class Movie {
     private String poster_url;
     @ManyToOne
     @JoinColumn(name = "category_id")
-    @JsonBackReference
     private Category category;
 
 
