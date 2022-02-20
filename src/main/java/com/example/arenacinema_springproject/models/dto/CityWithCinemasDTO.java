@@ -4,13 +4,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
 @NoArgsConstructor
-public class CinemaResponseDTO {
-
+public class CityWithCinemasDTO {
+    private int id;
     private String name;
-    private String phoneNumber;
-    private String address;
-    private String email;
+    List<CinemaWithoutCityDTO> cinemasInTown;
 }

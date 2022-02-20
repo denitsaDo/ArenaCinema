@@ -3,7 +3,7 @@ POST localhost:9999/cities
 Content-Type: application/json
 
 {
-  "name" : "vidin"
+  "name" : "burgas"
 }
 
 ### edit
@@ -11,16 +11,16 @@ PUT localhost:9999/cities
 Content-Type: application/json
 
 {
-  "id" : 7,
-  "name" : "kazanlyk"
+  "id" : 10,
+  "name" : "burgas"
 
 }
 
 ### remove
-DELETE localhost:9999/cities/9
+DELETE localhost:9999/cities/4
 
 ### get by id
-GET localhost:9999/cities/4
+GET localhost:9999/cities/10
 
 ### get all
 GET localhost:9999/cities

@@ -34,7 +34,7 @@ public class Cinema {
     private String email;
 
     @OneToMany(mappedBy = "cinemaIn")
-    @JsonManagedReference
+    //@JsonManagedReference  //overcomes circular reference problem in city->cinema but doesn`t give needed functionality
     private Set<Hall> halls;
     
 }

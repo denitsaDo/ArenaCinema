@@ -7,8 +7,8 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class CinemaResponseDTO {
-
+public class CinemaWithoutCityDTO {
+    private int id;
     private String name;
     private String phoneNumber;
     private String address;

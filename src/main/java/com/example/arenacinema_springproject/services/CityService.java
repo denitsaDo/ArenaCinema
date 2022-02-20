@@ -3,19 +3,28 @@ package com.example.arenacinema_springproject.services;
 import com.example.arenacinema_springproject.exceptions.BadRequestException;
 import com.example.arenacinema_springproject.exceptions.NoContentException;
 import com.example.arenacinema_springproject.exceptions.NotFoundException;
+import com.example.arenacinema_springproject.models.dto.CinemaWithoutCityDTO;
+import com.example.arenacinema_springproject.models.dto.CityWithCinemasDTO;
+import com.example.arenacinema_springproject.models.dto.CityWithoutCinemasDTO;
+import com.example.arenacinema_springproject.models.entities.Cinema;
 import com.example.arenacinema_springproject.models.entities.City;
 import com.example.arenacinema_springproject.models.repositories.CityRepository;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class CityService {
 
     @Autowired
     private CityRepository cityRepository;
+    @Autowired
+    private ModelMapper modelMapper;
 
     public City add(String name) {
         if (name == null || name.isBlank()){
@@ -62,8 +71,17 @@ public class CityService {
         }
     }
 
-    public City getCityById(int id) {
-        return  cityRepository.findById(id).orElseThrow(()-> new NotFoundException("City not found"));
+    public CityWithCinemasDTO getCityById(int id) {
+        Optional<City> opt = cityRepository.findById(id);
+        if (opt.isPresent()){
+            City city = opt.get();
+            CityWithCinemasDTO dto = modelMapper.map(city, CityWithCinemasDTO.class);
+            Set<Cinema> cinemas = city.getTownCinemas();
+            dto.setCinemasInTown(cinemas.stream().map(c -> modelMapper.map(c, CinemaWithoutCityDTO.class)).collect(Collectors.toList()));
+            return dto;
+        }
+        else throw new NotFoundException("City not found");
+
     }
 
     public List<City> getAll() {

@@ -1,6 +1,7 @@
 package com.example.arenacinema_springproject.controllers;
 
 import com.example.arenacinema_springproject.models.dto.CityAddDto;
+import com.example.arenacinema_springproject.models.dto.CityWithCinemasDTO;
 import com.example.arenacinema_springproject.models.entities.City;
 import com.example.arenacinema_springproject.services.CityService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +33,6 @@ public class CityController extends BaseController{
         adminLogin(request);
         City c = cityService.getById(id);
         cityService.delete(c);
-
     }
 
     @PutMapping("/cities")
@@ -44,9 +44,8 @@ public class CityController extends BaseController{
     }
 
     @GetMapping("/cities/{id}")
-    public ResponseEntity<City> getById(@PathVariable int id){
-        City c = cityService.getCityById(id);
-        return ResponseEntity.ok(c);
+    public ResponseEntity<CityWithCinemasDTO> getById(@PathVariable int id){
+             return ResponseEntity.ok(cityService.getCityById(id));
     }
 
     @GetMapping("/cities")
