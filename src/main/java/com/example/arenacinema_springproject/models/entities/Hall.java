@@ -23,6 +23,6 @@ public class Hall {
     private int capacity;
     @ManyToOne
     @JoinColumn(name = "cinema_id")
-    @JsonBackReference
+    //@JsonBackReference
     private Cinema cinemaIn;
 }

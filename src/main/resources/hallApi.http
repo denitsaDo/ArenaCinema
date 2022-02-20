@@ -4,8 +4,8 @@ Content-Type: application/json
 
 {
   "name" : "zala VIP",
-  "capacity" : 20,
-  "cinemaId" : 1
+  "capacity" : 30,
+  "cinemaId" : 10
 }
 
 ### edit
@@ -15,7 +15,7 @@ Content-Type: application/json
 {
   "id" : 5,
   "capacity" : 20,
-  "cinemaId" : 1
+  "cinemaId" : 10
 }
 
 ### remove

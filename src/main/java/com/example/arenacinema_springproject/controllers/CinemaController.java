@@ -28,10 +28,11 @@ public class CinemaController extends BaseController{
     private ModelMapper modelMapper;
 
     @PostMapping("/cinemas")
-    public ResponseEntity<Cinema> add(@RequestBody CinemaAddDTO cinema, HttpServletRequest request) {
+    public ResponseEntity<CinemaWithCityDTO> add(@RequestBody CinemaAddDTO cinema, HttpServletRequest request) {
         validateLogin(request);
         adminLogin(request);
-        Cinema c = cinemaService.add(cinema);
+        CinemaWithCityDTO c = cinemaService.add(cinema);
+
         return ResponseEntity.ok(c);
     }
 
@@ -45,10 +46,10 @@ public class CinemaController extends BaseController{
     }
 
     @PutMapping("/cinemas")
-    public ResponseEntity<Cinema> edit(@RequestBody Cinema cinema, HttpServletRequest request) {
+    public ResponseEntity<CinemaWithCityDTO> edit(@RequestBody CinemaEditDTO cinema, HttpServletRequest request) {
         validateLogin(request);
         adminLogin(request);
-        Cinema c = cinemaService.edit(cinema);
+        CinemaWithCityDTO c = cinemaService.edit(cinema);
         return ResponseEntity.ok(c);
     }
 

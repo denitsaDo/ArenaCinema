@@ -3,17 +3,17 @@ package com.example.arenacinema_springproject.services;
 import com.example.arenacinema_springproject.exceptions.BadRequestException;
 import com.example.arenacinema_springproject.exceptions.NoContentException;
 import com.example.arenacinema_springproject.exceptions.NotFoundException;
-import com.example.arenacinema_springproject.models.dto.CinemaAddDTO;
+import com.example.arenacinema_springproject.models.dto.*;
 import com.example.arenacinema_springproject.models.entities.Cinema;
 import com.example.arenacinema_springproject.models.repositories.CinemaRepository;
 import com.example.arenacinema_springproject.models.repositories.CityRepository;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class CinemaService {
@@ -22,9 +22,11 @@ public class CinemaService {
     private CinemaRepository cinemaRepository;
     @Autowired
     private CityRepository cityRepository;
+    @Autowired
+    private ModelMapper modelMapper;
 
 
-    public Cinema add(CinemaAddDTO cinema) {
+    public CinemaWithCityDTO add(CinemaAddDTO cinema) {
         if (cinema.getName() == null || cinema.getName().isBlank()) {
             throw new BadRequestException("Cinema name is mandatory!");
         }
@@ -54,7 +56,27 @@ public class CinemaService {
         c.setAddress(cinema.getAddress());
         c.setEmail(cinema.getEmail());
         cinemaRepository.save(c);
-        return c;
+        CinemaWithCityDTO dto = new CinemaWithCityDTO();
+        modelMapper.map(c,dto);
+        dto.setCityForCinema(modelMapper.map(c.getCitySelected(), CityWithoutCinemasDTO.class));
+        return dto;
+    }
+
+    public CinemaWithCityDTO edit(CinemaEditDTO cinema) {
+        Optional<Cinema> opt = cinemaRepository.findById(cinema.getId());
+        if(opt.isPresent()){
+
+            Cinema c = modelMapper.map(cinema, Cinema.class);
+            c.setCitySelected(cityRepository.findById(cinema.getCityId()).orElseThrow(()-> new BadRequestException("No such city.")));
+            cinemaRepository.save(c);
+            CinemaWithCityDTO dto = new CinemaWithCityDTO();
+            modelMapper.map(c,dto);
+            dto.setCityForCinema(modelMapper.map(c.getCitySelected(), CityWithoutCinemasDTO.class));
+            return dto;
+        }
+        else{
+            throw new NotFoundException("Cinema not found.");
+        }
     }
 
     public Cinema getCinemaById(int id) {
@@ -69,17 +91,6 @@ public class CinemaService {
         }
         else {
             throw new NotFoundException("No such cinema.");
-        }
-    }
-
-    public Cinema edit(Cinema cinema) {
-        Optional<Cinema> opt = cinemaRepository.findById(cinema.getId());
-        if(opt.isPresent()){
-            cinemaRepository.save(cinema);
-            return cinema;
-        }
-        else{
-            throw new NotFoundException("Cinema not found.");
         }
     }
 

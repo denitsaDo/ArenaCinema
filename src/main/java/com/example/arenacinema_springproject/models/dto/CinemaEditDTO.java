@@ -4,14 +4,14 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.JoinColumn;
-
 @Getter
 @Setter
 @NoArgsConstructor
-public class CityWithoutCinemasDTO {
-
+public class CinemaEditDTO {
     private int id;
     private String name;
-
+    private int cityId;
+    private String phoneNumber;
+    private String address;
+    private String email;
 }

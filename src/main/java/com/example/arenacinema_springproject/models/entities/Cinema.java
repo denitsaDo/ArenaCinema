@@ -23,7 +23,7 @@ public class Cinema {
     private String name;
     @ManyToOne
     @JoinColumn(name = "city_id")
-    @JsonBackReference     //this helps to overcome circular reference problem   city->cinema
+    //@JsonBackReference     //this helps to overcome circular reference problem   city->cinema
     private City citySelected;
     @Column
     private String phoneNumber;

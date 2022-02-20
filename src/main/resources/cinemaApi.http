@@ -3,8 +3,8 @@ POST localhost:9999/cinemas
 Content-Type: application/json
 
 {
-  "name" : "Grande cinema",
-  "cityId" : 10,
+  "name" : "Grande cinema ruse",
+  "cityId" : 8,
   "phoneNumber" : "0899878787",
   "address" : "okolovrysten pyt 77",
   "email" : "cinemaring@abv.bg"
@@ -16,17 +16,17 @@ PUT localhost:9999/cinemas
 Content-Type: application/json
 
 {
-  "id" : 3,
-  "name" : "cinema",
-  "cityId" : 4,
-  "phoneNumber" : "0899888888",
+  "id" : 27,
+  "name" : "New Cinema ",
+  "cityId" : 10,
+  "phoneNumber" : "0999888888",
   "address" : "okolovrysten pyt 77",
   "email" : "cinemaring@abv.bg"
 
 }
 
 ### remove
-DELETE localhost:9999/cinemas/12
+DELETE localhost:9999/cinemas/10
 
 ### get by id
 GET localhost:9999/cinemas/11
