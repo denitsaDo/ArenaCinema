@@ -22,8 +22,7 @@ public class CityController extends BaseController{
     public ResponseEntity<City> add(@RequestBody CityAddDto city, HttpServletRequest request) {
         validateLogin(request);
         adminLogin(request);
-        String name = city.getName();
-        City c = cityService.add(name);
+        City c = cityService.add(city);
         return ResponseEntity.ok(c);
     }
 
@@ -45,7 +44,7 @@ public class CityController extends BaseController{
 
     @GetMapping("/cities/{id}")
     public ResponseEntity<CityWithCinemasDTO> getById(@PathVariable int id){
-             return ResponseEntity.ok(cityService.getCityById(id));
+        return ResponseEntity.ok(cityService.getCityById(id));
     }
 
     @GetMapping("/cities")

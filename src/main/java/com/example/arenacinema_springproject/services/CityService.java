@@ -4,6 +4,7 @@ import com.example.arenacinema_springproject.exceptions.BadRequestException;
 import com.example.arenacinema_springproject.exceptions.NoContentException;
 import com.example.arenacinema_springproject.exceptions.NotFoundException;
 import com.example.arenacinema_springproject.models.dto.CinemaWithoutCityDTO;
+import com.example.arenacinema_springproject.models.dto.CityAddDto;
 import com.example.arenacinema_springproject.models.dto.CityWithCinemasDTO;
 import com.example.arenacinema_springproject.models.dto.CityWithoutCinemasDTO;
 import com.example.arenacinema_springproject.models.entities.Cinema;
@@ -26,15 +27,14 @@ public class CityService {
     @Autowired
     private ModelMapper modelMapper;
 
-    public City add(String name) {
-        if (name == null || name.isBlank()){
+    public City add(CityAddDto city) {
+        if (city.getName() == null || city.getName().isBlank()){
             throw new BadRequestException("City name is mandatory!");
         }
-        if (cityRepository.findByName(name)!= null) {
+        if (cityRepository.findByName(city.getName())!= null) {
             throw new BadRequestException("City already exists!");
         }
-        City c = new City();
-        c.setName(name);
+        City c = modelMapper.map(city, City.class);
         cityRepository.save(c);
         return c;
     }

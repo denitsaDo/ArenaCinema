@@ -5,6 +5,7 @@ import com.example.arenacinema_springproject.exceptions.NoContentException;
 import com.example.arenacinema_springproject.exceptions.NotFoundException;
 import com.example.arenacinema_springproject.models.dto.*;
 import com.example.arenacinema_springproject.models.entities.Cinema;
+import com.example.arenacinema_springproject.models.entities.City;
 import com.example.arenacinema_springproject.models.repositories.CinemaRepository;
 import com.example.arenacinema_springproject.models.repositories.CityRepository;
 import org.modelmapper.ModelMapper;
@@ -12,7 +13,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class CinemaService {
@@ -93,16 +96,29 @@ public class CinemaService {
         }
     }
 
-//    public List getAllByCityId(int cityId) {
-//        Optional<Cinema> opt = cinemaRepository.findByCityId(cityId);
-//        if(opt.isPresent()){
-//            Cinema cinema = opt.get();
-//            List<Cinema> townCinemas = new ArrayList<>();
-//            townCinemas.add(cinema);
-//            return townCinemas;
-//        }
-//        else{
-//            throw new NotFoundException("No cinemas in this town.");
-//        }
-//    }
+    public CinemaWithCityAndHallsDTO getCinemaWithCityAndHallsDById(int id) {
+        Cinema c = getCinemaById(id);
+        CinemaWithCityAndHallsDTO dto = new CinemaWithCityAndHallsDTO();
+        dto.setId(c.getId());
+        dto.setName(c.getName());
+        dto.setPhoneNumber(c.getPhoneNumber());
+        dto.setAddress(c.getAddress());
+        dto.setEmail(c.getEmail());
+        dto.setCityForCinema(modelMapper.map(c.getCitySelected(), CityWithoutCinemasDTO.class));
+        dto.setHalls(c.getHalls().stream().map(hall -> modelMapper.map(hall, HallWithoutCinemaDTO.class)).collect(Collectors.toList()));
+        return dto;
+    }
+
+    public List<CinemaWithHallsDTO> getAllByCityName(City city) {
+        Optional<List<Cinema>> opt = cinemaRepository.findAllByCitySelected_Name(city.getName());
+        if (opt.isPresent()) {
+            if (opt.get().size() == 0) {
+                throw new BadRequestException("No cinemas in this city");
+            } else
+                return opt.get().stream().map(cinema -> modelMapper
+                        .map(cinema, CinemaWithHallsDTO.class)).collect(Collectors.toList());
+
+        }
+        else throw new BadRequestException("No cinemas");
+    }
 }

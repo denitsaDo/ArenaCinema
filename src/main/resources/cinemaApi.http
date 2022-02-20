@@ -29,7 +29,7 @@ Content-Type: application/json
 DELETE localhost:9999/cinemas/10
 
 ### get by id
-GET localhost:9999/cinemas/26
+GET localhost:9999/cinemas/11
 
 
 ### get all by city name
