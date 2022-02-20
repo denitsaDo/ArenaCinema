@@ -47,7 +47,9 @@ public class MovieController extends BaseController {
     }
 
 
-    //TODO add getRatingById
+    //TODO add getRatingById (SELECT AVG(r.rating) FROM users_rate_movies AS r JOIN movies AS m ON r.movie_id = m.id
+    //JOIN users AS u ON r.user_id = u.id
+    //WHERE m.id = ? AND u.id = ?;)
 
 
 

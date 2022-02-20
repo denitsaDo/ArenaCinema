@@ -1,10 +1,8 @@
 package com.example.arenacinema_springproject.services;
 
 import com.example.arenacinema_springproject.exceptions.BadRequestException;
-import com.example.arenacinema_springproject.exceptions.NoContentException;
 import com.example.arenacinema_springproject.exceptions.NotFoundException;
 import com.example.arenacinema_springproject.models.entities.Category;
-import com.example.arenacinema_springproject.models.entities.City;
 import com.example.arenacinema_springproject.models.repositories.CategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -38,17 +36,11 @@ public class CategotyService {
     }
 
     public Category getById(int id) {
-        Optional<Category> category = categoryRepository.findById(id);
-        if (category.isPresent()) {
-            return category.get();
-        }
-        else {
-            throw new NotFoundException("Category not found");
-        }
+        return  categoryRepository.findById(id).orElseThrow(()-> new NotFoundException("Category not found!"));
     }
 
     public void delete(Category category) {
-        categoryRepository.delete(category);
+        categoryRepository.delete(categoryRepository.findById(category.getId()).orElseThrow(() -> new NotFoundException("Category not found!")));
     }
 
     public Category edit(Category category) {

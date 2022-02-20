@@ -5,6 +5,7 @@ import com.example.arenacinema_springproject.exceptions.NotFoundException;
 import com.example.arenacinema_springproject.models.dto.MovieAddDTO;
 import com.example.arenacinema_springproject.models.dto.MovieResponseDTO;
 import com.example.arenacinema_springproject.models.entities.Movie;
+import com.example.arenacinema_springproject.models.repositories.CategoryRepository;
 import com.example.arenacinema_springproject.models.repositories.MovieRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,12 +21,14 @@ public class MovieService {
     private MovieRepository movieRepository;
     @Autowired
     private ModelMapper modelMapper;
+    @Autowired
+    private CategoryRepository categoryRepository;
 
     public MovieResponseDTO add(MovieAddDTO movieAddDTO){
         validateMovie(movieAddDTO);
         Movie movie1 = new Movie();
         movie1.setActors(movieAddDTO.getActors());
-        movie1.setCategory(movieAddDTO.getCategory());
+        movie1.setCategory(categoryRepository.findById(movieAddDTO.getCategory().getId()).orElseThrow(() -> new NotFoundException("Category not found!")));
         movie1.setDescription(movieAddDTO.getDescription());
         movie1.setDuration(movieAddDTO.getDuration());
         movie1.setPremiere(movieAddDTO.getPremiere());
@@ -38,17 +41,11 @@ public class MovieService {
     }
 
     public Movie getById(int id) {
-       Optional<Movie> movie =  movieRepository.findById(id);
-       if (movie.isPresent()){
-           return movie.get();
-       }else {
-           throw new NotFoundException("Movie not found.");
-       }
+        return  movieRepository.findById(id).orElseThrow(()-> new NotFoundException("Movie not found!"));
     }
 
     public void delete(Movie movie) {
-        Movie movie1 = movieRepository.getById(movie.getId());
-        movieRepository.delete(movie1);
+        movieRepository.delete(movieRepository.findById(movie.getId()).orElseThrow(() -> new NotFoundException("Movie not found")));
     }
 
     public Movie edit(Movie movie) {
