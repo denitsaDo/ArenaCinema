@@ -10,6 +10,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.Optional;
 
 @Service
@@ -21,15 +22,10 @@ public class MovieService {
     private ModelMapper modelMapper;
 
     public MovieResponseDTO add(MovieAddDTO movieAddDTO){
-        Movie movie = movieRepository.findByTitle(movieAddDTO.getTitle());
-        //Movie movie2 = movieRepository.exists()
-        if (movie != null) {
-            throw new BadRequestException("This movie already exists");
-        }
-        //TODO more validates
+        validateMovie(movieAddDTO);
         Movie movie1 = new Movie();
         movie1.setActors(movieAddDTO.getActors());
-        movie1.setCategory_id(movieAddDTO.getCategory_id());
+        movie1.setCategory(movieAddDTO.getCategory());
         movie1.setDescription(movieAddDTO.getDescription());
         movie1.setDuration(movieAddDTO.getDuration());
         movie1.setPremiere(movieAddDTO.getPremiere());
@@ -39,7 +35,6 @@ public class MovieService {
         movieRepository.save(movie1);
         MovieResponseDTO dto = modelMapper.map(movieAddDTO, MovieResponseDTO.class);
         return dto;
-
     }
 
     public Movie getById(int id) {
@@ -65,4 +60,35 @@ public class MovieService {
             throw new NotFoundException("Movie not found.");
         }
     }
+
+    private MovieAddDTO validateMovie(MovieAddDTO movieAddDTO){
+        if (movieAddDTO.getTitle() == null || movieAddDTO.getTitle().isBlank()) {
+            throw new BadRequestException("Movie title is mandatory!");
+        }
+        if (movieAddDTO.getDuration()<=0 || movieAddDTO.getDuration() > 240){
+            throw new BadRequestException("Movie duration is too short or long!");
+        }
+        if (movieAddDTO.getDescription() == null || movieAddDTO.getDescription().isBlank()) {
+            throw new BadRequestException("Movie description is mandatory!");
+        }
+        if (movieRepository.findByDescription(movieAddDTO.getDescription())!=null){
+            throw new BadRequestException("Movie already exists!");
+        }
+        if (movieAddDTO.getActors() == null || movieAddDTO.getActors().isBlank()) {
+            throw new BadRequestException("Movie actors is mandatory!");
+        }
+        LocalDate date = LocalDate.now();
+        if (movieAddDTO.getPremiere().isBefore(date)){
+            throw new BadRequestException("Invalid premiere date!");
+        }
+        if (movieAddDTO.getDirector() == null || movieAddDTO.getDirector().isBlank()) {
+            throw new BadRequestException("Movie director is mandatory!");
+        }
+        if (movieAddDTO.getPoster_url() == null || movieAddDTO.getPoster_url().isBlank()) {
+            throw new BadRequestException("Movie poster is mandatory!");
+        }
+        return movieAddDTO;
+    }
+
+
 }

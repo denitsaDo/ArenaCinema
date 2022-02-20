@@ -30,9 +30,10 @@ public class Movie {
     @Column
     private String director;
     @Column
-    private int category_id;
-    @Column
     private String poster_url;
+    @ManyToOne
+    @JoinColumn(name = "category_id")
+    private Category category;
 
 
 }

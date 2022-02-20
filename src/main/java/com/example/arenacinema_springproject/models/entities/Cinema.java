@@ -36,5 +36,7 @@ public class Cinema {
     @OneToMany(mappedBy = "cinemaIn")
     //@JsonManagedReference  //overcomes circular reference problem in city->cinema but doesn`t give needed functionality
     private Set<Hall> halls;
-    
+
+
+
 }

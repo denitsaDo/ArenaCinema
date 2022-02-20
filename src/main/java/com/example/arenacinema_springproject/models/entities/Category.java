@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 @Table(name = "categories")
@@ -19,5 +20,6 @@ public class Category {
     private String name;
     @Column
     private String description;
-
+    @OneToMany(mappedBy = "category")
+    private Set<Movie> categoryMovies;
 }
