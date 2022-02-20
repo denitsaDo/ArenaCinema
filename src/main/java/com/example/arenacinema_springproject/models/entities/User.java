@@ -8,7 +8,7 @@ import lombok.ToString;
 import javax.persistence.Entity;
 import javax.persistence.*;
 import java.util.Date;
-
+import java.util.Set;
 
 
 @Entity
@@ -39,6 +39,10 @@ public class User {
     private Date dateOfBirth;
     @Column
     private boolean isAdmin;
+
+    @OneToMany(mappedBy = "user")
+    Set<MovieRating> ratings;
+
 
 
 
