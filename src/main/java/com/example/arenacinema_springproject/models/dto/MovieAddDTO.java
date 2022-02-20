@@ -1,5 +1,6 @@
 package com.example.arenacinema_springproject.models.dto;
 
+import com.example.arenacinema_springproject.models.entities.Category;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -16,6 +17,6 @@ public class MovieAddDTO {
     private String actors;
     private LocalDate premiere;
     private String director;
-    private int category_id;
+    private Category category;
     private String poster_url;
 }

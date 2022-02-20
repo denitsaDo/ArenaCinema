@@ -47,4 +47,7 @@ public class MovieController extends BaseController {
     }
 
     //TODO add getRatingById
+
+
+
 }
