@@ -1,0 +1,26 @@
+### add
+POST localhost:9999/types
+Content-Type: application/json
+
+{
+  "name" : "5D Real"
+}
+
+### edit
+PUT localhost:9999/types
+Content-Type: application/json
+
+{
+  "id" : 2,
+  "name" : "2D"
+
+}
+
+### remove
+DELETE localhost:9999/types/1
+
+### get by id
+GET localhost:9999/types/4
+
+### get all
+GET localhost:9999/types
