@@ -21,4 +21,7 @@ public class Type {
 //    @OneToMany(mappedBy = "citySelected")
 //
 //    private Set<Cinema> townCinemas;
+
+    @OneToMany(mappedBy = "typeForProjection")
+    private Set<Projection> projections;
 }

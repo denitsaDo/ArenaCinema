@@ -12,6 +12,7 @@ public class ArenaCinemaSpringProjectApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(ArenaCinemaSpringProjectApplication.class, args);
+
     }
 
     @Bean
@@ -23,4 +24,6 @@ public class ArenaCinemaSpringProjectApplication {
     public ModelMapper modelMapper() {
         return new ModelMapper();
     }
+
+
 }

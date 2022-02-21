@@ -1,0 +1,15 @@
+### add
+POST localhost:9999/projections
+Content-Type: application/json
+
+{
+
+  "movieId" : 3,
+  "hallId" : 11,
+  "typeId" : 4,
+  "startTime" : "2022-03-11"
+
+}
+
+### get by id
+GET localhost:9999/projections/1

@@ -4,9 +4,8 @@ import com.example.arenacinema_springproject.exceptions.BadRequestException;
 import com.example.arenacinema_springproject.exceptions.NoContentException;
 import com.example.arenacinema_springproject.exceptions.NotFoundException;
 import com.example.arenacinema_springproject.models.dto.CinemaWithoutCityDTO;
-import com.example.arenacinema_springproject.models.dto.CityAddDto;
+import com.example.arenacinema_springproject.models.dto.CityAddDTO;
 import com.example.arenacinema_springproject.models.dto.CityWithCinemasDTO;
-import com.example.arenacinema_springproject.models.dto.CityWithoutCinemasDTO;
 import com.example.arenacinema_springproject.models.entities.Cinema;
 import com.example.arenacinema_springproject.models.entities.City;
 import com.example.arenacinema_springproject.models.repositories.CityRepository;
@@ -27,7 +26,7 @@ public class CityService {
     @Autowired
     private ModelMapper modelMapper;
 
-    public City add(CityAddDto city) {
+    public City add(CityAddDTO city) {
         if (city.getName() == null || city.getName().isBlank()){
             throw new BadRequestException("City name is mandatory!");
         }
@@ -87,4 +86,6 @@ public class CityService {
     public List<City> getAll() {
        return cityRepository.findAll();
     }
+
+
 }

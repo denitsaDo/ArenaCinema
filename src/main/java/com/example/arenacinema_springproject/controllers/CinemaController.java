@@ -3,7 +3,6 @@ package com.example.arenacinema_springproject.controllers;
 
 import com.example.arenacinema_springproject.models.dto.*;
 import com.example.arenacinema_springproject.models.entities.Cinema;
-import com.example.arenacinema_springproject.models.entities.City;
 import com.example.arenacinema_springproject.models.repositories.CinemaRepository;
 import com.example.arenacinema_springproject.services.CinemaService;
 import org.modelmapper.ModelMapper;
@@ -12,17 +11,18 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.*;
+import java.util.stream.Stream;
 
 @RestController
 public class CinemaController extends BaseController{
 
     @Autowired
     private CinemaService cinemaService;
+
     @Autowired
-    private CinemaRepository cinemaRepository;
-    @Autowired
-    private ModelMapper modelMapper;
+    ModelMapper modelMapper;
+
+
 
     @PostMapping("/cinemas")
     public ResponseEntity<CinemaWithCityAndHallsDTO> add(@RequestBody CinemaAddDTO cinema, HttpServletRequest request) {
@@ -56,10 +56,12 @@ public class CinemaController extends BaseController{
     }
 
 
-    @GetMapping("/cinemas")
-    public ResponseEntity<List<CinemaWithHallsDTO>> getAll (@RequestBody City city) {
-        List<CinemaWithHallsDTO> cinemas = cinemaService.getAllByCityName(city);
-        return ResponseEntity.ok(cinemas);
 
+
+    @GetMapping("/cinemas/city/{cityId}")
+    public Stream<CinemaInfoDTO> getALlbyCity (@PathVariable int cityId) {
+        Stream<CinemaInfoDTO> result = cinemaService.getCinemaByCity(cityId);
+        return result;
     }
+
 }

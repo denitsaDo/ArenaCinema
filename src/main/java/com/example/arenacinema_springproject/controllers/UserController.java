@@ -87,7 +87,6 @@ public class UserController extends BaseController{
     }
     
 
-//TODO edit only some fields
     @PutMapping("/users")
     public ResponseEntity<UserResponseDTO> edit(@RequestBody UserEditDTO user, HttpServletRequest request) {
         validateLogin(request);

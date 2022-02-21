@@ -16,11 +16,13 @@ import java.io.Serializable;
 @Setter
 @EqualsAndHashCode
 @NoArgsConstructor
+
 public class UserRateMovie implements Serializable {
 
     @Column(name = "user_id")
     private int userId;
     @Column(name = "movie_id")
     private int movieId;
+
 
 }

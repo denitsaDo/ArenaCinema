@@ -1,6 +1,6 @@
 package com.example.arenacinema_springproject.models.entities;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -19,7 +19,7 @@ public class City {
     private int id;
     @Column
     private String name;
-    @OneToMany(mappedBy = "citySelected")
+    @OneToMany(mappedBy = "citySelected", cascade = CascadeType.ALL)
     //@JsonManagedReference    //overcomes circular reference problem   city->cinema but doesn`t give needed functionality
     private Set<Cinema> townCinemas;
 }

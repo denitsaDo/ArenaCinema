@@ -4,13 +4,15 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.List;
+import java.util.Date;
+
 @Getter
 @Setter
 @NoArgsConstructor
-public class CinemaWithHallsDTO {
-    private int id;
-    private String name;
-    List<HallWithoutCinemaDTO> halls;
+public class ProjectionAddDTO {
 
+    private int movieId;
+    private int hallId;
+    private int typeId;
+    private Date startTime;
 }

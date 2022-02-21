@@ -11,10 +11,7 @@ import java.util.Optional;
 @Repository
 public interface CinemaRepository extends JpaRepository<Cinema, Integer> {
 
-    Cinema findByName(String name);
 
-    Optional<List<Cinema>> findAllByCitySelected_Name(String name);
-
-  // @Query("select cin.id, cin.name from cinemas as cin left outer join cities as c on cin.city_id=c.id where c.name= burgas " )
+    Optional<List<Cinema>> findByName(String name);
 
 }

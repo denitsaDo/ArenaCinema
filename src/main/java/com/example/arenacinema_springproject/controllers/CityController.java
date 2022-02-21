@@ -1,6 +1,6 @@
 package com.example.arenacinema_springproject.controllers;
 
-import com.example.arenacinema_springproject.models.dto.CityAddDto;
+import com.example.arenacinema_springproject.models.dto.CityAddDTO;
 import com.example.arenacinema_springproject.models.dto.CityWithCinemasDTO;
 import com.example.arenacinema_springproject.models.entities.City;
 import com.example.arenacinema_springproject.services.CityService;
@@ -18,8 +18,9 @@ public class CityController extends BaseController{
     @Autowired
     private CityService cityService;
 
+
     @PostMapping("/cities")
-    public ResponseEntity<City> add(@RequestBody CityAddDto city, HttpServletRequest request) {
+    public ResponseEntity<City> add(@RequestBody CityAddDTO city, HttpServletRequest request) {
         validateLogin(request);
         adminLogin(request);
         City c = cityService.add(city);

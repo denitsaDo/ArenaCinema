@@ -1,21 +1,23 @@
 package com.example.arenacinema_springproject.services;
 
+import com.example.arenacinema_springproject.configuration.JdbcConfiguration;
 import com.example.arenacinema_springproject.exceptions.BadRequestException;
 import com.example.arenacinema_springproject.exceptions.NoContentException;
 import com.example.arenacinema_springproject.exceptions.NotFoundException;
 import com.example.arenacinema_springproject.models.dto.*;
 import com.example.arenacinema_springproject.models.entities.Cinema;
-import com.example.arenacinema_springproject.models.entities.City;
 import com.example.arenacinema_springproject.models.repositories.CinemaRepository;
 import com.example.arenacinema_springproject.models.repositories.CityRepository;
+import com.example.arenacinema_springproject.models.repositories.ProjectionRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 public class CinemaService {
@@ -25,7 +27,15 @@ public class CinemaService {
     @Autowired
     private CityRepository cityRepository;
     @Autowired
+    ProjectionRepository projectionRepository;
+    @Autowired
     private ModelMapper modelMapper;
+
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
+
+    @Autowired
+    JdbcConfiguration jdbcConfiguration;
 
 
     public CinemaWithCityAndHallsDTO add(CinemaAddDTO cinema) {
@@ -109,16 +119,15 @@ public class CinemaService {
         return dto;
     }
 
-    public List<CinemaWithHallsDTO> getAllByCityName(City city) {
-        Optional<List<Cinema>> opt = cinemaRepository.findAllByCitySelected_Name(city.getName());
-        if (opt.isPresent()) {
-            if (opt.get().size() == 0) {
-                throw new BadRequestException("No cinemas in this city");
-            } else
-                return opt.get().stream().map(cinema -> modelMapper
-                        .map(cinema, CinemaWithHallsDTO.class)).collect(Collectors.toList());
-
-        }
-        else throw new BadRequestException("No cinemas");
+    public Stream<CinemaInfoDTO> getCinemaByCity(int cityId) {
+        return jdbcTemplate.queryForStream(
+        "SELECT c.name AS cinema_name, p.id AS projection_id, m.title AS movie_title, h.name AS hall_name, t.name AS type_name, p.start_time AS projection_start  from kinoarena.cinemas AS c\n" +
+            "LEFT JOIN halls AS h ON( c.id = h.cinema_id)\n" +
+            "LEFT JOIN projections As p ON(h.id = p.hall_id)\n" +
+            "LEFT JOIN movies AS m ON(m.id = p.movie_id)\n" +
+            "LEFT JOIN cities ON(cities.id = c.city_id)\n" +
+            "LEFT JOIN types AS t ON(p.type_id = t.id)\n" +
+            "WHERE cities.id =" + cityId, new CinemaRowMapper());
     }
+
 }

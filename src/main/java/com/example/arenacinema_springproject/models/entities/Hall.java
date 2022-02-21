@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 @Table(name = "halls")
@@ -25,4 +26,8 @@ public class Hall {
     @JoinColumn(name = "cinema_id")
     //@JsonBackReference
     private Cinema cinemaIn;
+
+    @OneToMany(mappedBy = "hallForProjection")
+    //@JsonManagedReference  //overcomes circular reference problem in city->cinema but doesn`t give needed functionality
+    private Set<Projection> projections;
 }
