@@ -70,8 +70,10 @@ POST localhost:9999/users/ticket
 Content-Type: application/json
 
 {
+
   "userId" : 32,
   "projectionId" : 4,
   "rownumber" : 4,
   "seatNumber" : 12
+
 }
