@@ -28,7 +28,7 @@ public class MovieService {
         validateMovie(movieAddDTO);
         Movie movie1 = new Movie();
         movie1.setActors(movieAddDTO.getActors());
-        movie1.setCategory(categoryRepository.findById(movieAddDTO.getCategory().getId()).orElseThrow(() -> new NotFoundException("Category not found!")));
+        movie1.setCategory(categoryRepository.findById(movieAddDTO.getCategoryId()).orElseThrow(() -> new NotFoundException("Category not found!")));
         movie1.setDescription(movieAddDTO.getDescription());
         movie1.setDuration(movieAddDTO.getDuration());
         movie1.setPremiere(movieAddDTO.getPremiere());
@@ -81,9 +81,9 @@ public class MovieService {
         if (movieAddDTO.getDirector() == null || movieAddDTO.getDirector().isBlank()) {
             throw new BadRequestException("Movie director is mandatory!");
         }
-        if (movieAddDTO.getPoster_url() == null || movieAddDTO.getPoster_url().isBlank()) {
-            throw new BadRequestException("Movie poster is mandatory!");
-        }
+        //if (movieAddDTO.getPoster_url() == null || movieAddDTO.getPoster_url().isBlank()) {
+        //    throw new BadRequestException("Movie poster is mandatory!");
+        //}
         return movieAddDTO;
     }
 

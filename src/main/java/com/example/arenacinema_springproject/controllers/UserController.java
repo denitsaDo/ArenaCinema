@@ -3,11 +3,10 @@ package com.example.arenacinema_springproject.controllers;
 
 import com.example.arenacinema_springproject.exceptions.ConstraintValidationException;
 import com.example.arenacinema_springproject.exceptions.UnauthorizedException;
-import com.example.arenacinema_springproject.models.dto.UserEditDTO;
-import com.example.arenacinema_springproject.models.dto.UserPasswordEditDTO;
-import com.example.arenacinema_springproject.models.dto.UserRegisterDTO;
-import com.example.arenacinema_springproject.models.dto.UserResponseDTO;
+import com.example.arenacinema_springproject.models.dto.*;
+import com.example.arenacinema_springproject.models.entities.Ticket;
 import com.example.arenacinema_springproject.models.entities.User;
+import com.example.arenacinema_springproject.services.TicketService;
 import com.example.arenacinema_springproject.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +17,7 @@ import org.modelmapper.ModelMapper;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import javax.transaction.Transactional;
 import javax.validation.Valid;
 
 import java.util.List;
@@ -30,7 +30,10 @@ public class UserController extends BaseController{
     @Autowired
     private UserService userService;
     @Autowired
+    private TicketController ticketController;
+    @Autowired
     private ModelMapper modelMapper;
+
 
 
     @PostMapping("/login")
@@ -113,4 +116,13 @@ public class UserController extends BaseController{
         }
     }
 
+    //@Transactional
+    @PostMapping("/users/ticket")
+    public ResponseEntity<TicketAddDTO> buyTicket(@RequestBody TicketAddDTO ticket, HttpServletRequest request){
+        validateLogin(request);
+        TicketAddDTO ticket1 = ticketController.addTicket(ticket);
+        User u = userService.getById(ticket1.getUserId());
+        //u.getUserTickets().add(ticket1);
+        return ResponseEntity.ok(ticket1);
+    }
 }

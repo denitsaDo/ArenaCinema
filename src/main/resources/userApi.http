@@ -3,14 +3,17 @@ POST localhost:9999/reg
 Content-Type: application/json
 
 {
-  "firstName" : "ivo",
-  "secondName" : "ivanov",
-  "lastName" : "georgiev",
-  "gender" : "m",
-  "email" : "ivo@abv.bg",
+  "firstName" : "deni",
+  "secondName" : "r",
+  "lastName" : "do",
+  "gender" : "f",
+  "email" : "denito@abv.bg",
   "password" : "Groups99%",
   "password2" : "Groups99%",
-  "dateOfBirth" : "2005-10-10"
+  "dateOfBirth" : "2005-10-10",
+  "isAdmin" : "false"
+
+
 }
 
 ### login
@@ -18,7 +21,7 @@ POST localhost:9999/login
 Content-Type: application/json
 
 {
-  "email" : "basecamp@abv.bg",
+  "email" : "denito@abv.bg",
   "password" : "Groups99%"
 }
 
@@ -60,4 +63,15 @@ Content-Type: application/json
   "newPassword" : "Groups99%",
   "newPassword2" : "Groups99%"
 
+}
+
+### buyTicket
+POST localhost:9999/users/ticket
+Content-Type: application/json
+
+{
+  "userId" : 13,
+  "projectionId" : 1,
+  "rowNumber" : 1,
+  "seatNumber" : 1
 }

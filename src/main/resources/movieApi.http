@@ -5,12 +5,12 @@ Content-Type: application/json
 {
   "title" : "title32",
   "duration" : 120,
-  "description" : "description",
+  "description" : "descrjjiption",
   "actors" : "Georg Georg",
   "premiere" : "2022-03-18",
   "director" : "director",
-  "category_id" : 1,
-  "poster_url" : ".."
+  "categoryId" : 1,
+  "poster_url" : "kjbhkjhnkj"
 
 }
 
@@ -29,4 +29,4 @@ Content-Type: application/json
 
 
 ### get by id
-GET localhost:9999/movies/2
+GET localhost:9999/movies/6

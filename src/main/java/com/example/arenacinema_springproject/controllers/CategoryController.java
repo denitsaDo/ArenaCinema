@@ -35,9 +35,9 @@ public class CategoryController extends BaseController{
     }
 
     @GetMapping("/categories/{id}")
-    public ResponseEntity<Category> getById(@PathVariable int id){
+    public Category getById(@PathVariable int id){
         Category category = categoryService.getById(id);
-        return ResponseEntity.ok(category);
+        return category;
     }
 
     @PutMapping("/categories")

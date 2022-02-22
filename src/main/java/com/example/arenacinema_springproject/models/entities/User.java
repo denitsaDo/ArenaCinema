@@ -20,6 +20,7 @@ import java.util.Set;
 
 public class User {
 
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -43,6 +44,8 @@ public class User {
     @OneToMany(mappedBy = "user")
     Set<MovieRating> ratings;
 
+    @OneToMany(mappedBy = "userForTicket")
+    Set<Ticket> userTickets;
 
 
 

@@ -23,4 +23,4 @@ Content-Type: application/json
 DELETE localhost:9999/categories/7
 
 ### get by id
-GET localhost:9999/categories/2
+GET localhost:9999/categories/1

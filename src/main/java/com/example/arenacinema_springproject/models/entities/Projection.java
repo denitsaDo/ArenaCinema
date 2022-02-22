@@ -7,6 +7,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.Set;
 
 @Entity
 @Table(name = "projections")
@@ -33,4 +34,7 @@ public class Projection {
 
     @Column
     private Date startTime;
+
+    @OneToMany(mappedBy = "projectionIdForTicket")
+    Set<Ticket> projectionTickets;
 }
