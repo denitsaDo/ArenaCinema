@@ -2,6 +2,7 @@ package com.example.arenacinema_springproject.controllers;
 
 
 import com.example.arenacinema_springproject.exceptions.ConstraintValidationException;
+import com.example.arenacinema_springproject.exceptions.CreatedException;
 import com.example.arenacinema_springproject.exceptions.UnauthorizedException;
 import com.example.arenacinema_springproject.models.dto.*;
 import com.example.arenacinema_springproject.models.entities.Ticket;
@@ -116,13 +117,13 @@ public class UserController extends BaseController{
         }
     }
 
-    //@Transactional
+
     @PostMapping("/users/ticket")
-    public ResponseEntity<Ticket> buyTicket(@RequestBody TicketAddDTO ticket, HttpServletRequest request){
+    public void buyTicket(@RequestBody TicketAddDTO ticket, HttpServletRequest request){
         validateLogin(request);
         Ticket ticket1 = ticketController.add(ticket);
-//        User u = userService.getById(ticket1.getUserId());
-//        u.getUserTickets().add(modelMapper.map(ticket1, Ticket.class));
-        return ResponseEntity.ok(ticket1);
+        User u = userService.getById(ticket.getUserId());
+        u.getUserTickets().add(modelMapper.map(ticket1, Ticket.class));
+        throw new CreatedException("Ticket added. This user has " + u.getUserTickets().size() + " tickets.");
     }
 }

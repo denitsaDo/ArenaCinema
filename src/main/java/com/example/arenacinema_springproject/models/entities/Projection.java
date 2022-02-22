@@ -36,5 +36,5 @@ public class Projection {
     private Date startTime;
 
     @OneToMany(mappedBy = "projectionIdForTicket")
-    Set<Ticket> projectionTickets;
+    private Set<Ticket> projectionTickets;
 }

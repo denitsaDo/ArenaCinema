@@ -75,7 +75,6 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
 
-
     @ExceptionHandler(value = {Exception.class})
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ResponseBody

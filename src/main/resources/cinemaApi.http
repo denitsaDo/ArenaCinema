@@ -17,7 +17,7 @@ Content-Type: application/json
 
 {
   "id" : 27,
-  "name" : "New Cinema ",
+  "name" : "New Cinema Arena",
   "cityId" : 10,
   "phoneNumber" : "0999888888",
   "address" : "okolovrysten pyt 77",
