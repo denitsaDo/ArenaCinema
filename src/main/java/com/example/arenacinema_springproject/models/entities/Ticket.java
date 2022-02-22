@@ -19,7 +19,7 @@ public class Ticket {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
-    private User userForTicket;
+    private User owner;
 
     @ManyToOne
     @JoinColumn(name = "projection_id")

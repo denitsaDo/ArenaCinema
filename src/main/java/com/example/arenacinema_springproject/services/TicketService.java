@@ -10,6 +10,8 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class TicketService {
 
@@ -37,12 +39,16 @@ public class TicketService {
         }
         //TODO check free seats
         Ticket newTicket = new Ticket();
-        newTicket.setUserForTicket(userRepository.getById(ticket.getUserId()));
+        newTicket.setOwner(userRepository.getById(ticket.getUserId()));
         newTicket.setProjectionIdForTicket(projectionRepository.getById(ticket.getProjectionId()));
         newTicket.setRownumber(ticket.getRownumber());
         newTicket.setSeatNumber(ticket.getSeatNumber());
         ticketRepository.save(newTicket);
         return newTicket;
 
+    }
+
+    public List<Ticket> getAllUserTickets(int id) {
+        return ticketRepository.findAllByOwnerId(id);
     }
 }
