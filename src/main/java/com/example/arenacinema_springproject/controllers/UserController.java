@@ -118,11 +118,11 @@ public class UserController extends BaseController{
 
     //@Transactional
     @PostMapping("/users/ticket")
-    public ResponseEntity<TicketAddDTO> buyTicket(@RequestBody TicketAddDTO ticket, HttpServletRequest request){
+    public ResponseEntity<Ticket> buyTicket(@RequestBody TicketAddDTO ticket, HttpServletRequest request){
         validateLogin(request);
-        TicketAddDTO ticket1 = ticketController.addTicket(ticket);
-        User u = userService.getById(ticket1.getUserId());
-        //u.getUserTickets().add(ticket1);
+        Ticket ticket1 = ticketController.add(ticket);
+//        User u = userService.getById(ticket1.getUserId());
+//        u.getUserTickets().add(modelMapper.map(ticket1, Ticket.class));
         return ResponseEntity.ok(ticket1);
     }
 }

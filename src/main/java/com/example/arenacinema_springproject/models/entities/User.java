@@ -41,12 +41,10 @@ public class User {
     @Column
     private boolean isAdmin;
 
-    @OneToMany(mappedBy = "user")
-    Set<MovieRating> ratings;
+//    @OneToMany(mappedBy = "user")
+//    Set<MovieRating> ratings;
 
     @OneToMany(mappedBy = "userForTicket")
     Set<Ticket> userTickets;
-
-
 
 }

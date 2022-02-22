@@ -30,10 +30,8 @@ public class CinemaService {
     ProjectionRepository projectionRepository;
     @Autowired
     private ModelMapper modelMapper;
-
     @Autowired
     private JdbcTemplate jdbcTemplate;
-
     @Autowired
     JdbcConfiguration jdbcConfiguration;
 
@@ -120,7 +118,8 @@ public class CinemaService {
     }
 
     public Stream<CinemaInfoDTO> getCinemasWithFilter(CinemaWithFiltersDTO cinemaWithFilters) {
-        String sql = "SELECT c.name AS cinema_name, p.id AS projection_id, m.title AS movie_title, h.name AS hall_name, t.name AS type_name, p.start_time AS projection_start  from kinoarena.cinemas AS c\n" +
+        String sql = "SELECT c.name AS cinema_name, p.id AS projection_id, m.title AS movie_title, h.name AS hall_name, t.name AS type_name, p.start_time AS projection_start  " +
+                "FROM cinemas AS c\n" +
                 "LEFT JOIN halls AS h ON( c.id = h.cinema_id)\n" +
                 "LEFT JOIN projections As p ON(h.id = p.hall_id)\n" +
                 "LEFT JOIN movies AS m ON(m.id = p.movie_id)\n" +

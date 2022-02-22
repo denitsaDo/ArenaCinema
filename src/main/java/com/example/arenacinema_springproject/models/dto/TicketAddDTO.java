@@ -11,6 +11,6 @@ public class TicketAddDTO {
 
     private int userId;
     private int projectionId;
-    private int rowNumber;
+    private int rownumber;
     private int seatNumber;
 }

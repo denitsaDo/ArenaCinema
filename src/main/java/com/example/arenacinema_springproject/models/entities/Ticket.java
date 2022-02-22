@@ -26,7 +26,7 @@ public class Ticket {
     private Projection projectionIdForTicket;
 
     @Column
-    private int rowNumber;
+    private int rownumber;
 
     @Column
     private int seatNumber;

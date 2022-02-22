@@ -22,19 +22,27 @@ public class TicketService {
     @Autowired
     private ModelMapper modelMapper;
 
-    public TicketAddDTO addTicket(TicketAddDTO ticket) {
-        if (ticket.getProjectionId() == 0 || ticket.getUserId() == 0
-                || ticket.getRowNumber() == 0 || ticket.getSeatNumber() == 0){
-            throw new BadRequestException("All fields are mandatory.");
+    public Ticket addTicketInService(TicketAddDTO ticket) {
+        if (ticket.getUserId() == 0) {
+            throw new BadRequestException("User id is mandatory");
+        }
+        if(ticket.getProjectionId() == 0) {
+            throw new BadRequestException("Projection id is mandatory");
+        }
+        if (ticket.getRownumber() == 0) {
+            throw new BadRequestException("Row number is mandatory");
+        }
+        if(ticket.getSeatNumber() == 0){
+            throw new BadRequestException("Seat number is mandatory");
         }
         //TODO check free seats
         Ticket newTicket = new Ticket();
-        newTicket.setUserForTicket(userRepository.findById(ticket.getUserId()).orElseThrow());
-        newTicket.setProjectionIdForTicket(projectionRepository.findById(ticket.getProjectionId()).orElseThrow());
-        newTicket.setRowNumber(ticket.getRowNumber());
+        newTicket.setUserForTicket(userRepository.getById(ticket.getUserId()));
+        newTicket.setProjectionIdForTicket(projectionRepository.getById(ticket.getProjectionId()));
+        newTicket.setRownumber(ticket.getRownumber());
         newTicket.setSeatNumber(ticket.getSeatNumber());
         ticketRepository.save(newTicket);
-        return ticket;
+        return newTicket;
 
     }
 }

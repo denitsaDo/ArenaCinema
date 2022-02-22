@@ -32,11 +32,11 @@ DELETE localhost:9999/cinemas/10
 GET localhost:9999/cinemas/11
 
 
-### get all cinemas optional filter by city name or ptojection type
+### get all cinemas with optional filter by city name or ptojection type
 GET localhost:9999/cinemas
 Content-Type: application/json
 
 {
-  "city" : null,
+  "city" : "burgas",
   "type" : "5D Real"
 }
