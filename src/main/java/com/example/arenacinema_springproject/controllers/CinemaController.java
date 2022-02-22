@@ -3,7 +3,6 @@ package com.example.arenacinema_springproject.controllers;
 
 import com.example.arenacinema_springproject.models.dto.*;
 import com.example.arenacinema_springproject.models.entities.Cinema;
-import com.example.arenacinema_springproject.models.repositories.CinemaRepository;
 import com.example.arenacinema_springproject.services.CinemaService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,9 +57,9 @@ public class CinemaController extends BaseController{
 
 
 
-    @GetMapping("/cinemas/city/{cityId}")
-    public Stream<CinemaInfoDTO> getALlbyCity (@PathVariable int cityId) {
-        Stream<CinemaInfoDTO> result = cinemaService.getCinemaByCity(cityId);
+    @GetMapping("/cinemas")
+    public Stream<CinemaInfoDTO> getAll(@RequestBody CinemaWithFiltersDTO cinemaWithFilters) {
+        Stream<CinemaInfoDTO> result = cinemaService.getCinemasWithFilter(cinemaWithFilters);
         return result;
     }
 

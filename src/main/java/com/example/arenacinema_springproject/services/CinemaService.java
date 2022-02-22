@@ -119,15 +119,27 @@ public class CinemaService {
         return dto;
     }
 
-    public Stream<CinemaInfoDTO> getCinemaByCity(int cityId) {
-        return jdbcTemplate.queryForStream(
-        "SELECT c.name AS cinema_name, p.id AS projection_id, m.title AS movie_title, h.name AS hall_name, t.name AS type_name, p.start_time AS projection_start  from kinoarena.cinemas AS c\n" +
-            "LEFT JOIN halls AS h ON( c.id = h.cinema_id)\n" +
-            "LEFT JOIN projections As p ON(h.id = p.hall_id)\n" +
-            "LEFT JOIN movies AS m ON(m.id = p.movie_id)\n" +
-            "LEFT JOIN cities ON(cities.id = c.city_id)\n" +
-            "LEFT JOIN types AS t ON(p.type_id = t.id)\n" +
-            "WHERE cities.id =" + cityId, new CinemaRowMapper());
-    }
+    public Stream<CinemaInfoDTO> getCinemasWithFilter(CinemaWithFiltersDTO cinemaWithFilters) {
+        String sql = "SELECT c.name AS cinema_name, p.id AS projection_id, m.title AS movie_title, h.name AS hall_name, t.name AS type_name, p.start_time AS projection_start  from kinoarena.cinemas AS c\n" +
+                "LEFT JOIN halls AS h ON( c.id = h.cinema_id)\n" +
+                "LEFT JOIN projections As p ON(h.id = p.hall_id)\n" +
+                "LEFT JOIN movies AS m ON(m.id = p.movie_id)\n" +
+                "LEFT JOIN cities ON(cities.id = c.city_id)\n" +
+                "LEFT JOIN types AS t ON(p.type_id = t.id)\n";
 
+        if (cinemaWithFilters.getCity() != null && cinemaWithFilters.getType() != null) {
+            sql+= "WHERE cities.name LIKE " + "'" + cinemaWithFilters.getCity() + "'" + "AND t.name LIKE " + "'" + cinemaWithFilters.getType() + "'";
+        }
+        else {
+            if (cinemaWithFilters.getCity() != null ) {
+                sql+= "WHERE cities.name LIKE " + "'" + cinemaWithFilters.getCity() + "'" ;
+            }
+
+            if ((cinemaWithFilters.getType() != null) ) {
+                sql+= "WHERE t.name LIKE " + "'" + cinemaWithFilters.getType() + "'";
+            }
+        }
+
+        return jdbcTemplate.queryForStream(sql, new CinemaRowMapper());
+    }
 }
