@@ -22,7 +22,7 @@ public class UserRegisterDTO {
     private String email;
     private String password;
     private String password2;
-    @DateTimeFormat(pattern = "yyyy.MM.dd")   //todo some exception msg if wrong format
+    @DateTimeFormat(pattern = "yyyy.MM.dd")
     private Date dateOfBirth;
-    private boolean isAdmin;
+
 }

@@ -95,7 +95,7 @@ public class UserService {
         u.setGender(user.getGender());
         u.setEmail(user.getEmail());
         u.setDateOfBirth(user.getDateOfBirth());
-        u.setAdmin(user.isAdmin());
+        u.setAdmin(false);
         u.setPassword(passwordEncoder.encode(user.getPassword()));  // bcrypt password
         userRepository.save(u);
         return u;
