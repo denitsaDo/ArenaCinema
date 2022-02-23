@@ -72,9 +72,9 @@ Content-Type: application/json
 {
 
   "userId" : 23,
-  "projectionId" : 6,
-  "rownumber" : 2,
-  "seatNumber" : 22
+  "projectionId" : 1,
+  "rownumber" : 5,
+  "seatNumber" : 10
 
 }
 

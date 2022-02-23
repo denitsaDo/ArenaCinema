@@ -8,9 +8,11 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class HallEditDTO {
+
     private int id;
     private String name;
-    private int capacity;
+    private int rowsNumber;
+    private int seatsPerRow;
     private int cinemaId;
 
 }

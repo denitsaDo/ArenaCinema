@@ -118,9 +118,9 @@ public class CinemaService {
     }
 
     public Stream<CinemaInfoDTO> getCinemasWithFilter(CinemaWithFiltersDTO cinemaWithFilters) {
-        String sql = "SELECT c.name AS cinema_name, p.id AS projection_id, m.title AS movie_title, " +
-                "h.name AS hall_name, t.name AS type_name, p.start_time AS projection_start, " +
-                "h.capacity - (SELECT count(*) FROM tickets where tickets.projection_id = p.id)  AS free_seats\n" +
+        String sql = "SELECT c.name AS cinema_name, p.id AS projection_id, m.title AS movie_title, h.name AS hall_name, \n" +
+                "t.name AS type_name, p.start_time AS projection_start, \n" +
+                "((h.rows_number * h.seats_per_row) - (SELECT count(*) FROM kinoarena.tickets where tickets.projection_id = p.id))  AS free_seats\n" +
                 "FROM cinemas AS c\n" +
                 "LEFT JOIN halls AS h ON( c.id = h.cinema_id)\n" +
                 "LEFT JOIN projections AS p ON(h.id = p.hall_id)\n" +

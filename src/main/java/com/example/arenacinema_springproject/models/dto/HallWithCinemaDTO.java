@@ -11,6 +11,7 @@ import lombok.Setter;
 public class HallWithCinemaDTO {
     private int id;
     private String name;
-    private int capacity;
+    private int rowsNumber;
+    private int seatsPerRow;
     private CinemaWithoutHallDTO cinemaForThisHall;
 }

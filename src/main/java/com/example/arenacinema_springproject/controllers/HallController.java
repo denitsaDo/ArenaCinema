@@ -57,7 +57,8 @@ public class HallController extends BaseController{
         HallWithCinemaDTO dto = new HallWithCinemaDTO();
         dto.setId(h.getId());
         dto.setName(h.getName());
-        dto.setCapacity(h.getCapacity());
+        dto.setRowsNumber(h.getRowsNumber());
+        dto.setSeatsPerRow(h.getSeatsPerRow());
         dto.setCinemaForThisHall(modelMapper.map(h.getCinemaIn(), CinemaWithoutHallDTO.class));
         return ResponseEntity.ok(dto);
     }

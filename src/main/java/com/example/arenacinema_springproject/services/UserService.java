@@ -107,7 +107,6 @@ public class UserService {
     }
 
 
-
     public User edit(UserEditDTO user) {
         Optional<User> opt = userRepository.findById(user.getId());
         if(opt.isPresent()){

@@ -21,7 +21,9 @@ public class Hall {
     @Column
     private String name;
     @Column
-    private int capacity;
+    private int rowsNumber;
+    @Column
+    private int seatsPerRow;
     @ManyToOne
     @JoinColumn(name = "cinema_id")
     //@JsonBackReference

@@ -10,7 +10,8 @@ import lombok.Setter;
 public class HallAddDTO {
 
     private String name;
-    private int capacity;
+    private int rowsNumber;
+    private int seatsPerRow;
     private int cinemaId;
 
 }

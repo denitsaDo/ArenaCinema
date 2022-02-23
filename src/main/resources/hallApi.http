@@ -3,9 +3,10 @@ POST localhost:9999/halls
 Content-Type: application/json
 
 {
-  "name" : "zala VIP2",
-  "capacity" : 40,
-  "cinemaId" : 26
+  "name" : "zala DELUXE",
+  "rowsNumber" : 4,
+  "seatsPerRow" : 10,
+  "cinemaId" : 34
 }
 
 ### edit
@@ -13,10 +14,11 @@ PUT localhost:9999/halls
 Content-Type: application/json
 
 {
-  "id" : 11,
-  "name" : "Zala 3",
-  "capacity" : 40,
-  "cinemaId" : 11
+  "id" : 17,
+  "name" : "zala DELUXE",
+  "rowsNumber" : 3,
+  "seatsPerRow" : 10,
+  "cinemaId" : 34
 }
 
 ### remove

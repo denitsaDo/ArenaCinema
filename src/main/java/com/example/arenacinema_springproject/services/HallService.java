@@ -27,16 +27,12 @@ public class HallService {
     private ModelMapper modelMapper;
 
     public HallWithCinemaDTO addHall(HallAddDTO hall) {
-        if (hall.getName() == null || hall.getName().isBlank()) {
-            throw new BadRequestException("Cinema name is mandatory!");
-        }
-        if (hall.getCapacity() < 25 || hall.getCapacity() > 120) {
-            throw new BadRequestException("Seats must be between 25 and 120");
-        }
+        validateHallData(hall);
 
         Hall h = new Hall();
         h.setName(hall.getName());
-        h.setCapacity(hall.getCapacity());
+        h.setRowsNumber(hall.getRowsNumber());
+        h.setSeatsPerRow(hall.getSeatsPerRow());
         h.setCinemaIn(cinemaRepository.findById(hall.getCinemaId()).orElseThrow(() -> new NotFoundException("Cinema not found")));
         hallRepository.save(h);
         HallWithCinemaDTO dto = new HallWithCinemaDTO();
@@ -46,10 +42,10 @@ public class HallService {
 
     }
 
+
     public Hall getHallById(int id) {
         return hallRepository.findById(id).orElseThrow(() -> new NotFoundException("Hall not found"));
     }
-
 
 
     public void delete(Hall hall) {
@@ -57,6 +53,7 @@ public class HallService {
     }
 
     public HallWithCinemaDTO edit(HallEditDTO hall) {
+//        validateHallData(modelMapper.map(hall, HallAddDTO.class));
         Optional<Hall> opt = hallRepository.findById(hall.getId());
         if(opt.isPresent()){
             Hall h = modelMapper.map(hall, Hall.class);
@@ -69,6 +66,15 @@ public class HallService {
         }
         else{
             throw new NotFoundException("Hall not found.");
+        }
+    }
+
+    private void validateHallData(HallAddDTO hall) {
+        if (hall.getName() == null || hall.getName().isBlank()) {
+            throw new BadRequestException("Cinema name is mandatory!");
+        }
+        if (hall.getRowsNumber() <= 0 ||  hall.getSeatsPerRow() <= 0) {
+            throw new BadRequestException("Seats and rows should be greater than 0.");
         }
     }
 
