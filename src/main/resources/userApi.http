@@ -77,3 +77,6 @@ Content-Type: application/json
   "seatNumber" : 22
 
 }
+
+### get occupied seats for a projection
+GET localhost:9999/users/occupied/6

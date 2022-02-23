@@ -55,8 +55,6 @@ public class CinemaController extends BaseController{
     }
 
 
-
-
     @GetMapping("/cinemas")
     public Stream<CinemaInfoDTO> getAll(@RequestBody CinemaWithFiltersDTO cinemaWithFilters) {
         Stream<CinemaInfoDTO> result = cinemaService.getCinemasWithFilter(cinemaWithFilters);

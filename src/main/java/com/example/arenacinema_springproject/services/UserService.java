@@ -1,6 +1,7 @@
 package com.example.arenacinema_springproject.services;
 import com.example.arenacinema_springproject.exceptions.NoContentException;
 import com.example.arenacinema_springproject.exceptions.NotFoundException;
+import com.example.arenacinema_springproject.models.dto.OccupiedSeatsDTO;
 import com.example.arenacinema_springproject.models.dto.UserEditDTO;
 import com.example.arenacinema_springproject.models.dto.UserPasswordEditDTO;
 import com.example.arenacinema_springproject.models.dto.UserRegisterDTO;
@@ -8,6 +9,7 @@ import com.example.arenacinema_springproject.models.entities.User;
 import com.example.arenacinema_springproject.models.repositories.UserRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import com.example.arenacinema_springproject.exceptions.BadRequestException;
@@ -21,6 +23,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 
 @Service
@@ -32,6 +35,8 @@ public class UserService {
     private PasswordEncoder passwordEncoder;
     @Autowired
     private ModelMapper modelMapper;
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
 
 
     public User login(String email, String password) {
@@ -121,6 +126,12 @@ public class UserService {
         }
     }
 
+    public Stream<OccupiedSeatsDTO> getOccupiedSeatsForProjection(int projectionId) {
+        String sql = "SELECT rownumber , seat_number FROM tickets WHERE projection_id =" + projectionId;
+
+        return jdbcTemplate.queryForStream(sql,new OccupiedSeatsRowMapper());
+    }
+
 
     public User editPassword(UserPasswordEditDTO user) {
         Optional<User> opt = userRepository.findById(user.getId());
@@ -142,7 +153,6 @@ public class UserService {
             throw new NotFoundException("User not found");
         }
     }
-
     private void validateMandatoryFields(UserRegisterDTO user) {
         if (user.getFirstName() == null || user.getFirstName().isBlank() || user.getSecondName() == null || user.getSecondName().isBlank() || user.getLastName() == null || user.getLastName().isBlank() ||
                 user.getGender() == null || user.getGender().isBlank()  || user.getDateOfBirth() == null) {
@@ -170,4 +180,6 @@ public class UserService {
             throw new BadRequestException("Passwords mismatch.");
         }
     }
+
+
 }
