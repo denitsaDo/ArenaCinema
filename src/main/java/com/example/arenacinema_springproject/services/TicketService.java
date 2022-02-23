@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class TicketService {
@@ -41,7 +42,6 @@ public class TicketService {
         if ( row < 0 || seat < 0) {
             throw new BadRequestException("Row and seat numbers should be positive numbers");
         }
-
         Projection p = projectionRepository.findById(projectionId).orElseThrow(()-> new BadRequestException("No such projection"));
         Hall h = hallRepository.findById(p.getHallForProjection().getId()).orElseThrow(()-> new BadRequestException("No such hall."));
         if (h.getRowsNumber() < row  ) {
@@ -52,15 +52,19 @@ public class TicketService {
         }
 
         //TODO check free seats
-
-
-        Ticket newTicket = new Ticket();
-        newTicket.setOwner(userRepository.getById(ticket.getUserId()));
-        newTicket.setProjectionIdForTicket(projectionRepository.getById(ticket.getProjectionId()));
-        newTicket.setRownumber(ticket.getRownumber());
-        newTicket.setSeatNumber(ticket.getSeatNumber());
-        ticketRepository.save(newTicket);
-        return newTicket;
+        Optional<Ticket> ticketOptional = ticketRepository.findTicketByProjectionIdForTicketAndRownumberAndSeatNumber(projectionRepository.findById(projectionId).orElseThrow(), row, seat);
+        if (!ticketOptional.isPresent()){
+            Ticket newTicket = new Ticket();
+            newTicket.setOwner(userRepository.getById(ticket.getUserId()));
+            newTicket.setProjectionIdForTicket(projectionRepository.getById(ticket.getProjectionId()));
+            newTicket.setRownumber(ticket.getRownumber());
+            newTicket.setSeatNumber(ticket.getSeatNumber());
+            ticketRepository.save(newTicket);
+            return newTicket;
+        }
+        else {
+            throw new BadRequestException("This place is occupied");
+        }
 
     }
 
