@@ -15,15 +15,23 @@ public class CategotyService {
     @Autowired
     private CategoryRepository categoryRepository;
 
+    public static final int MAX_LENGTH = 30;
+
     public Category add(String name, String description) {
         if (name == null || name.isBlank()){
             throw new BadRequestException("Category name is mandatory!");
+        }
+        if (name.length() >MAX_LENGTH){
+            throw new BadRequestException("Category name is too long!");
         }
         if (categoryRepository.findByName(name)!= null) {
             throw new BadRequestException("Category already exists!");
         }
         if (description == null || description.isBlank()){
             throw new BadRequestException("Description name is mandatory!");
+        }
+        if (description.length() >MAX_LENGTH){
+            throw new BadRequestException("Description is too long!");
         }
         if (categoryRepository.findByDescription(description)!= null) {
             throw new BadRequestException("Description already exists!");
@@ -44,6 +52,26 @@ public class CategotyService {
     }
 
     public Category edit(Category category) {
+        String name = category.getName();
+        String description = category.getDescription();
+        if (name == null || name.isBlank()){
+            throw new BadRequestException("Category name is mandatory!");
+        }
+        if (name.length() >MAX_LENGTH){
+            throw new BadRequestException("Category name is too long!");
+        }
+        if (categoryRepository.findByName(name)!= null) {
+            throw new BadRequestException("Category already exists!");
+        }
+        if (description == null || description.isBlank()){
+            throw new BadRequestException("Description name is mandatory!");
+        }
+        if (description.length() >MAX_LENGTH){
+            throw new BadRequestException("Description is too long!");
+        }
+        if (categoryRepository.findByDescription(description)!= null) {
+            throw new BadRequestException("Description already exists!");
+        }
         Optional<Category> cat = categoryRepository.findById(category.getId());
         if(cat.isPresent()){
             categoryRepository.save(category);

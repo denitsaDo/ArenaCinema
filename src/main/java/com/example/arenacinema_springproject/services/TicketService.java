@@ -56,7 +56,7 @@ public class TicketService {
             throw new BadRequestException("Invalid seat number. This hall has " + h.getSeatsPerRow() + " seats per row.");
         }
 
-        //TODO check free seats
+
 
         Optional<Ticket> ticketOptional = ticketRepository.findTicketByProjectionIdForTicketAndRownumberAndSeatNumber(projectionRepository.findById(projectionId).orElseThrow(), row, seat);
         if (!ticketOptional.isPresent()){

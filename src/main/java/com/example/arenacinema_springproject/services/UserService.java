@@ -31,9 +31,11 @@ public class UserService {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
+    public static final int MAX_LENGTH = 30;
+
 
     public User login(String email, String password) {
-        if (email == null || email.isBlank()) {
+        if (email == null || email.isBlank() ) {
             throw new BadRequestException("Email is mandatory!");
         }
         if (password == null || password.isBlank()) {
@@ -77,6 +79,9 @@ public class UserService {
         validateMandatoryFields(user);
         if (user.getEmail() == null || user.getEmail().isBlank()) {
             throw new BadRequestException("All fields are mandatory");
+        }
+        if (user.getEmail().length() > MAX_LENGTH){
+            throw new BadRequestException("Email name is too long!");
         }
         if (userRepository.findByEmail(user.getEmail()) != null) {
             throw new BadRequestException("User already exists!");
@@ -146,7 +151,15 @@ public class UserService {
                 user.getGender() == null || user.getGender().isBlank()  || user.getDateOfBirth() == null) {
             throw new BadRequestException("All fields are mandatory");
         }
-
+        if (user.getFirstName().length() > MAX_LENGTH){
+            throw new BadRequestException("First name is too long!");
+        }
+        if (user.getSecondName().length() > MAX_LENGTH){
+            throw new BadRequestException("Second name is too long!");
+        }
+        if (user.getLastName().length() > MAX_LENGTH){
+            throw new BadRequestException("Last name is too long!");
+        }
         Calendar cal = Calendar.getInstance();
         cal.setTime(user.getDateOfBirth());
 

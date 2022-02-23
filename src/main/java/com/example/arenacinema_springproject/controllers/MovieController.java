@@ -1,6 +1,7 @@
 package com.example.arenacinema_springproject.controllers;
 
 import com.example.arenacinema_springproject.models.dto.MovieAddDTO;
+import com.example.arenacinema_springproject.models.dto.MovieEditDTO;
 import com.example.arenacinema_springproject.models.dto.MovieResponseDTO;
 import com.example.arenacinema_springproject.models.entities.Movie;
 import com.example.arenacinema_springproject.models.repositories.CategoryRepository;
@@ -11,6 +12,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -26,17 +28,17 @@ public class MovieController extends BaseController {
     @PostMapping("/movies")
     public ResponseEntity<MovieResponseDTO> addMovie(@RequestBody MovieAddDTO movie, HttpServletRequest request) {
         validateLogin(request);
-        adminLogin(request);
+        //adminLogin(request);
         MovieResponseDTO dto = movieService.add(movie);
         return ResponseEntity.ok(dto);
     }
 
 
     @PutMapping("/movies")
-    public ResponseEntity<Movie> edit(@RequestBody Movie movie, HttpServletRequest request){
+    public ResponseEntity<MovieResponseDTO> edit(@RequestBody MovieEditDTO movie, HttpServletRequest request){
         validateLogin(request);
         adminLogin(request);
-        Movie movie1 = movieService.edit(movie);
+        MovieResponseDTO movie1 = movieService.edit(movie);
         return ResponseEntity.ok(movie1);
     }
 
@@ -57,6 +59,8 @@ public class MovieController extends BaseController {
     //TODO add getRatingById (SELECT AVG(r.rating) FROM users_rate_movies AS r JOIN movies AS m ON r.movie_id = m.id
     //JOIN users AS u ON r.user_id = u.id
     //WHERE m.id = ? AND u.id = ?;)
+
+
 
 
 

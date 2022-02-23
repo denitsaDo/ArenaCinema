@@ -5,9 +5,9 @@ Content-Type: application/json
 {
   "title" : "title32",
   "duration" : 120,
-  "description" : "descrjjiption",
+  "description" : "descrjhhhhjiption",
   "actors" : "Georg Georg",
-  "premiere" : "2022-03-18",
+  "premiere" : "2022-02-18",
   "director" : "director",
   "categoryId" : 1,
   "poster_url" : "kjbhkjhnkj"
@@ -23,10 +23,18 @@ PUT localhost:9999/movies
 Content-Type: application/json
 
 {
-  "title" : "title",
-  "duration" : 125
+  "id" : 10,
+  "title" : "title32",
+  "duration" : 120,
+  "description" : "ddddd",
+  "actors" : "Georg Georg",
+  "premiere" : "2022-04-18",
+  "director" : "director",
+  "category" : 1,
+  "poster_url" : "kjbhkjhnkj"
+
 }
 
 
 ### get by id
-GET localhost:9999/movies/6
+GET localhost:9999/movies/10
