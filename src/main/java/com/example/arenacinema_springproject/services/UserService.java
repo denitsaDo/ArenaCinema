@@ -125,11 +125,7 @@ public class UserService {
         }
     }
 
-    public Stream<OccupiedSeatsDTO> getOccupiedSeatsForProjection(int projectionId) {
-        String sql = "SELECT rownumber , seat_number FROM tickets WHERE projection_id =" + projectionId;
 
-        return jdbcTemplate.queryForStream(sql,new OccupiedSeatsRowMapper());
-    }
 
 
     public User editPassword(UserPasswordEditDTO user) {

@@ -128,10 +128,5 @@ public class UserController extends BaseController{
         throw new CreatedException("Ticket added. This user has " + u.getUserTickets().size() + " tickets.");
     }
 
-    @GetMapping("/users/occupied/{projectionId}")
-    public Stream<OccupiedSeatsDTO> getAll(@PathVariable int projectionId, HttpServletRequest request) {
-        validateLogin(request);
-        Stream<OccupiedSeatsDTO> result = userService.getOccupiedSeatsForProjection(projectionId);
-        return result;
-    }
+
 }

@@ -1,6 +1,7 @@
 package com.example.arenacinema_springproject.services;
 
 import com.example.arenacinema_springproject.exceptions.BadRequestException;
+import com.example.arenacinema_springproject.models.dto.OccupiedSeatsDTO;
 import com.example.arenacinema_springproject.models.dto.TicketAddDTO;
 import com.example.arenacinema_springproject.models.entities.Hall;
 import com.example.arenacinema_springproject.models.entities.Projection;
@@ -11,10 +12,12 @@ import com.example.arenacinema_springproject.models.repositories.TicketRepositor
 import com.example.arenacinema_springproject.models.repositories.UserRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 @Service
 public class TicketService {
@@ -27,7 +30,8 @@ public class TicketService {
     private ProjectionRepository projectionRepository;
     @Autowired
     private HallRepository hallRepository;
-
+    @Autowired
+    JdbcTemplate jdbcTemplate;
 
 
 
@@ -72,5 +76,11 @@ public class TicketService {
 
     public List<Ticket> getAllUserTickets(int id) {
         return ticketRepository.findAllByOwnerId(id);
+    }
+
+    public Stream<OccupiedSeatsDTO> getOccupiedSeatsForProjection(int projectionId) {
+        String sql = "SELECT rownumber , seat_number FROM tickets WHERE projection_id =" + projectionId;
+
+        return jdbcTemplate.queryForStream(sql,new OccupiedSeatsRowMapper());
     }
 }
