@@ -15,5 +15,6 @@ public interface TicketRepository extends JpaRepository<Ticket, Integer> {
 
     List<Ticket> findAllByOwnerId(int id);
 
-  Optional<Ticket> findTicketByProjectionIdForTicketAndAndRownumberAndSeatNumber(Projection projection, int row, int seat);
+    Optional<Ticket> findTicketByProjectionIdForTicketAndRownumberAndSeatNumber(Projection projection, int row, int seat);
+
 }

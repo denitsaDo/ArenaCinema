@@ -42,7 +42,6 @@ public class TicketService {
         if ( row < 0 || seat < 0) {
             throw new BadRequestException("Row and seat numbers should be positive numbers");
         }
-
         Projection p = projectionRepository.findById(projectionId).orElseThrow(()-> new BadRequestException("No such projection"));
         Hall h = hallRepository.findById(p.getHallForProjection().getId()).orElseThrow(()-> new BadRequestException("No such hall."));
         if (h.getRowsNumber() < row  ) {
@@ -53,8 +52,10 @@ public class TicketService {
         }
 
         //TODO check free seats
-        Optional<Ticket> opt = ticketRepository.findTicketByProjectionIdForTicketAndAndRownumberAndSeatNumber(projectionRepository.findById(projectionId).orElseThrow(),row,seat);
-        if (!opt.isPresent()) {
+
+        Optional<Ticket> ticketOptional = ticketRepository.findTicketByProjectionIdForTicketAndRownumberAndSeatNumber(projectionRepository.findById(projectionId).orElseThrow(), row, seat);
+        if (!ticketOptional.isPresent()){
+
             Ticket newTicket = new Ticket();
             newTicket.setOwner(userRepository.getById(ticket.getUserId()));
             newTicket.setProjectionIdForTicket(projectionRepository.getById(ticket.getProjectionId()));
@@ -66,6 +67,7 @@ public class TicketService {
         else {
             throw new BadRequestException("This place is occupied");
         }
+
     }
 
     public List<Ticket> getAllUserTickets(int id) {

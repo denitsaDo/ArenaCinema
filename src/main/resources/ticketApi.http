@@ -1,2 +1,2 @@
 ### get all tickets for user by id
-GET localhost:9999/tickets/23
+GET localhost:9999/tickets/13
