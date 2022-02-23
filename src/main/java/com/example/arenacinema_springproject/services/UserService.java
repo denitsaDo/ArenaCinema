@@ -1,7 +1,6 @@
 package com.example.arenacinema_springproject.services;
 import com.example.arenacinema_springproject.exceptions.NoContentException;
 import com.example.arenacinema_springproject.exceptions.NotFoundException;
-import com.example.arenacinema_springproject.models.dto.OccupiedSeatsDTO;
 import com.example.arenacinema_springproject.models.dto.UserEditDTO;
 import com.example.arenacinema_springproject.models.dto.UserPasswordEditDTO;
 import com.example.arenacinema_springproject.models.dto.UserRegisterDTO;
@@ -15,15 +14,9 @@ import org.springframework.stereotype.Service;
 import com.example.arenacinema_springproject.exceptions.BadRequestException;
 import com.example.arenacinema_springproject.exceptions.UnauthorizedException;
 
-import javax.servlet.http.HttpServletRequest;
-import java.time.LocalDate;
-import java.time.Year;
-import java.time.chrono.ChronoLocalDate;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Stream;
 
 
 @Service

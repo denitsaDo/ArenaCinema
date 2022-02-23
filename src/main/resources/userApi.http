@@ -78,5 +78,3 @@ Content-Type: application/json
 
 }
 
-### get occupied seats for a projection
-GET localhost:9999/users/occupied/6

@@ -129,15 +129,15 @@ public class CinemaService {
                 "LEFT JOIN types AS t ON(p.type_id = t.id)";
 
         if (cinemaWithFilters.getCity() != null && cinemaWithFilters.getType() != null) {
-            sql+= "WHERE cities.name LIKE " + "'" + cinemaWithFilters.getCity() + "'" + "AND t.name LIKE " + "'" + cinemaWithFilters.getType() + "'";
+            sql+= "WHERE cities.name LIKE " + "'%" + cinemaWithFilters.getCity() + "%'" + "AND t.name LIKE " + "'%" + cinemaWithFilters.getType() + "%'";
         }
         else {
             if (cinemaWithFilters.getCity() != null ) {
-                sql+= "WHERE cities.name LIKE " + "'" + cinemaWithFilters.getCity() + "'" ;
+                sql+= "WHERE cities.name LIKE " + "'%" + cinemaWithFilters.getCity() + "%'" ;
             }
 
             if ((cinemaWithFilters.getType() != null) ) {
-                sql+= "WHERE t.name LIKE " + "'" + cinemaWithFilters.getType() + "'";
+                sql+= "WHERE t.name LIKE " + "'%" + cinemaWithFilters.getType() + "%'";
             }
         }
 

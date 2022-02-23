@@ -3,3 +3,6 @@ GET localhost:9999/tickets/13
 
 ### get occupied seats for a projection
 GET localhost:9999/tickets/occupied/6
+
+### get free seats for a projection
+GET localhost:9999/tickets/free/6

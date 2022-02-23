@@ -38,5 +38,5 @@ Content-Type: application/json
 
 {
   "city" : "burgas",
-  "type" : "3D Real"
+  "type" : "3D real"
 }

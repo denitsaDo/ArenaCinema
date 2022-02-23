@@ -7,7 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class OccupiedSeatsDTO {
+public class TicketsWithoutUserAndProjectionDTO {
     private int rownumber;
     private int seatNumber;
 }
