@@ -23,7 +23,7 @@ public class TicketController extends BaseController{
     }
 
     @GetMapping("/tickets/{id}")
-    public List<Ticket> getUserTickets(@PathVariable int id,  HttpServletRequest request){
+    public List<Ticket> getUserTickets(@PathVariable int id, HttpServletRequest request){
         validateLogin(request);
         return ticketService.getAllUserTickets(id);
     }

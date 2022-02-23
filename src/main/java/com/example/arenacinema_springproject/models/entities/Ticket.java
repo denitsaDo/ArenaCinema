@@ -1,5 +1,6 @@
 package com.example.arenacinema_springproject.models.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -30,6 +31,5 @@ public class Ticket {
 
     @Column
     private int seatNumber;
-
 
 }

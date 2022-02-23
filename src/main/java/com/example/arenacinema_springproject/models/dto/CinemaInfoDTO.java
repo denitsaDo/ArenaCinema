@@ -17,5 +17,6 @@ public class CinemaInfoDTO {
     private String movieTitle;
     private String hallName;
     private Timestamp projectionStart;
+    private int freeSeats;
 
 }

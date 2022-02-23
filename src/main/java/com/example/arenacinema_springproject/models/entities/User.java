@@ -1,6 +1,7 @@
 package com.example.arenacinema_springproject.models.entities;
 
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -44,7 +45,7 @@ public class User {
 //    @OneToMany(mappedBy = "user")
 //    Set<MovieRating> ratings;
 
-    @OneToMany(mappedBy = "userForTicket")
+    @OneToMany(mappedBy = "owner")
     Set<Ticket> userTickets;
 
 }

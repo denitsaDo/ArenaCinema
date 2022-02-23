@@ -16,6 +16,7 @@ public class CinemaRowMapper implements RowMapper<CinemaInfoDTO> {
         cinema.setMovieTitle(rs.getString("movie_title"));
         cinema.setHallName(rs.getString("hall_name"));
         cinema.setProjectionStart(rs.getTimestamp("projection_start"));
+        cinema.setFreeSeats(rs.getInt("free_seats"));
         return cinema;
     }
 }

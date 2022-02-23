@@ -118,13 +118,15 @@ public class CinemaService {
     }
 
     public Stream<CinemaInfoDTO> getCinemasWithFilter(CinemaWithFiltersDTO cinemaWithFilters) {
-        String sql = "SELECT c.name AS cinema_name, p.id AS projection_id, m.title AS movie_title, h.name AS hall_name, t.name AS type_name, p.start_time AS projection_start  " +
+        String sql = "SELECT c.name AS cinema_name, p.id AS projection_id, m.title AS movie_title, " +
+                "h.name AS hall_name, t.name AS type_name, p.start_time AS projection_start, " +
+                "h.capacity - (SELECT count(*) FROM tickets where tickets.projection_id = p.id)  AS free_seats\n" +
                 "FROM cinemas AS c\n" +
                 "LEFT JOIN halls AS h ON( c.id = h.cinema_id)\n" +
-                "LEFT JOIN projections As p ON(h.id = p.hall_id)\n" +
+                "LEFT JOIN projections AS p ON(h.id = p.hall_id)\n" +
                 "LEFT JOIN movies AS m ON(m.id = p.movie_id)\n" +
                 "LEFT JOIN cities ON(cities.id = c.city_id)\n" +
-                "LEFT JOIN types AS t ON(p.type_id = t.id)\n";
+                "LEFT JOIN types AS t ON(p.type_id = t.id)";
 
         if (cinemaWithFilters.getCity() != null && cinemaWithFilters.getType() != null) {
             sql+= "WHERE cities.name LIKE " + "'" + cinemaWithFilters.getCity() + "'" + "AND t.name LIKE " + "'" + cinemaWithFilters.getType() + "'";
