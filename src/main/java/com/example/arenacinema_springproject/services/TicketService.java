@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class TicketService {
@@ -52,16 +53,19 @@ public class TicketService {
         }
 
         //TODO check free seats
-
-
-        Ticket newTicket = new Ticket();
-        newTicket.setOwner(userRepository.getById(ticket.getUserId()));
-        newTicket.setProjectionIdForTicket(projectionRepository.getById(ticket.getProjectionId()));
-        newTicket.setRownumber(ticket.getRownumber());
-        newTicket.setSeatNumber(ticket.getSeatNumber());
-        ticketRepository.save(newTicket);
-        return newTicket;
-
+        Optional<Ticket> opt = ticketRepository.findTicketByProjectionIdForTicketAndAndRownumberAndSeatNumber(projectionRepository.findById(projectionId).orElseThrow(),row,seat);
+        if (!opt.isPresent()) {
+            Ticket newTicket = new Ticket();
+            newTicket.setOwner(userRepository.getById(ticket.getUserId()));
+            newTicket.setProjectionIdForTicket(projectionRepository.getById(ticket.getProjectionId()));
+            newTicket.setRownumber(ticket.getRownumber());
+            newTicket.setSeatNumber(ticket.getSeatNumber());
+            ticketRepository.save(newTicket);
+            return newTicket;
+        }
+        else {
+            throw new BadRequestException("This place is occupied");
+        }
     }
 
     public List<Ticket> getAllUserTickets(int id) {
