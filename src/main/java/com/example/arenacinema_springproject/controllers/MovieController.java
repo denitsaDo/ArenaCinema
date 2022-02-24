@@ -3,7 +3,6 @@ package com.example.arenacinema_springproject.controllers;
 import com.example.arenacinema_springproject.models.dto.MovieAddDTO;
 import com.example.arenacinema_springproject.models.dto.MovieEditDTO;
 import com.example.arenacinema_springproject.models.dto.MovieResponseDTO;
-import com.example.arenacinema_springproject.models.dto.MovieResponseRatingDTO;
 import com.example.arenacinema_springproject.models.entities.Movie;
 import com.example.arenacinema_springproject.models.repositories.CategoryRepository;
 import com.example.arenacinema_springproject.models.repositories.MovieRepository;
@@ -56,11 +55,12 @@ public class MovieController extends BaseController {
         return movieService.getById(id);
     }
 
-
-
-    @GetMapping("/movies/rating/{id}")
-    public MovieResponseRatingDTO getRatingById(@PathVariable int id) {
-
-        return movieService.getRatingByMovieId(id);
+    @SneakyThrows
+    @PostMapping("/movies/poster")
+    public String uploadPoster(@RequestParam(name = "file") MultipartFile file,@RequestParam int id, HttpServletRequest request){
+        validateLogin(request);
+        adminLogin(request);
+        return movieService.uploadFile(file, id);
     }
+
 }
