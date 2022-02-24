@@ -45,13 +45,12 @@ public class MovieController extends BaseController {
     @DeleteMapping("/movies/{id}")
     public void deleteMovie(@Valid @PathVariable int id, HttpServletRequest request) {
         validateLogin(request);
-        adminLogin(request);
-        Movie movie = movieService.getById(id);
-        movieService.delete(movie);
+        adminLogin(request);;
+        movieService.delete(id);
     }
 
     @GetMapping("/movies/{id}")
-    public Movie getById(@PathVariable int id, HttpServletRequest request) {
+    public MovieResponseDTO getById(@PathVariable int id) {
         return movieService.getById(id);
     }
 

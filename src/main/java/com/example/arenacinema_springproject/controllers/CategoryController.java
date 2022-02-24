@@ -1,6 +1,7 @@
 package com.example.arenacinema_springproject.controllers;
 
 import com.example.arenacinema_springproject.models.dto.CategoryAddDTO;
+import com.example.arenacinema_springproject.models.dto.CategoryResponseDTO;
 import com.example.arenacinema_springproject.models.entities.Category;
 import com.example.arenacinema_springproject.models.entities.City;
 import com.example.arenacinema_springproject.services.CategotyService;
@@ -17,12 +18,12 @@ public class CategoryController extends BaseController{
     private CategotyService categoryService;
 
     @PostMapping("/categories")
-    public ResponseEntity<Category> add(@RequestBody CategoryAddDTO categoryAddDTO, HttpServletRequest request){
+    public ResponseEntity<CategoryResponseDTO> add(@RequestBody CategoryAddDTO categoryAddDTO, HttpServletRequest request){
         validateLogin(request);
         adminLogin(request);
         String name = categoryAddDTO.getName();
         String description = categoryAddDTO.getDescription();
-        Category category = categoryService.add(name, description);
+        CategoryResponseDTO category = categoryService.add(name, description);
         return ResponseEntity.ok(category);
     }
 
@@ -30,21 +31,20 @@ public class CategoryController extends BaseController{
     public void delete(@PathVariable int id, HttpServletRequest request) {
         validateLogin(request);
         adminLogin(request);
-        Category category = categoryService.getById(id);
-        categoryService.delete(category);
+        categoryService.delete(id);
     }
 
     @GetMapping("/categories/{id}")
-    public Category getById(@PathVariable int id){
-        Category category = categoryService.getById(id);
+    public CategoryResponseDTO getById(@PathVariable int id){
+        CategoryResponseDTO category = categoryService.getById(id);
         return category;
     }
 
     @PutMapping("/categories")
-    public ResponseEntity<Category> edit(@RequestBody Category category, HttpServletRequest request) {
+    public ResponseEntity<CategoryResponseDTO> edit(@RequestBody Category category, HttpServletRequest request) {
         validateLogin(request);
         adminLogin(request);
-        Category category1 = categoryService.edit(category);
+        CategoryResponseDTO category1 = categoryService.edit(category);
         return ResponseEntity.ok(category1);
     }
 

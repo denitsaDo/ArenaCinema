@@ -2,8 +2,10 @@ package com.example.arenacinema_springproject.services;
 
 import com.example.arenacinema_springproject.exceptions.BadRequestException;
 import com.example.arenacinema_springproject.exceptions.NotFoundException;
+import com.example.arenacinema_springproject.models.dto.CategoryResponseDTO;
 import com.example.arenacinema_springproject.models.entities.Category;
 import com.example.arenacinema_springproject.models.repositories.CategoryRepository;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,10 +16,12 @@ public class CategotyService {
 
     @Autowired
     private CategoryRepository categoryRepository;
+    @Autowired
+    private ModelMapper modelMapper;
 
     public static final int MAX_LENGTH = 30;
 
-    public Category add(String name, String description) {
+    public CategoryResponseDTO add(String name, String description) {
         if (name == null || name.isBlank()){
             throw new BadRequestException("Category name is mandatory!");
         }
@@ -40,18 +44,21 @@ public class CategotyService {
         category.setName(name);
         category.setDescription(description);
         categoryRepository.save(category);
-        return category;
+        CategoryResponseDTO dto = modelMapper.map(category, CategoryResponseDTO.class);
+        return dto;
     }
 
-    public Category getById(int id) {
-        return  categoryRepository.findById(id).orElseThrow(()-> new NotFoundException("Category not found!"));
+    public CategoryResponseDTO getById(int id) {
+        Category c = categoryRepository.findById(id).orElseThrow(()-> new NotFoundException("Category not found!"));
+        CategoryResponseDTO dto = modelMapper.map(c, CategoryResponseDTO.class);
+        return  dto;
     }
 
-    public void delete(Category category) {
-        categoryRepository.delete(categoryRepository.findById(category.getId()).orElseThrow(() -> new NotFoundException("Category not found!")));
+    public void delete(int id) {
+        categoryRepository.delete(categoryRepository.findById(id).orElseThrow(() -> new NotFoundException("Category not found")));
     }
 
-    public Category edit(Category category) {
+    public CategoryResponseDTO edit(Category category) {
         String name = category.getName();
         String description = category.getDescription();
         if (name == null || name.isBlank()){
@@ -75,7 +82,8 @@ public class CategotyService {
         Optional<Category> cat = categoryRepository.findById(category.getId());
         if(cat.isPresent()){
             categoryRepository.save(category);
-            return category;
+            CategoryResponseDTO dto = modelMapper.map(category, CategoryResponseDTO.class);
+            return dto;
         }
         else{
             throw new NotFoundException("Category not found.");

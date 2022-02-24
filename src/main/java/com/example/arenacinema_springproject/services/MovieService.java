@@ -51,12 +51,14 @@ public class MovieService {
         return dto;
     }
 
-    public Movie getById(int id) {
-        return  movieRepository.findById(id).orElseThrow(()-> new NotFoundException("Movie not found!"));
+    public MovieResponseDTO getById(int id) {
+        Movie m = movieRepository.findById(id).orElseThrow(()-> new NotFoundException("Movie not found!"));
+        MovieResponseDTO dto = modelMapper.map(m, MovieResponseDTO.class);
+        return  dto;
     }
 
-    public void delete(Movie movie) {
-        movieRepository.delete(movieRepository.findById(movie.getId()).orElseThrow(() -> new NotFoundException("Movie not found")));
+    public void delete(int id) {
+        movieRepository.delete(movieRepository.findById(id).orElseThrow(() -> new NotFoundException("Movie not found")));
     }
 
     public MovieResponseDTO edit(MovieEditDTO movie) {
@@ -147,7 +149,7 @@ public class MovieService {
         String extension = FilenameUtils.getExtension(file.getOriginalFilename());
         String name = System.nanoTime() + "." + extension;
         Files.copy(file.getInputStream(), new File("uploads" + File.separator + name).toPath());
-        Movie m = getById(id);
+        Movie m = movieRepository.getById(id);
         m.setPoster_url(name);
         movieRepository.save(m);
         return name;
