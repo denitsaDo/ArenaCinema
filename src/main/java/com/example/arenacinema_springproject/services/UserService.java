@@ -1,19 +1,21 @@
 package com.example.arenacinema_springproject.services;
-import com.example.arenacinema_springproject.exceptions.NoContentException;
-import com.example.arenacinema_springproject.exceptions.NotFoundException;
+import com.example.arenacinema_springproject.exceptions.*;
+import com.example.arenacinema_springproject.models.dto.MovieRatingAddDTO;
 import com.example.arenacinema_springproject.models.dto.UserEditDTO;
 import com.example.arenacinema_springproject.models.dto.UserPasswordEditDTO;
 import com.example.arenacinema_springproject.models.dto.UserRegisterDTO;
 import com.example.arenacinema_springproject.models.entities.User;
+import com.example.arenacinema_springproject.models.entities.UsersRateMovies;
+import com.example.arenacinema_springproject.models.repositories.MovieRepository;
 import com.example.arenacinema_springproject.models.repositories.UserRepository;
+import com.example.arenacinema_springproject.models.repositories.UsersRateMoviesRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import com.example.arenacinema_springproject.exceptions.BadRequestException;
-import com.example.arenacinema_springproject.exceptions.UnauthorizedException;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Optional;
@@ -24,6 +26,10 @@ public class UserService {
 
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private UsersRateMoviesRepository usersRateMoviesRepository;
+    @Autowired
+    private MovieRepository movieRepository;
     @Autowired
     private PasswordEncoder passwordEncoder;
     @Autowired
@@ -183,4 +189,25 @@ public class UserService {
     }
 
 
+    public void rateMovie(MovieRatingAddDTO movieRating, HttpServletRequest request) {
+        int userId = movieRating.getUserId();
+        int movieId = movieRating.getMovieId();
+        int rating = movieRating.getRating();
+        if (userId ==0 || movieId ==0 || rating == 0) {
+            throw new BadRequestException("All fields are mandatory!");
+        }
+        if (rating < 1 || rating > 5) {
+            throw new BadRequestException("Movie`s rating should be between 1 and 5 ");
+        }
+        if (usersRateMoviesRepository.findByUserRatesMovieIdAndMovieRatedByUserId(userId, movieId).isPresent()){
+            throw new BadRequestException("You have already rated this move.");
+        }
+
+        UsersRateMovies newRating = new UsersRateMovies();
+        newRating.setUserRatesMovie(userRepository.findById(userId).orElseThrow(()-> new BadRequestException("No user with this id")));
+        newRating.setMovieRatedByUser(movieRepository.findById(movieId).orElseThrow(()-> new BadRequestException("No movie with this movie id")));
+        newRating.setRating(rating);
+        usersRateMoviesRepository.save(newRating);
+        throw new CreatedException("Rating added successfully");
+    }
 }

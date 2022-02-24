@@ -8,6 +8,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class CinemaEditDTO {
+
     private int id;
     private String name;
     private int cityId;

@@ -112,13 +112,6 @@ public class UserController extends BaseController{
         return ResponseEntity.ok(dto);
     }
 
-    private void validateAccountOwner(int id, HttpServletRequest request) {
-        if((Integer) request.getSession().getAttribute(USER_ID) != id) {
-            throw new UnauthorizedException("You can edit or delete only own account!");
-        }
-    }
-
-
     @PostMapping("/users/ticket")
     public void buyTicket(@RequestBody TicketAddDTO ticket, HttpServletRequest request){
         validateLogin(request);
@@ -128,5 +121,17 @@ public class UserController extends BaseController{
         throw new CreatedException("Ticket added. This user has " + u.getUserTickets().size() + " tickets.");
     }
 
+    @PostMapping("/users/ratings")
+    public void rateMovie(@RequestBody MovieRatingAddDTO movieRating, HttpServletRequest request){
+        validateLogin(request);
+        validateAccountOwner(movieRating.getUserId(), request);
+        userService.rateMovie(movieRating, request);
 
+    }
+
+    private void validateAccountOwner(int id, HttpServletRequest request) {
+        if((Integer) request.getSession().getAttribute(USER_ID) != id) {
+            throw new UnauthorizedException("Unauthorized action!");
+        }
+    }
 }
