@@ -8,20 +8,12 @@ import com.example.arenacinema_springproject.models.dto.MovieResponseDTO;
 import com.example.arenacinema_springproject.models.entities.Movie;
 import com.example.arenacinema_springproject.models.repositories.CategoryRepository;
 import com.example.arenacinema_springproject.models.repositories.MovieRepository;
-import lombok.SneakyThrows;
-import org.apache.commons.io.FileUtils;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
-import org.apache.commons.io.FilenameUtils;
 
-import java.io.File;
-import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.StandardCopyOption;
 import java.time.LocalDate;
 import java.util.Optional;
 
@@ -99,7 +91,7 @@ public class MovieService {
             movie1.setDescription(movie.getDescription());
             movie1.setDuration(movie.getDuration());
             movie1.setPremiere(movie.getPremiere());
-            movie1.setCategory(categoryRepository.getById(movie.getCategory()));
+            movie1.setCategory(categoryRepository.getById(movie.getCategoryId()));
             movie1.setPoster_url(movie.getPoster_url());
             movie1.setDirector(movie.getDirector());
             movieRepository.save(movie1);

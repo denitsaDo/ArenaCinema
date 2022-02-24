@@ -78,3 +78,12 @@ Content-Type: application/json
 
 }
 
+###rate movie
+POST  localhost:9999/users/ratings
+Content-Type: application/json
+
+{
+  "userId": 32,
+  "movieId" : 2,
+  "rating" : 5
+}

@@ -48,4 +48,7 @@ public class User {
     @OneToMany(mappedBy = "owner")
     Set<Ticket> userTickets;
 
+    @OneToMany(mappedBy = "userRatesMovie")
+    Set<UsersRateMovies> ratings;
+
 }

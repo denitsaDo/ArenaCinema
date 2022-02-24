@@ -60,8 +60,4 @@ public class MovieController extends BaseController {
     //JOIN users AS u ON r.user_id = u.id
     //WHERE m.id = ? AND u.id = ?;)
 
-
-
-
-
 }

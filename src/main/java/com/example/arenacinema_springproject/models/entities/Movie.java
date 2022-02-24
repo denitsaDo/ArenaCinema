@@ -42,5 +42,8 @@ public class Movie {
     @OneToMany(mappedBy = "movieForProjection")
     private Set<Projection> projections;
 
+    @OneToMany(mappedBy = "movieRatedByUser")
+    Set<UsersRateMovies> ratings;
+
 
 }
