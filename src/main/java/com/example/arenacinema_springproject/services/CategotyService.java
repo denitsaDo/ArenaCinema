@@ -19,13 +19,13 @@ public class CategotyService {
     @Autowired
     private ModelMapper modelMapper;
 
-    public static final int MAX_LENGTH = 30;
+    public static final int MAX_LENGTH = 50;
 
     public CategoryResponseDTO add(String name, String description) {
         if (name == null || name.isBlank()){
             throw new BadRequestException("Category name is mandatory!");
         }
-        if (name.length() >MAX_LENGTH){
+        if (name.length() > MAX_LENGTH){
             throw new BadRequestException("Category name is too long!");
         }
         if (categoryRepository.findByName(name)!= null) {
@@ -34,7 +34,7 @@ public class CategotyService {
         if (description == null || description.isBlank()){
             throw new BadRequestException("Description name is mandatory!");
         }
-        if (description.length() >MAX_LENGTH){
+        if (description.length() > MAX_LENGTH){
             throw new BadRequestException("Description is too long!");
         }
         if (categoryRepository.findByDescription(description)!= null) {

@@ -1,8 +1,10 @@
 package com.example.arenacinema_springproject.controllers;
 
+import com.example.arenacinema_springproject.exceptions.ConstraintValidationException;
 import com.example.arenacinema_springproject.models.dto.MovieAddDTO;
 import com.example.arenacinema_springproject.models.dto.MovieEditDTO;
 import com.example.arenacinema_springproject.models.dto.MovieResponseDTO;
+import com.example.arenacinema_springproject.models.dto.MovieResponseRatingDTO;
 import com.example.arenacinema_springproject.models.entities.Movie;
 import com.example.arenacinema_springproject.models.repositories.CategoryRepository;
 import com.example.arenacinema_springproject.models.repositories.MovieRepository;
@@ -11,6 +13,7 @@ import lombok.SneakyThrows;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -26,7 +29,10 @@ public class MovieController extends BaseController {
 
     @SneakyThrows
     @PostMapping("/movies")
-    public ResponseEntity<MovieResponseDTO> addMovie(@RequestBody MovieAddDTO movie, HttpServletRequest request) {
+    public ResponseEntity<MovieResponseDTO> addMovie(@Valid @RequestBody MovieAddDTO movie, HttpServletRequest request, BindingResult result) {
+        if (result.hasErrors()) {
+            throw new ConstraintValidationException(result.toString());
+        }
         validateLogin(request);
         adminLogin(request);
         MovieResponseDTO dto = movieService.add(movie);
@@ -52,6 +58,12 @@ public class MovieController extends BaseController {
     @GetMapping("/movies/{id}")
     public MovieResponseDTO getById(@PathVariable int id) {
         return movieService.getById(id);
+    }
+
+    @GetMapping("/movies/rating/{id}")
+    public MovieResponseRatingDTO getRatingById(@PathVariable int id) {
+
+        return movieService.getRatingByMovieId(id);
     }
 
     @SneakyThrows

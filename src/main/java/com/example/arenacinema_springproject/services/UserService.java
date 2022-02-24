@@ -96,7 +96,6 @@ public class UserService {
         validateStrongPassword(user.getPassword());
         validateMatchingPasswords(user.getPassword(), user.getPassword2());
 
-
         User u = new User();
         u.setFirstName(user.getFirstName());
         u.setSecondName(user.getSecondName());
@@ -196,7 +195,7 @@ public class UserService {
         if (userId ==0 || movieId ==0 || rating == 0) {
             throw new BadRequestException("All fields are mandatory!");
         }
-        if (rating < 1 || rating > 5) {
+        if (rating !=1 && rating !=2 && rating !=3 && rating!=4 && rating !=5) {
             throw new BadRequestException("Movie`s rating should be between 1 and 5 ");
         }
         if (usersRateMoviesRepository.findByUserRatesMovieIdAndMovieRatedByUserId(userId, movieId).isPresent()){

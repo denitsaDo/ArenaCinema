@@ -40,7 +40,7 @@ public class CinemaService {
         if (cinema.getName() == null || cinema.getName().isBlank()) {
             throw new BadRequestException("Cinema name is mandatory!");
         }
-        if (cinemaRepository.findByName(cinema.getName())!= null) {
+        if (cinemaRepository.findFirstByName(cinema.getName())!= null) {
             throw new BadRequestException("Cinema already exists!");
         }
         if (cinema.getCityId() == 0 ) {
