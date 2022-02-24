@@ -5,15 +5,15 @@ import com.example.arenacinema_springproject.exceptions.NotFoundException;
 import com.example.arenacinema_springproject.models.dto.MovieAddDTO;
 import com.example.arenacinema_springproject.models.dto.MovieEditDTO;
 import com.example.arenacinema_springproject.models.dto.MovieResponseDTO;
+import com.example.arenacinema_springproject.models.dto.MovieResponseRatingDTO;
 import com.example.arenacinema_springproject.models.entities.Movie;
 import com.example.arenacinema_springproject.models.repositories.CategoryRepository;
 import com.example.arenacinema_springproject.models.repositories.MovieRepository;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
-
-
 import java.time.LocalDate;
 import java.util.Optional;
 
@@ -26,6 +26,8 @@ public class MovieService {
     private ModelMapper modelMapper;
     @Autowired
     private CategoryRepository categoryRepository;
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
 
     public static final int MIN_LENGTH = 2;
     public static final int MAX_LENGTH = 100;
@@ -137,4 +139,15 @@ public class MovieService {
     }
 
 
+    public MovieResponseRatingDTO getRatingByMovieId(int id) {
+        String sql = "SELECT ROUND (AVG(r.rating), 0)\n" +
+                "FROM users_rate_movies AS r \n" +
+                "JOIN movies AS m ON r.movie_id = m.id\n" +
+                "WHERE m.id = " + id;
+
+        int rating = jdbcTemplate.queryForObject(sql, Integer.class); //ratings are between 1 and 5
+        MovieResponseRatingDTO movieRating = new MovieResponseRatingDTO();
+        movieRating.setRating(rating);
+        return movieRating;
+    }
 }

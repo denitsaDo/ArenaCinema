@@ -35,6 +35,9 @@ Content-Type: application/json
 
 }
 
-
 ### get by id
 GET localhost:9999/movies/10
+
+
+### get rating by movie id
+GET localhost:9999/movies/rating/3

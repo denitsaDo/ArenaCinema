@@ -200,7 +200,7 @@ public class UserService {
             throw new BadRequestException("Movie`s rating should be between 1 and 5 ");
         }
         if (usersRateMoviesRepository.findByUserRatesMovieIdAndMovieRatedByUserId(userId, movieId).isPresent()){
-            throw new BadRequestException("You have already rated this move.");
+            throw new BadRequestException("You have already rated this movie.");
         }
 
         UsersRateMovies newRating = new UsersRateMovies();
