@@ -28,7 +28,7 @@ public class MovieController extends BaseController {
     @PostMapping("/movies")
     public ResponseEntity<MovieResponseDTO> addMovie(@RequestBody MovieAddDTO movie, HttpServletRequest request) {
         validateLogin(request);
-        //adminLogin(request);
+        adminLogin(request);
         MovieResponseDTO dto = movieService.add(movie);
         return ResponseEntity.ok(dto);
     }
