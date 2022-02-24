@@ -3,6 +3,7 @@ package com.example.arenacinema_springproject.controllers;
 import com.example.arenacinema_springproject.models.dto.MovieAddDTO;
 import com.example.arenacinema_springproject.models.dto.MovieEditDTO;
 import com.example.arenacinema_springproject.models.dto.MovieResponseDTO;
+import com.example.arenacinema_springproject.models.dto.MovieResponseRatingDTO;
 import com.example.arenacinema_springproject.models.entities.Movie;
 import com.example.arenacinema_springproject.models.repositories.CategoryRepository;
 import com.example.arenacinema_springproject.models.repositories.MovieRepository;
@@ -56,8 +57,10 @@ public class MovieController extends BaseController {
     }
 
 
-    //TODO add getRatingById (SELECT AVG(r.rating) FROM users_rate_movies AS r JOIN movies AS m ON r.movie_id = m.id
-    //JOIN users AS u ON r.user_id = u.id
-    //WHERE m.id = ? AND u.id = ?;)
 
+    @GetMapping("/movies/rating/{id}")
+    public MovieResponseRatingDTO getRatingById(@PathVariable int id) {
+
+        return movieService.getRatingByMovieId(id);
+    }
 }
