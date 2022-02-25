@@ -67,6 +67,7 @@ public class UserController extends BaseController{
         adminLogin(request);
         return userService.getAllUsers();
     }
+
     @PostMapping("/logout")
     public void logOut(HttpServletRequest request){
         request.getSession().invalidate();
@@ -91,7 +92,6 @@ public class UserController extends BaseController{
         return ResponseEntity.ok(dto);
     }
     
-
     @PutMapping("/users")
     public ResponseEntity<UserResponseDTO> edit(@RequestBody UserEditDTO user, HttpServletRequest request) {
         validateLogin(request);
@@ -118,6 +118,7 @@ public class UserController extends BaseController{
         Ticket ticket1 = ticketController.add(ticket);
         User u = userService.getById(ticket.getUserId());
         u.getUserTickets().add(modelMapper.map(ticket1, Ticket.class));
+        //TOdo save user in DB
         throw new CreatedException("Ticket added. This user has " + u.getUserTickets().size() + " tickets.");
     }
 

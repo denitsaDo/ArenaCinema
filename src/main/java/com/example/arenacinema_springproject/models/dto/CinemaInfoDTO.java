@@ -11,6 +11,7 @@ import java.sql.Timestamp;
 @Setter
 @NoArgsConstructor
 public class CinemaInfoDTO {
+    private int cinemaId;
     private String cinemaName;
     private int projectionId;
     private String projectionType;

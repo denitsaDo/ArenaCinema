@@ -30,7 +30,7 @@ public class ProjectionService {
     @Autowired
     private ModelMapper modelMapper;
 
-    public Projection addProjection(ProjectionAddDTO projection) {
+    public ProjectionResponseDTO addProjection(ProjectionAddDTO projection) {
 
         if (projection.getMovieId() == 0 || projection.getHallId() == 0 || projection.getTypeId() == 0) {
                 throw new BadRequestException("Movie, hall and type are mandatory fields!");
@@ -46,7 +46,8 @@ public class ProjectionService {
         p.setStartTime(projection.getStartTime());
 
         projectionRepository.save(p);
-        return p;
+        ProjectionResponseDTO dto = modelMapper.map(p, ProjectionResponseDTO.class);
+        return dto;
     }
 
     public Projection getProjectionById(int id) {

@@ -10,6 +10,7 @@ public class CinemaRowMapper implements RowMapper<CinemaInfoDTO> {
     @Override
     public CinemaInfoDTO mapRow(ResultSet rs, int rowNum) throws SQLException {
         CinemaInfoDTO cinema = new CinemaInfoDTO();
+        cinema.setCinemaId(rs.getInt("id"));
         cinema.setCinemaName(rs.getString("cinema_name"));
         cinema.setProjectionId(rs.getInt("projection_id"));
         cinema.setProjectionType(rs.getString("type_name"));
