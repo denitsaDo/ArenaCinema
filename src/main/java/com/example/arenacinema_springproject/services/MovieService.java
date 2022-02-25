@@ -47,7 +47,6 @@ public class MovieService {
         movie1.setDescription(movieAddDTO.getDescription());
         movie1.setDuration(movieAddDTO.getDuration());
         movie1.setPremiere(movieAddDTO.getPremiere());
-        movie1.setPoster_url(movieAddDTO.getPoster_url());
         movie1.setTitle(movieAddDTO.getTitle());
         movie1.setDirector(movieAddDTO.getDirector());
         movieRepository.save(movie1);
@@ -142,9 +141,6 @@ public class MovieService {
         || movieAddDTO.getDirector().length() > MAX_LENGTH) {
             throw new BadRequestException("Movie director is mandatory!");
         }
-//        if (movieAddDTO.getPoster_url() == null || movieAddDTO.getPoster_url().isBlank()) {
-//            throw new BadRequestException("Movie poster is mandatory!");
-//        }
         return movieAddDTO;
     }
 

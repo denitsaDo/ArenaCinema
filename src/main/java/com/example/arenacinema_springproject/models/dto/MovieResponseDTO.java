@@ -19,6 +19,5 @@ public class MovieResponseDTO {
     private String actors;
     private LocalDate premiere;
     private String director;
-    private int category_id;
-    private String poster_url;
+
 }

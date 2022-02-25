@@ -19,5 +19,4 @@ public class MovieAddDTO {
     private LocalDate premiere;
     private String director;
     private int categoryId;
-    private String poster_url;
 }

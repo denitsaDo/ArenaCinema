@@ -55,9 +55,6 @@ public class TicketService {
         if (h.getSeatsPerRow() < seat) {
             throw new BadRequestException("Invalid seat number. This hall has " + h.getSeatsPerRow() + " seats per row.");
         }
-
-
-
         Optional<Ticket> ticketOptional = ticketRepository.findTicketByProjectionIdForTicketAndRownumberAndSeatNumber(projectionRepository.findById(projectionId).orElseThrow(), row, seat);
         if (!ticketOptional.isPresent()){
 
