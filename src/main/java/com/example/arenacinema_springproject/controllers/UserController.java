@@ -62,7 +62,7 @@ public class UserController extends BaseController{
     }
 
     @GetMapping("/users")
-    public List getAll(HttpServletRequest request){
+    public List<UserResponseDTO> getAll(HttpServletRequest request){
         validateLogin(request);
         adminLogin(request);
         return userService.getAllUsers();
@@ -122,7 +122,6 @@ public class UserController extends BaseController{
     @PostMapping("/users/ratings")
     public void rateMovie(@RequestBody MovieRatingAddDTO movieRating, HttpServletRequest request){
         validateLogin(request);
-        validateAccountOwner(movieRating.getUserId(), request);
         userService.rateMovie(movieRating, request);
 
     }

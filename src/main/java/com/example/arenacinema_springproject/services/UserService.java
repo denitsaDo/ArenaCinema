@@ -16,6 +16,9 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+
+import static com.example.arenacinema_springproject.controllers.BaseController.USER_ID;
 
 
 @Service
@@ -64,8 +67,9 @@ public class UserService {
         }
     }
 
-    public List<User> getAllUsers() {
-        return userRepository.findAll();
+    public List<UserResponseDTO> getAllUsers() {
+        List<UserResponseDTO> dto = userRepository.findAll().stream().map(user -> modelMapper.map(user, UserResponseDTO.class)).collect(Collectors.toList());
+        return dto;
     }
 
     public void deleteUserById(User user) {
@@ -187,7 +191,7 @@ public class UserService {
 
 
     public void rateMovie(MovieRatingAddDTO movieRating, HttpServletRequest request) {
-        int userId = movieRating.getUserId();
+        int userId = (Integer) request.getSession().getAttribute(USER_ID);
         int movieId = movieRating.getMovieId();
         int rating = movieRating.getRating();
         if (userId ==0 || movieId ==0 || rating == 0) {

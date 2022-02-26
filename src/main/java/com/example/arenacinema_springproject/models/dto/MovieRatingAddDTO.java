@@ -9,7 +9,6 @@ import lombok.Setter;
 @NoArgsConstructor
 public class MovieRatingAddDTO {
 
-    private int userId;
     private int movieId;
     private int rating;
 }
