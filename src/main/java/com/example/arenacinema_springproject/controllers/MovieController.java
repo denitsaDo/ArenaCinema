@@ -56,7 +56,7 @@ public class MovieController extends BaseController {
 
     @SneakyThrows
     @PostMapping("/movies/poster")
-    public String uploadPoster(@RequestParam(name = "file") MultipartFile file,@RequestParam int id, HttpServletRequest request){
+    public String uploadPoster(@RequestParam MultipartFile file,@RequestParam int id, HttpServletRequest request){
         validateLogin(request);
         adminLogin(request);
         return movieService.uploadFile(file, id);

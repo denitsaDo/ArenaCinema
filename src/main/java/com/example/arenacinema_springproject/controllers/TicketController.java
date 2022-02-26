@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -34,19 +35,11 @@ public class TicketController extends BaseController{
         return ticketService.getAllUserTickets(userId);
     }
 
-    @GetMapping("/tickets/occupied/{projectionId}")
-    public List<TicketsWithoutUserAndProjectionDTO> getAllSoldTickets(@PathVariable int projectionId, HttpServletRequest request) {
-        validateLogin(request);
-        Stream<TicketsWithoutUserAndProjectionDTO> result = ticketService.getOccupiedSeatsForProjection(projectionId);
-        List<TicketsWithoutUserAndProjectionDTO> occupiedSeats = result.collect(Collectors.toList());
-        return occupiedSeats;
-    }
 
-    @GetMapping("/tickets/free/{projectionId}")
-    public List<TicketsWithoutUserAndProjectionDTO> getFreeTicketsForProjection( @PathVariable int projectionId, HttpServletRequest request) throws SQLException {
+    @GetMapping("/tickets/{projectionId}")
+        public List<TicketsWithoutUserAndProjectionDTO> getSeatsForProjection(@PathVariable int projectionId, HttpServletRequest request){
         validateLogin(request);
-        List<TicketsWithoutUserAndProjectionDTO> reservedTickets = ticketService.getOccupiedSeatsForProjection(projectionId).collect(Collectors.toList());
-        List<TicketsWithoutUserAndProjectionDTO> ticketList = ticketService.getFreeSeatsForProjection(reservedTickets,projectionId);
-        return ticketList;
+        List<TicketsWithoutUserAndProjectionDTO> seatsForProjection = ticketService.getSeatsForProjection(projectionId).stream().collect(Collectors.toList());
+        return seatsForProjection;
     }
 }

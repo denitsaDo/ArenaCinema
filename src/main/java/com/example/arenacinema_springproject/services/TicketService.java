@@ -83,32 +83,36 @@ public class TicketService {
         return dto;
     }
 
-    public Stream<TicketsWithoutUserAndProjectionDTO> getOccupiedSeatsForProjection(int projectionId) {
+    public ArrayList<TicketsWithoutUserAndProjectionDTO> getSeatsForProjection(int projectionId) {
+        Hall hall = projectionRepository.findById(projectionId).orElseThrow().getHallForProjection();
+        TicketsWithoutUserAndProjectionDTO [][] hallMatrix = new TicketsWithoutUserAndProjectionDTO [hall.getRowsNumber()][hall.getSeatsPerRow()];
+        for (int row = 0; row < hallMatrix.length; row++) {
+            for (int col = 0; col < hallMatrix[0].length; col++) {
+                hallMatrix[row][col] = new TicketsWithoutUserAndProjectionDTO();
+            }
+        }
+        List<TicketsWithoutUserAndProjectionDTO> taken = getOccupiedSeatsForProjection(projectionId).collect(Collectors.toList());
+        for (TicketsWithoutUserAndProjectionDTO ticket : taken) {
+            hallMatrix[ticket.getRownumber()-1][ticket.getSeatNumber()-1].setTaken(true);
+        }
+        ArrayList<TicketsWithoutUserAndProjectionDTO> allSeats = new ArrayList<>();
+        for (int row = 0; row < hallMatrix.length; row++) {
+            for (int col = 0; col < hallMatrix[0].length; col++) {
+                    TicketsWithoutUserAndProjectionDTO dto = hallMatrix[row][col];
+                    dto.setRownumber(row);
+                    dto.setSeatNumber(col);
+                    allSeats.add(dto);
+            }
+        }
+        ArrayList <TicketsWithoutUserAndProjectionDTO> converted = fixIndexesOfTicketWithoutUserDtoList(allSeats);
+        return converted;
+    }
+
+
+    private Stream<TicketsWithoutUserAndProjectionDTO> getOccupiedSeatsForProjection(int projectionId) {
         String sql = "SELECT rownumber , seat_number FROM tickets WHERE projection_id =" + projectionId;
 
         return jdbcTemplate.queryForStream(sql,new OccupiedSeatsRowMapper());
-    }
-
-    public ArrayList<TicketsWithoutUserAndProjectionDTO> getFreeSeatsForProjection(List<TicketsWithoutUserAndProjectionDTO> taken , int projectionId) throws SQLException {
-        Hall hall = projectionRepository.findById(projectionId).orElseThrow().getHallForProjection();
-
-        boolean[][] hallMatrix = new boolean[hall.getRowsNumber()][hall.getSeatsPerRow()];
-        for (TicketsWithoutUserAndProjectionDTO ticket : taken) {
-            hallMatrix[ticket.getRownumber()-1][ticket.getSeatNumber()-1] = true;
-        }
-        ArrayList<TicketsWithoutUserAndProjectionDTO> freeTickets = new ArrayList<>();
-        for (int row = 0; row < hallMatrix.length; row++) {
-            for (int col = 0; col < hallMatrix[0].length; col++) {
-                if (!hallMatrix[row][col]){
-                    TicketsWithoutUserAndProjectionDTO dto = new TicketsWithoutUserAndProjectionDTO();
-                    dto.setRownumber(row);
-                    dto.setSeatNumber(col);
-                    freeTickets.add(dto);
-                }
-            }
-        }
-        ArrayList <TicketsWithoutUserAndProjectionDTO> converted = fixIndexesOfTicketWithoutUserDtoList(freeTickets);
-        return converted;
     }
 
     private ArrayList<TicketsWithoutUserAndProjectionDTO> fixIndexesOfTicketWithoutUserDtoList(ArrayList<TicketsWithoutUserAndProjectionDTO> ticketList){

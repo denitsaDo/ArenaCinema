@@ -148,7 +148,7 @@ public class MovieService {
     public String uploadFile(MultipartFile file, int id) {
         String extension = FilenameUtils.getExtension(file.getOriginalFilename());
         String name = System.nanoTime() + "." + extension;
-        Files.copy(file.getInputStream(), new File("uploads" + File.separator + name).toPath());
+        Files.copy(file.getInputStream(), new File("/Users/dezizlava/Desktop/ArenaCinema/uploads" + File.separator + name).toPath());
         Movie m = movieRepository.getById(id);
         m.setPoster_url(name);
         movieRepository.save(m);
