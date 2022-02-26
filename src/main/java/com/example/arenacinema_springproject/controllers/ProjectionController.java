@@ -1,6 +1,7 @@
 package com.example.arenacinema_springproject.controllers;
 
 import com.example.arenacinema_springproject.models.dto.ProjectionAddDTO;
+import com.example.arenacinema_springproject.models.dto.ProjectionByIdDTO;
 import com.example.arenacinema_springproject.models.dto.ProjectionEditDTO;
 import com.example.arenacinema_springproject.models.dto.ProjectionResponseDTO;
 import com.example.arenacinema_springproject.models.entities.Projection;
@@ -26,8 +27,8 @@ public class ProjectionController extends BaseController{
     }
 
     @GetMapping("/projections/{id}")
-    public ResponseEntity <Projection> getById(@PathVariable int id){
-        Projection p = projectionService.getProjectionById(id);
+    public ResponseEntity <ProjectionByIdDTO> getById(@PathVariable int id){
+        ProjectionByIdDTO p = projectionService.getProjectionById(id);
         return ResponseEntity.ok(p);
     }
 
@@ -43,8 +44,7 @@ public class ProjectionController extends BaseController{
     public void delete(@PathVariable int id, HttpServletRequest request) {
         validateLogin(request);
         adminLogin(request);
-        Projection p = projectionService.getProjectionById(id);
-        projectionService.delete(p);
+        projectionService.delete(id);
 
     }
 }

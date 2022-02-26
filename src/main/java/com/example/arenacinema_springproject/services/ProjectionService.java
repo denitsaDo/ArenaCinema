@@ -1,5 +1,6 @@
 package com.example.arenacinema_springproject.services;
 
+import com.example.arenacinema_springproject.controllers.TicketController;
 import com.example.arenacinema_springproject.exceptions.BadRequestException;
 import com.example.arenacinema_springproject.exceptions.NoContentException;
 import com.example.arenacinema_springproject.exceptions.NotFoundException;
@@ -29,6 +30,8 @@ public class ProjectionService {
     @Autowired
     private TypeRepository typeRepository;
     @Autowired
+    private TicketService ticketService;
+    @Autowired
     private ModelMapper modelMapper;
 
     public ProjectionResponseDTO addProjection(ProjectionAddDTO projection) {
@@ -51,8 +54,13 @@ public class ProjectionService {
         return dto;
     }
 
-    public Projection getProjectionById(int id) {
-        return  projectionRepository.findById(id).orElseThrow(()-> new NotFoundException("Projection not found"));
+    public ProjectionByIdDTO getProjectionById(int id) {
+        Projection p = projectionRepository.findById(id).orElseThrow(()-> new NotFoundException("Projection not found"));
+        ProjectionByIdDTO dto = new ProjectionByIdDTO();
+        dto.setMovieName(p.getMovieForProjection().getTitle());
+        dto.setStartTime(p.getStartTime());
+        dto.setSeats(ticketService.getSeatsForProjection(id));
+        return  dto;
     }
 
     public ProjectionResponseDTO editProjection(ProjectionEditDTO projection) {
@@ -91,10 +99,10 @@ public class ProjectionService {
     }
 
 
-    public void delete(Projection projection) {
-        Optional<Projection> optional = projectionRepository.findById(projection.getId());
+    public void delete(int id) {
+        Optional<Projection> optional = projectionRepository.findById(id);
         if (optional.isPresent() ) {
-            projectionRepository.delete(projection);
+            projectionRepository.delete(optional.get());
             throw new NoContentException();
         }
         else {
