@@ -12,40 +12,30 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 
 @RestController
-public class CategoryController extends BaseController{
+public class CategoryController{
 
     @Autowired
     private CategotyService categoryService;
 
+
     @PostMapping("/categories")
-    public ResponseEntity<CategoryResponseDTO> add(@RequestBody CategoryAddDTO categoryAddDTO, HttpServletRequest request){
-        validateLogin(request);
-        adminLogin(request);
-        String name = categoryAddDTO.getName();
-        String description = categoryAddDTO.getDescription();
-        CategoryResponseDTO category = categoryService.add(name, description);
-        return ResponseEntity.ok(category);
+    public ResponseEntity<CategoryAddDTO> add(@RequestBody CategoryAddDTO categoryAddDTO, HttpServletRequest request){
+        return ResponseEntity.ok(categoryService.add(categoryAddDTO, request));
     }
 
     @DeleteMapping("/categories/{id}")
     public void delete(@PathVariable int id, HttpServletRequest request) {
-        validateLogin(request);
-        adminLogin(request);
-        categoryService.delete(id);
+        categoryService.delete(id, request);
     }
 
     @GetMapping("/categories/{id}")
     public CategoryResponseDTO getById(@PathVariable int id){
-        CategoryResponseDTO category = categoryService.getById(id);
-        return category;
+        return categoryService.getById(id);
     }
 
     @PutMapping("/categories")
     public ResponseEntity<CategoryResponseDTO> edit(@RequestBody Category category, HttpServletRequest request) {
-        validateLogin(request);
-        adminLogin(request);
-        CategoryResponseDTO category1 = categoryService.edit(category);
-        return ResponseEntity.ok(category1);
+        return ResponseEntity.ok(categoryService.edit(category, request));
     }
 
 }

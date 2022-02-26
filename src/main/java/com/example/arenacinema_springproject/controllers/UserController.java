@@ -52,7 +52,9 @@ public class UserController extends BaseController{
     }
 
     @GetMapping("/users/{id}")
-    public ResponseEntity<UserResponseDTO> getById(@PathVariable int id){
+    public ResponseEntity<UserResponseDTO> getById(@PathVariable int id, HttpServletRequest request){
+        validateLogin(request);
+        adminLogin(request);
         User u = userService.getById(id);
         UserResponseDTO dto = modelMapper.map(u, UserResponseDTO.class);
         return ResponseEntity.ok(dto);
