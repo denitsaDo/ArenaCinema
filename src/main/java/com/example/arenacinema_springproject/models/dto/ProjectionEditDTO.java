@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 @Getter
 @Setter
@@ -13,6 +14,6 @@ public class ProjectionEditDTO {
     private int movieId;
     private int hallId;
     private int typeId;
-    private Date startTime;
+    private LocalDateTime startTime;
 
 }

@@ -18,7 +18,7 @@ public class ProjectionController extends BaseController{
     private ProjectionService projectionService;
 
     @PostMapping("/projections")
-    public ResponseEntity<ProjectionResponseDTO> add(@RequestBody ProjectionAddDTO projection, HttpServletRequest request) {
+    public ResponseEntity<ProjectionResponseDTO> add( @RequestBody  ProjectionAddDTO projection, HttpServletRequest request) {
         validateLogin(request);
         adminLogin(request);
         ProjectionResponseDTO p = projectionService.addProjection(projection);

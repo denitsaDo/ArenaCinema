@@ -14,6 +14,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Service
@@ -43,7 +44,7 @@ public class ProjectionService {
         p.setMovieForProjection(movieRepository.findById(projection.getMovieId()).orElseThrow(()-> new NotFoundException("Movie not found")));
         p.setHallForProjection(hallRepository.findById(projection.getHallId()).orElseThrow(()-> new NotFoundException("Hall not found")));
         p.setTypeForProjection(typeRepository.findById(projection.getTypeId()).orElseThrow(()-> new NotFoundException("Type not found")));
-        p.setStartTime(projection.getStartTime());
+        p.setStartTime(LocalDateTime.parse(projection.getStartTime().toString()));
 
         projectionRepository.save(p);
         ProjectionResponseDTO dto = modelMapper.map(p, ProjectionResponseDTO.class);
@@ -73,7 +74,7 @@ public class ProjectionService {
             modifiedProjection.setMovieForProjection(movieRepository.findById(projection.getMovieId()).orElseThrow());
             modifiedProjection.setHallForProjection(hallRepository.findById(projection.getHallId()).orElseThrow());
             modifiedProjection.setTypeForProjection(typeRepository.findById(projection.getTypeId()).orElseThrow());
-            modifiedProjection.setStartTime(projection.getStartTime());
+            modifiedProjection.setStartTime( projection.getStartTime());
             modifiedProjection.setProjectionTickets(opt.get().getProjectionTickets());
 
             projectionRepository.save(modifiedProjection);

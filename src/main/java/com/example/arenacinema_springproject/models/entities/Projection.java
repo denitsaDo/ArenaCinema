@@ -6,7 +6,7 @@ import lombok.Setter;
 
 
 import javax.persistence.*;
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.Set;
 
 @Entity
@@ -33,7 +33,7 @@ public class Projection {
     private Type typeForProjection;
 
     @Column
-    private Date startTime;
+    private LocalDateTime startTime;
 
     @OneToMany(mappedBy = "projectionIdForTicket")
     private Set<Ticket> projectionTickets;
