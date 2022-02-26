@@ -27,7 +27,8 @@ public class ProjectionController extends BaseController{
     }
 
     @GetMapping("/projections/{id}")
-    public ResponseEntity <ProjectionByIdDTO> getById(@PathVariable int id){
+    public ResponseEntity <ProjectionByIdDTO> getById(@PathVariable int id, HttpServletRequest request){
+        validateLogin(request);
         ProjectionByIdDTO p = projectionService.getProjectionById(id);
         return ResponseEntity.ok(p);
     }

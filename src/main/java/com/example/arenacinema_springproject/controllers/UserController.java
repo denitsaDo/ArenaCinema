@@ -125,7 +125,6 @@ public class UserController extends BaseController{
     @PostMapping("/users/ratings")
     public void rateMovie(@RequestBody MovieRatingAddDTO movieRating, HttpServletRequest request){
         validateLogin(request);
-        validateAccountOwner(movieRating.getUserId(), request);
         userService.rateMovie(movieRating, request);
 
     }

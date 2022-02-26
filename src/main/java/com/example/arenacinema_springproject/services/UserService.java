@@ -18,6 +18,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import static com.example.arenacinema_springproject.controllers.BaseController.USER_ID;
+
 
 @Service
 public class UserService {
@@ -188,7 +190,7 @@ public class UserService {
 
 
     public void rateMovie(MovieRatingAddDTO movieRating, HttpServletRequest request) {
-        int userId = movieRating.getUserId();
+        int userId = (Integer) request.getSession().getAttribute(USER_ID);
         int movieId = movieRating.getMovieId();
         int rating = movieRating.getRating();
         if (userId ==0 || movieId ==0 || rating == 0) {

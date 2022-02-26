@@ -36,10 +36,10 @@ public class TicketController extends BaseController{
     }
 
 
-    @GetMapping("/tickets/{projectionId}")
+    /*@GetMapping("/tickets/{projectionId}")
         public List<TicketsWithoutUserAndProjectionDTO> getSeatsForProjection(@PathVariable int projectionId, HttpServletRequest request){
         validateLogin(request);
         List<TicketsWithoutUserAndProjectionDTO> seatsForProjection = ticketService.getSeatsForProjection(projectionId).stream().collect(Collectors.toList());
         return seatsForProjection;
-    }
+    }*/
 }
