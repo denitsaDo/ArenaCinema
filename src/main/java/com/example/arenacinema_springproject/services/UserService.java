@@ -1,9 +1,6 @@
 package com.example.arenacinema_springproject.services;
 import com.example.arenacinema_springproject.exceptions.*;
-import com.example.arenacinema_springproject.models.dto.MovieRatingAddDTO;
-import com.example.arenacinema_springproject.models.dto.UserEditDTO;
-import com.example.arenacinema_springproject.models.dto.UserPasswordEditDTO;
-import com.example.arenacinema_springproject.models.dto.UserRegisterDTO;
+import com.example.arenacinema_springproject.models.dto.*;
 import com.example.arenacinema_springproject.models.entities.User;
 import com.example.arenacinema_springproject.models.entities.UsersRateMovies;
 import com.example.arenacinema_springproject.models.repositories.MovieRepository;
@@ -110,8 +107,9 @@ public class UserService {
     }
 
 
-    public User edit(UserEditDTO user) {
-        Optional<User> opt = userRepository.findById(user.getId());
+    public UserResponseDTO edit(UserEditDTO user, int userId) {
+
+        Optional<User> opt = userRepository.findById(userId);
         if(opt.isPresent()){
             validateMandatoryFields(modelMapper.map(user, UserRegisterDTO.class));
             User u = opt.get();
@@ -121,7 +119,7 @@ public class UserService {
             u.setGender(user.getGender());
             u.setDateOfBirth(user.getDateOfBirth());
             userRepository.save(u);
-            return u;
+            return modelMapper.map(u, UserResponseDTO.class);
         }
         else{
             throw new NotFoundException("User not found");
@@ -131,7 +129,7 @@ public class UserService {
 
 
 
-    public User editPassword(UserPasswordEditDTO user, int userId) {
+    public UserResponseDTO editPassword(UserPasswordEditDTO user, int userId) {
         Optional<User> opt = userRepository.findById(userId);
         if(opt.isPresent()){
             User u = opt.get();
@@ -145,7 +143,7 @@ public class UserService {
 
             u.setPassword(passwordEncoder.encode(user.getNewPassword())); // bcrypt password
             userRepository.save(u);
-            return u;
+            return modelMapper.map(u, UserResponseDTO.class);
         }
         else{
             throw new NotFoundException("User not found");

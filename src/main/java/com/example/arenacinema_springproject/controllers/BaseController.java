@@ -12,7 +12,7 @@ public abstract class BaseController {
     public static final String USER_ID = "user_id";
     public static final String ADMIN = "admin";
 
-    protected void validateLogin(HttpServletRequest request) {
+    public void validateLogin(HttpServletRequest request) {
         HttpSession session = request.getSession();
         boolean isNewSession = session.isNew();
         boolean isLogged = session.getAttribute(LOGGED)!=null && ((Boolean)session.getAttribute(LOGGED));

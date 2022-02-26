@@ -95,10 +95,8 @@ public class UserController extends BaseController{
     @PutMapping("/users")
     public ResponseEntity<UserResponseDTO> edit(@RequestBody UserEditDTO user, HttpServletRequest request) {
         validateLogin(request);
-        validateAccountOwner(user.getId(), request);
-
-        User u = userService.edit(user);
-        UserResponseDTO dto = modelMapper.map(u, UserResponseDTO.class);
+        int userId = (Integer) request.getSession().getAttribute(USER_ID);
+        UserResponseDTO dto = userService.edit(user, userId);
         return ResponseEntity.ok(dto);
     }
 
@@ -106,8 +104,7 @@ public class UserController extends BaseController{
     public ResponseEntity<UserResponseDTO> editPassword(@RequestBody UserPasswordEditDTO user, HttpServletRequest request) {
         validateLogin(request);
         int userId = (Integer) request.getSession().getAttribute(USER_ID);
-        User u = userService.editPassword(user, userId);
-        UserResponseDTO dto = modelMapper.map(u, UserResponseDTO.class);
+        UserResponseDTO dto = userService.editPassword(user, userId);;
         return ResponseEntity.ok(dto);
     }
 
