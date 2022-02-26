@@ -1,12 +1,10 @@
 package com.example.arenacinema_springproject.controllers;
 
 import com.example.arenacinema_springproject.exceptions.UnauthorizedException;
-import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-@Component
 public abstract class BaseController {
 
     public static final String LOGGED = "logged";
@@ -24,7 +22,7 @@ public abstract class BaseController {
         }
     }
 
-    public void adminLogin(HttpServletRequest request) {
+    protected void adminLogin(HttpServletRequest request) {
         HttpSession session = request.getSession();
         boolean isAdminSession = (Boolean) session.getAttribute(ADMIN);
         if(!isAdminSession) {
