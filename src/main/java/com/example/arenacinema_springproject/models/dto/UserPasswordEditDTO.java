@@ -10,7 +10,7 @@ import java.util.Date;
 @Setter
 @NoArgsConstructor
 public class UserPasswordEditDTO {
-    private int id;
+
     private String oldPassword;
     private String newPassword;
     private String newPassword2;

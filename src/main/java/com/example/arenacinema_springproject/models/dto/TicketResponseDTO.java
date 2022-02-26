@@ -11,7 +11,6 @@ import lombok.Setter;
 public class TicketResponseDTO {
 
     private int id;
-
     private int rownumber;
     private int seatNumber;
 

@@ -105,9 +105,8 @@ public class UserController extends BaseController{
     @PutMapping("/users/changePassword")
     public ResponseEntity<UserResponseDTO> editPassword(@RequestBody UserPasswordEditDTO user, HttpServletRequest request) {
         validateLogin(request);
-        validateAccountOwner(user.getId(), request);
-
-        User u = userService.editPassword(user);
+        int userId = (Integer) request.getSession().getAttribute(USER_ID);
+        User u = userService.editPassword(user, userId);
         UserResponseDTO dto = modelMapper.map(u, UserResponseDTO.class);
         return ResponseEntity.ok(dto);
     }
@@ -115,11 +114,12 @@ public class UserController extends BaseController{
     @PostMapping("/users/ticket")
     public void buyTicket(@RequestBody TicketAddDTO ticket, HttpServletRequest request){
         validateLogin(request);
-        Ticket ticket1 = ticketController.add(ticket);
-        User u = userService.getById(ticket.getUserId());
-        u.getUserTickets().add(modelMapper.map(ticket1, Ticket.class));
+        int userId = (Integer) request.getSession().getAttribute(USER_ID);
+        Ticket ticket1 = ticketController.add(ticket, userId);
+        User u = userService.getById((Integer) request.getSession().getAttribute(USER_ID));
+//        u.getUserTickets().add(modelMapper.map(ticket1, Ticket.class));
         //TOdo save user in DB
-        throw new CreatedException("Ticket added. This user has " + u.getUserTickets().size() + " tickets.");
+        throw new CreatedException("Ticket added."); /*This user has " + u.getUserTickets().size() + " tickets.");*/
     }
 
     @PostMapping("/users/ratings")

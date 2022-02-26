@@ -9,7 +9,6 @@ import lombok.Setter;
 @NoArgsConstructor
 public class TicketAddDTO {
 
-    private int userId;
     private int projectionId;
     private int rownumber;
     private int seatNumber;

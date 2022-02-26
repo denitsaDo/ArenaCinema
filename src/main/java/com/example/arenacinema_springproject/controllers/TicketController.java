@@ -1,5 +1,6 @@
 package com.example.arenacinema_springproject.controllers;
 
+import com.example.arenacinema_springproject.models.dto.TicketResponseDTO;
 import com.example.arenacinema_springproject.models.dto.TicketsWithoutUserAndProjectionDTO;
 import com.example.arenacinema_springproject.models.dto.TicketAddDTO;
 import com.example.arenacinema_springproject.models.entities.Ticket;
@@ -21,15 +22,16 @@ public class TicketController extends BaseController{
     @Autowired
     private TicketService ticketService;
 
-    public Ticket add(TicketAddDTO ticket) {
-        Ticket t = ticketService.addTicketInService(ticket);
+    public Ticket add(TicketAddDTO ticket, int userId) {
+        Ticket t = ticketService.addTicketInService(ticket, userId);
         return t;
     }
 
-    @GetMapping("/tickets/{id}")
-    public List<Ticket> getUserTickets(@PathVariable int id, HttpServletRequest request){
+    @GetMapping("/tickets")
+    public List<TicketResponseDTO> getUserTickets(HttpServletRequest request){
         validateLogin(request);
-        return ticketService.getAllUserTickets(id);
+        int userId = (Integer) request.getSession().getAttribute(USER_ID);
+        return ticketService.getAllUserTickets(userId);
     }
 
     @GetMapping("/tickets/occupied/{projectionId}")

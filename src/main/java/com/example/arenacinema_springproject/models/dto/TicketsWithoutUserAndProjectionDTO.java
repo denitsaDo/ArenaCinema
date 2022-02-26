@@ -10,4 +10,5 @@ import lombok.Setter;
 public class TicketsWithoutUserAndProjectionDTO {
     private int rownumber;
     private int seatNumber;
+
 }

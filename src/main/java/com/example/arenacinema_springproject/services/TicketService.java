@@ -1,6 +1,7 @@
 package com.example.arenacinema_springproject.services;
 
 import com.example.arenacinema_springproject.exceptions.BadRequestException;
+import com.example.arenacinema_springproject.models.dto.TicketResponseDTO;
 import com.example.arenacinema_springproject.models.dto.TicketsWithoutUserAndProjectionDTO;
 import com.example.arenacinema_springproject.models.dto.TicketAddDTO;
 import com.example.arenacinema_springproject.models.entities.Hall;
@@ -10,6 +11,7 @@ import com.example.arenacinema_springproject.models.repositories.HallRepository;
 import com.example.arenacinema_springproject.models.repositories.ProjectionRepository;
 import com.example.arenacinema_springproject.models.repositories.TicketRepository;
 import com.example.arenacinema_springproject.models.repositories.UserRepository;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
@@ -18,6 +20,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Service
@@ -32,12 +35,14 @@ public class TicketService {
     @Autowired
     private HallRepository hallRepository;
     @Autowired
+    private ModelMapper modelMapper;
+    @Autowired
     JdbcTemplate jdbcTemplate;
 
 
 
-    public Ticket addTicketInService(TicketAddDTO ticket) {
-        int userId= ticket.getUserId();
+    public Ticket addTicketInService(TicketAddDTO ticket, int id) {
+        int userId= id;
         int projectionId = ticket.getProjectionId();
         int row = ticket.getRownumber();
         int seat = ticket.getSeatNumber();
@@ -59,7 +64,7 @@ public class TicketService {
         if (!ticketOptional.isPresent()){
 
             Ticket newTicket = new Ticket();
-            newTicket.setOwner(userRepository.getById(ticket.getUserId()));
+            newTicket.setOwner(userRepository.getById(userId));
             newTicket.setProjectionIdForTicket(projectionRepository.getById(ticket.getProjectionId()));
             newTicket.setRownumber(ticket.getRownumber());
             newTicket.setSeatNumber(ticket.getSeatNumber());
@@ -72,8 +77,10 @@ public class TicketService {
 
     }
 
-    public List<Ticket> getAllUserTickets(int id) {
-        return ticketRepository.findAllByOwnerId(id);
+    public List<TicketResponseDTO> getAllUserTickets(int id) {
+        List<TicketResponseDTO> dto = ticketRepository.findAllByOwnerId(id).stream()
+                .map(ticket -> modelMapper.map(ticket, TicketResponseDTO.class)).collect(Collectors.toList());
+        return dto;
     }
 
     public Stream<TicketsWithoutUserAndProjectionDTO> getOccupiedSeatsForProjection(int projectionId) {

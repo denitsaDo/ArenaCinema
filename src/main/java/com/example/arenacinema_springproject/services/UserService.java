@@ -131,8 +131,8 @@ public class UserService {
 
 
 
-    public User editPassword(UserPasswordEditDTO user) {
-        Optional<User> opt = userRepository.findById(user.getId());
+    public User editPassword(UserPasswordEditDTO user, int userId) {
+        Optional<User> opt = userRepository.findById(userId);
         if(opt.isPresent()){
             User u = opt.get();
 
