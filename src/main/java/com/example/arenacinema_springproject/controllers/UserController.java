@@ -62,7 +62,7 @@ public class UserController extends BaseController{
     }
 
     @GetMapping("/users")
-    public List getAll(HttpServletRequest request){
+    public List<UserResponseDTO> getAll(HttpServletRequest request){
         validateLogin(request);
         adminLogin(request);
         return userService.getAllUsers();

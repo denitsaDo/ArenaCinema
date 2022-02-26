@@ -1,9 +1,6 @@
 package com.example.arenacinema_springproject.services;
 import com.example.arenacinema_springproject.exceptions.*;
-import com.example.arenacinema_springproject.models.dto.MovieRatingAddDTO;
-import com.example.arenacinema_springproject.models.dto.UserEditDTO;
-import com.example.arenacinema_springproject.models.dto.UserPasswordEditDTO;
-import com.example.arenacinema_springproject.models.dto.UserRegisterDTO;
+import com.example.arenacinema_springproject.models.dto.*;
 import com.example.arenacinema_springproject.models.entities.User;
 import com.example.arenacinema_springproject.models.entities.UsersRateMovies;
 import com.example.arenacinema_springproject.models.repositories.MovieRepository;
@@ -19,6 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -67,8 +65,9 @@ public class UserService {
         }
     }
 
-    public List<User> getAllUsers() {
-        return userRepository.findAll();
+    public List<UserResponseDTO> getAllUsers() {
+        List<UserResponseDTO> dto = userRepository.findAll().stream().map(user -> modelMapper.map(user, UserResponseDTO.class)).collect(Collectors.toList());
+        return dto;
     }
 
     public void deleteUserById(User user) {
