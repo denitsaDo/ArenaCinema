@@ -72,10 +72,10 @@ public class UserService {
         return dto;
     }
 
-    public void deleteUserById(User user) {
-        Optional<User> optional = userRepository.findById(user.getId());   //check if id is >0
+    public void deleteUser(int useId) {
+        Optional<User> optional = userRepository.findById(useId);
         if (optional.isPresent()) {
-            userRepository.delete(user);
+            userRepository.delete(optional.get());
             throw new NoContentException();
         } else {
             throw new NotFoundException("No such user.");

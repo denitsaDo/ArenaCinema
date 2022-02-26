@@ -7,7 +7,6 @@ import com.example.arenacinema_springproject.exceptions.UnauthorizedException;
 import com.example.arenacinema_springproject.models.dto.*;
 import com.example.arenacinema_springproject.models.entities.Ticket;
 import com.example.arenacinema_springproject.models.entities.User;
-import com.example.arenacinema_springproject.services.TicketService;
 import com.example.arenacinema_springproject.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -18,11 +17,9 @@ import org.modelmapper.ModelMapper;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import javax.transaction.Transactional;
 import javax.validation.Valid;
 
 import java.util.List;
-import java.util.stream.Stream;
 
 @RestController
 @Validated
@@ -73,12 +70,11 @@ public class UserController extends BaseController{
         request.getSession().invalidate();
     }
 
-    @DeleteMapping("/users/{id}")
-    public void deleteUserById(@PathVariable int id, HttpServletRequest request) {
+    @DeleteMapping("/users")
+    public void delete(HttpServletRequest request) {
         validateLogin(request);
-        validateAccountOwner(id, request);
-        User u = userService.getById(id);
-        userService.deleteUserById(u);
+        int userId = (Integer) request.getSession().getAttribute(USER_ID);
+        userService.deleteUser(userId);
     }
 
     @PostMapping("/reg")

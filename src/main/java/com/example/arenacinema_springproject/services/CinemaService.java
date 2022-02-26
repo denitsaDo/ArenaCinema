@@ -1,6 +1,6 @@
 package com.example.arenacinema_springproject.services;
 
-import com.example.arenacinema_springproject.configuration.JdbcConfiguration;
+
 import com.example.arenacinema_springproject.exceptions.BadRequestException;
 import com.example.arenacinema_springproject.exceptions.NoContentException;
 import com.example.arenacinema_springproject.exceptions.NotFoundException;
@@ -32,8 +32,7 @@ public class CinemaService {
     private ModelMapper modelMapper;
     @Autowired
     private JdbcTemplate jdbcTemplate;
-    @Autowired
-    JdbcConfiguration jdbcConfiguration;
+
 
 
     public CinemaWithCityAndHallsDTO add(CinemaAddDTO cinema) {
@@ -119,7 +118,7 @@ public class CinemaService {
 
     public Stream<CinemaInfoDTO> getCinemasWithFilter(CinemaWithFiltersDTO cinemaWithFilters) {
         String sql = "SELECT c.id AS id, c.name AS cinema_name, p.id AS projection_id, m.title AS movie_title, h.name AS hall_name, \n" +
-                "t.name AS type_name, p.start_time AS projection_start, \n" +
+                "t.name AS type_name, p.start_time AS projection_date, p.start_time AS projection_time, \n" +
                 "((h.rows_number * h.seats_per_row) - (SELECT count(*) FROM kinoarena.tickets where tickets.projection_id = p.id))  AS free_seats\n" +
                 "FROM cinemas AS c\n" +
                 "LEFT JOIN halls AS h ON( c.id = h.cinema_id)\n" +

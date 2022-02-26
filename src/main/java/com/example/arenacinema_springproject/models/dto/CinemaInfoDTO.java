@@ -4,7 +4,12 @@ package com.example.arenacinema_springproject.models.dto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.apache.tomcat.jni.Local;
+
 import java.sql.Timestamp;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 
 @Getter
@@ -17,7 +22,8 @@ public class CinemaInfoDTO {
     private String projectionType;
     private String movieTitle;
     private String hallName;
-    private Timestamp projectionStart;
+    private LocalDate date;
+    private LocalTime time;
     private int freeSeats;
 
 }
