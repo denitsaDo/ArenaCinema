@@ -47,7 +47,7 @@ public class ProjectionService {
         p.setMovieForProjection(movieRepository.findById(projection.getMovieId()).orElseThrow(()-> new NotFoundException("Movie not found")));
         p.setHallForProjection(hallRepository.findById(projection.getHallId()).orElseThrow(()-> new NotFoundException("Hall not found")));
         p.setTypeForProjection(typeRepository.findById(projection.getTypeId()).orElseThrow(()-> new NotFoundException("Type not found")));
-        p.setStartTime(LocalDateTime.parse(projection.getStartTime().toString()));
+        p.setStartTime(projection.getStartTime());
 
         projectionRepository.save(p);
         ProjectionResponseDTO dto = modelMapper.map(p, ProjectionResponseDTO.class);

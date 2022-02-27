@@ -124,9 +124,5 @@ public class UserController extends BaseController{
 
     }
 
-    private void validateAccountOwner(int id, HttpServletRequest request) {
-        if((Integer) request.getSession().getAttribute(USER_ID) != id) {
-            throw new UnauthorizedException("Unauthorized action!");
-        }
-    }
+
 }

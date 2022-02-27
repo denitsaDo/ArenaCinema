@@ -3,6 +3,7 @@ package com.example.arenacinema_springproject.controllers;
 import com.example.arenacinema_springproject.models.dto.MovieAddDTO;
 import com.example.arenacinema_springproject.models.dto.MovieEditDTO;
 import com.example.arenacinema_springproject.models.dto.MovieResponseDTO;
+import com.example.arenacinema_springproject.models.dto.MovieResponseRatingDTO;
 import com.example.arenacinema_springproject.models.entities.Movie;
 import com.example.arenacinema_springproject.models.repositories.CategoryRepository;
 import com.example.arenacinema_springproject.models.repositories.MovieRepository;
@@ -52,6 +53,11 @@ public class MovieController extends BaseController {
     @GetMapping("/movies/{id}")
     public MovieResponseDTO getById(@PathVariable int id) {
         return movieService.getById(id);
+    }
+
+    @GetMapping("movies/rating/{id}")
+    public MovieResponseRatingDTO getRatingByMovieId(@PathVariable int id){
+        return movieService.getRatingByMovieId(id);
     }
 
     @SneakyThrows

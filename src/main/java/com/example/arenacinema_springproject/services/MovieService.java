@@ -155,15 +155,22 @@ public class MovieService {
         return name;
     }
 
-    public MovieResponseRatingDTO getRatingByMovieId(int id) {
+    public MovieResponseRatingDTO getRatingByMovieId(int movieId) {
+        if (!movieRepository.findById(movieId).isPresent()) {
+            throw new BadRequestException("No movie with this id");
+        }
         String sql = "SELECT ROUND (AVG(r.rating), 0)\n" +
                 "FROM users_rate_movies AS r \n" +
                 "JOIN movies AS m ON r.movie_id = m.id\n" +
-                "WHERE m.id = " + id;
-
-        int rating = jdbcTemplate.queryForObject(sql, Integer.class); //ratings are between 1 and 5
-        MovieResponseRatingDTO movieRating = new MovieResponseRatingDTO();
-        movieRating.setRating(rating);
-        return movieRating;
+                "WHERE m.id = " + movieId;
+        if (jdbcTemplate.queryForObject(sql, Integer.class) == null){
+            throw new BadRequestException("This movie is still not rated");
+        }
+        else {
+            int rating = jdbcTemplate.queryForObject(sql, Integer.class); //ratings are between 1 and 5
+            MovieResponseRatingDTO movieRating = new MovieResponseRatingDTO();
+            movieRating.setRating(rating);
+            return movieRating;
+        }
     }
 }
