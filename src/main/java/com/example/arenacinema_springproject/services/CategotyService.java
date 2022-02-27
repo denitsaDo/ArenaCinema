@@ -20,7 +20,7 @@ public class CategotyService {
     @Autowired
     private ModelMapper modelMapper;
 
-    public static final int MAX_LENGTH = 50;
+    public static final int MAX_LENGTH = 70;
 
     public CategoryResponseDTO add(CategoryAddDTO categoryAddDTO) {
         String name = categoryAddDTO.getName();

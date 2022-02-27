@@ -6,6 +6,7 @@ import com.example.arenacinema_springproject.exceptions.NotFoundException;
 import com.example.arenacinema_springproject.models.dto.CinemaWithoutCityDTO;
 import com.example.arenacinema_springproject.models.dto.CityAddDTO;
 import com.example.arenacinema_springproject.models.dto.CityWithCinemasDTO;
+import com.example.arenacinema_springproject.models.dto.CityWithoutCinemasDTO;
 import com.example.arenacinema_springproject.models.entities.Cinema;
 import com.example.arenacinema_springproject.models.entities.City;
 import com.example.arenacinema_springproject.models.repositories.CityRepository;
@@ -83,8 +84,10 @@ public class CityService {
 
     }
 
-    public List<City> getAll() {
-       return cityRepository.findAll();
+    public List<CityWithoutCinemasDTO> getAll() {
+        List<City> cities = cityRepository.findAll();
+        List<CityWithoutCinemasDTO> dto = cities.stream().map(city -> modelMapper.map(city, CityWithoutCinemasDTO.class)).collect(Collectors.toList());
+        return dto;
     }
 
 
