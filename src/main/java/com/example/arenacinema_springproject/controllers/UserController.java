@@ -1,6 +1,7 @@
 package com.example.arenacinema_springproject.controllers;
 
 
+import com.example.arenacinema_springproject.exceptions.BadRequestException;
 import com.example.arenacinema_springproject.exceptions.ConstraintValidationException;
 import com.example.arenacinema_springproject.exceptions.CreatedException;
 import com.example.arenacinema_springproject.exceptions.UnauthorizedException;
@@ -35,36 +36,39 @@ public class UserController extends BaseController{
 
 
 
-    @PostMapping("/login")
-    public UserResponseDTO login(@RequestBody User user, HttpSession session,  HttpServletRequest request){
-        if (session.getAttribute(LOGGED)!=null){
-            System.out.println("You are already logged!");
+    @PostMapping("/reg")
+    public ResponseEntity<UserResponseDTO> register(@Valid @RequestBody UserRegisterDTO user, BindingResult result, HttpServletRequest request) {
+        if (request.getSession().getAttribute(LOGGED)!=null){
+            throw new BadRequestException("You are already logged!");
         }
-        String email = user.getEmail();
-        String password = user.getPassword();
-        User u = userService.login(email,password);
-        session.setAttribute(LOGGED, true);
-        session.setAttribute(LOGGED_FROM, request.getRemoteAddr()); //chechk ip
-        session.setAttribute(USER_ID, u.getId());
-        session.setAttribute(ADMIN,u.isAdmin());
-        UserResponseDTO dto = modelMapper.map(u, UserResponseDTO.class);
-        return dto;
+        if (result.hasErrors()) {
+            throw new ConstraintValidationException(result.toString());
+        }
+        UserResponseDTO u = userService.register(user);
+        return ResponseEntity.ok(u);
     }
 
-    @GetMapping("/users/{id}")
-    public ResponseEntity<UserResponseDTO> getById(@PathVariable int id, HttpServletRequest request){
+    @PostMapping("/login")
+    public UserResponseDTO login(@RequestBody User user, HttpServletRequest request){
+        if (request.getSession().getAttribute(LOGGED)!=null){
+            throw new BadRequestException("You are already logged!");
+        }
+        UserResponseDTO u = userService.login(user, request);
+        return u;
+    }
+
+    @PutMapping("/users")
+    public ResponseEntity<UserResponseDTO> edit(@RequestBody UserEditDTO user, HttpServletRequest request) {
         validateLogin(request);
-        adminLogin(request);
-        User u = userService.getById(id);
-        UserResponseDTO dto = modelMapper.map(u, UserResponseDTO.class);
+        UserResponseDTO dto = userService.edit(user, request);
         return ResponseEntity.ok(dto);
     }
 
-    @GetMapping("/users")
-    public List<UserResponseDTO> getAll(HttpServletRequest request){
+    @PutMapping("/users/changePassword")
+    public ResponseEntity<UserResponseDTO> editPassword(@RequestBody UserPasswordEditDTO user, HttpServletRequest request) {
         validateLogin(request);
-        adminLogin(request);
-        return userService.getAllUsers();
+        UserResponseDTO dto = userService.editPassword(user, request);;
+        return ResponseEntity.ok(dto);
     }
 
     @PostMapping("/logout")
@@ -75,54 +79,35 @@ public class UserController extends BaseController{
     @DeleteMapping("/users")
     public void delete(HttpServletRequest request) {
         validateLogin(request);
-        int userId = (Integer) request.getSession().getAttribute(USER_ID);
-        userService.deleteUser(userId);
+        userService.deleteUser(request);
     }
 
-    @PostMapping("/reg")
-    public ResponseEntity<UserResponseDTO> register(@Valid @RequestBody UserRegisterDTO user, BindingResult result) {
-        if (result.hasErrors()) {
-            throw new ConstraintValidationException(result.toString());
-        }
-
-        User u = userService.register(user);
-        UserResponseDTO dto = modelMapper.map(u, UserResponseDTO.class);
-        return ResponseEntity.ok(dto);
-    }
-    
-    @PutMapping("/users")
-    public ResponseEntity<UserResponseDTO> edit(@RequestBody UserEditDTO user, HttpServletRequest request) {
+    @GetMapping("/users/{id}")
+    public ResponseEntity<UserResponseDTO> getById(@PathVariable int id, HttpServletRequest request){
         validateLogin(request);
-        int userId = (Integer) request.getSession().getAttribute(USER_ID);
-        UserResponseDTO dto = userService.edit(user, userId);
-        return ResponseEntity.ok(dto);
+        adminLogin(request);
+        UserResponseDTO u = userService.getById(id);
+        return ResponseEntity.ok(u);
     }
 
-    @PutMapping("/users/changePassword")
-    public ResponseEntity<UserResponseDTO> editPassword(@RequestBody UserPasswordEditDTO user, HttpServletRequest request) {
+    @GetMapping("/users")
+    public List<UserResponseDTO> getAll(HttpServletRequest request){
         validateLogin(request);
-        int userId = (Integer) request.getSession().getAttribute(USER_ID);
-        UserResponseDTO dto = userService.editPassword(user, userId);;
-        return ResponseEntity.ok(dto);
+        adminLogin(request);
+        return userService.getAllUsers();
     }
 
     @PostMapping("/users/ticket")
     public void buyTicket(@RequestBody TicketAddDTO ticket, HttpServletRequest request){
         validateLogin(request);
         int userId = (Integer) request.getSession().getAttribute(USER_ID);
-        Ticket ticket1 = ticketController.add(ticket, userId);
-        User u = userService.getById((Integer) request.getSession().getAttribute(USER_ID));
-//        u.getUserTickets().add(modelMapper.map(ticket1, Ticket.class));
-        //TOdo save user in DB
-        throw new CreatedException("Ticket added."); /*This user has " + u.getUserTickets().size() + " tickets.");*/
+        ticketController.add(ticket, userId);
+        throw new CreatedException("Ticket added.");
     }
 
     @PostMapping("/users/ratings")
     public void rateMovie(@RequestBody MovieRatingAddDTO movieRating, HttpServletRequest request){
         validateLogin(request);
         userService.rateMovie(movieRating, request);
-
     }
-
-
 }

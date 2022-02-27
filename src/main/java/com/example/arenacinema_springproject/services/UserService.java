@@ -1,4 +1,5 @@
 package com.example.arenacinema_springproject.services;
+import com.example.arenacinema_springproject.controllers.BaseController;
 import com.example.arenacinema_springproject.exceptions.*;
 import com.example.arenacinema_springproject.models.dto.*;
 import com.example.arenacinema_springproject.models.entities.User;
@@ -18,7 +19,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import static com.example.arenacinema_springproject.controllers.BaseController.USER_ID;
+import static com.example.arenacinema_springproject.controllers.BaseController.*;
 
 
 @Service
@@ -34,14 +35,15 @@ public class UserService {
     private PasswordEncoder passwordEncoder;
     @Autowired
     private ModelMapper modelMapper;
-    @Autowired
-    private JdbcTemplate jdbcTemplate;
+
 
     public static final int MAX_LENGTH = 30;
 
 
-    public User login(String email, String password) {
-        if (email == null || email.isBlank() ) {
+    public UserResponseDTO login(User user, HttpServletRequest request) {
+        String email = user.getEmail();
+        String password = user.getPassword();
+        if (email == null || email.isBlank()) {
             throw new BadRequestException("Email is mandatory!");
         }
         if (password == null || password.isBlank()) {
@@ -54,14 +56,20 @@ public class UserService {
             if (!passwordEncoder.matches(password, u.getPassword())) {
                 throw new UnauthorizedException("Wrong credentials.");
             }
-            return u;
+            request.getSession().setAttribute(LOGGED, true);
+            request.getSession().setAttribute(LOGGED_FROM, request.getRemoteAddr()); //chechk ip
+            request.getSession().setAttribute(USER_ID, u.getId());
+            request.getSession().setAttribute(ADMIN, u.isAdmin());
+            UserResponseDTO dto = modelMapper.map(u, UserResponseDTO.class);
+            return dto;
         }
     }
 
-    public User getById(int id) {
+    public UserResponseDTO getById(int id) {
         Optional<User> user = userRepository.findById(id);
         if (user.isPresent()) {
-            return user.get();
+            UserResponseDTO dto = modelMapper.map(user.get(), UserResponseDTO.class);
+            return dto;
         } else {
             throw new NotFoundException("User not found");
         }
@@ -72,17 +80,19 @@ public class UserService {
         return dto;
     }
 
-    public void deleteUser(int useId) {
-        Optional<User> optional = userRepository.findById(useId);
+    public void deleteUser(HttpServletRequest request) {
+        int userId = (Integer) request.getSession().getAttribute(USER_ID);
+        Optional<User> optional = userRepository.findById(userId);
         if (optional.isPresent()) {
             userRepository.delete(optional.get());
+            request.getSession().invalidate();
             throw new NoContentException();
         } else {
             throw new NotFoundException("No such user.");
         }
     }
 
-    public User register(UserRegisterDTO user) {
+    public UserResponseDTO register(UserRegisterDTO user) {
         validateMandatoryFields(user);
         if (user.getEmail() == null || user.getEmail().isBlank()) {
             throw new BadRequestException("All fields are mandatory");
@@ -107,12 +117,12 @@ public class UserService {
         u.setAdmin(false);
         u.setPassword(passwordEncoder.encode(user.getPassword()));  // bcrypt password
         userRepository.save(u);
-        return u;
+        UserResponseDTO dto = modelMapper.map(u, UserResponseDTO.class);
+        return dto;
     }
 
-
-    public UserResponseDTO edit(UserEditDTO user, int userId) {
-
+    public UserResponseDTO edit(UserEditDTO user, HttpServletRequest request) {
+        int userId = (Integer) request.getSession().getAttribute(USER_ID);
         Optional<User> opt = userRepository.findById(userId);
         if(opt.isPresent()){
             validateMandatoryFields(modelMapper.map(user, UserRegisterDTO.class));
@@ -130,10 +140,8 @@ public class UserService {
         }
     }
 
-
-
-
-    public UserResponseDTO editPassword(UserPasswordEditDTO user, int userId) {
+    public UserResponseDTO editPassword(UserPasswordEditDTO user, HttpServletRequest request) {
+        int userId = (Integer) request.getSession().getAttribute(USER_ID);
         Optional<User> opt = userRepository.findById(userId);
         if(opt.isPresent()){
             User u = opt.get();
@@ -153,6 +161,29 @@ public class UserService {
             throw new NotFoundException("User not found");
         }
     }
+
+    public void rateMovie(MovieRatingAddDTO movieRating, HttpServletRequest request) {
+        int userId = (Integer) request.getSession().getAttribute(USER_ID);
+        int movieId = movieRating.getMovieId();
+        int rating = movieRating.getRating();
+        if (userId ==0 || movieId ==0 || rating == 0) {
+            throw new BadRequestException("All fields are mandatory!");
+        }
+        if (rating !=1 && rating !=2 && rating !=3 && rating!=4 && rating !=5) {
+            throw new BadRequestException("Movie`s rating should be between 1 and 5 ");
+        }
+        if (usersRateMoviesRepository.findByUserRatesMovieIdAndMovieRatedByUserId(userId, movieId).isPresent()){
+            throw new BadRequestException("You have already rated this movie.");
+        }
+
+        UsersRateMovies newRating = new UsersRateMovies();
+        newRating.setUserRatesMovie(userRepository.findById(userId).orElseThrow(()-> new BadRequestException("No user with this id")));
+        newRating.setMovieRatedByUser(movieRepository.findById(movieId).orElseThrow(()-> new BadRequestException("No movie with this movie id")));
+        newRating.setRating(rating);
+        usersRateMoviesRepository.save(newRating);
+        throw new CreatedException("Rating added successfully");
+    }
+
     private void validateMandatoryFields(UserRegisterDTO user) {
         if (user.getFirstName() == null || user.getFirstName().isBlank() || user.getSecondName() == null || user.getSecondName().isBlank() || user.getLastName() == null || user.getLastName().isBlank() ||
                 user.getGender() == null || user.getGender().isBlank()  || user.getDateOfBirth() == null) {
@@ -177,38 +208,18 @@ public class UserService {
             throw new BadRequestException("You should be at least 16yo.");
         }
     }
+
     private void validateStrongPassword(String password) {
         if (!password.matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$")) {
             throw new BadRequestException("Your password must be at least 8 symbols and have at least one lowercase letter , " +
                     "one uppercase letter, one digit and one special character");
         }
     }
+
     private void validateMatchingPasswords(String password, String password2) {
         if (!password.equals(password2)) {
             throw new BadRequestException("Passwords mismatch.");
         }
     }
 
-
-    public void rateMovie(MovieRatingAddDTO movieRating, HttpServletRequest request) {
-        int userId = (Integer) request.getSession().getAttribute(USER_ID);
-        int movieId = movieRating.getMovieId();
-        int rating = movieRating.getRating();
-        if (userId ==0 || movieId ==0 || rating == 0) {
-            throw new BadRequestException("All fields are mandatory!");
-        }
-        if (rating !=1 && rating !=2 && rating !=3 && rating!=4 && rating !=5) {
-            throw new BadRequestException("Movie`s rating should be between 1 and 5 ");
-        }
-        if (usersRateMoviesRepository.findByUserRatesMovieIdAndMovieRatedByUserId(userId, movieId).isPresent()){
-            throw new BadRequestException("You have already rated this movie.");
-        }
-
-        UsersRateMovies newRating = new UsersRateMovies();
-        newRating.setUserRatesMovie(userRepository.findById(userId).orElseThrow(()-> new BadRequestException("No user with this id")));
-        newRating.setMovieRatedByUser(movieRepository.findById(movieId).orElseThrow(()-> new BadRequestException("No movie with this movie id")));
-        newRating.setRating(rating);
-        usersRateMoviesRepository.save(newRating);
-        throw new CreatedException("Rating added successfully");
-    }
 }
