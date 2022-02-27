@@ -13,8 +13,13 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Service;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -141,5 +146,22 @@ public class CinemaService {
         }
 
         return jdbcTemplate.queryForStream(sql, new CinemaRowMapper());
+    }
+
+    private class CinemaRowMapper implements RowMapper<CinemaInfoDTO> {
+        @Override
+        public CinemaInfoDTO mapRow(ResultSet rs, int rowNum) throws SQLException {
+            CinemaInfoDTO cinema = new CinemaInfoDTO();
+            cinema.setCinemaId(rs.getInt("id"));
+            cinema.setCinemaName(rs.getString("cinema_name"));
+            cinema.setProjectionId(rs.getInt("projection_id"));
+            cinema.setProjectionType(rs.getString("type_name"));
+            cinema.setMovieTitle(rs.getString("movie_title"));
+            cinema.setHallName(rs.getString("hall_name"));
+            cinema.setDate(LocalDate.parse(rs.getDate("projection_date").toString()));
+            cinema.setTime(LocalTime.parse(rs.getTime("projection_time").toString()));
+            cinema.setFreeSeats(rs.getInt("free_seats"));
+            return cinema;
+        }
     }
 }

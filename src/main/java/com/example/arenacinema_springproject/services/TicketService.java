@@ -2,6 +2,7 @@ package com.example.arenacinema_springproject.services;
 
 import com.example.arenacinema_springproject.exceptions.BadRequestException;
 import com.example.arenacinema_springproject.models.dto.TicketResponseDTO;
+import com.example.arenacinema_springproject.models.dto.TicketWithMovieInfoDTO;
 import com.example.arenacinema_springproject.models.dto.TicketsWithoutUserAndProjectionDTO;
 import com.example.arenacinema_springproject.models.dto.TicketAddDTO;
 import com.example.arenacinema_springproject.models.entities.Hall;
@@ -14,14 +15,21 @@ import com.example.arenacinema_springproject.models.repositories.UserRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import static com.example.arenacinema_springproject.controllers.BaseController.USER_ID;
 
 @Service
 public class TicketService {
@@ -77,11 +85,18 @@ public class TicketService {
 
     }
 
-    public List<TicketResponseDTO> getAllUserTickets(int id) {
-        List<TicketResponseDTO> dto = ticketRepository.findAllByOwnerId(id).stream()
-                .map(ticket -> modelMapper.map(ticket, TicketResponseDTO.class)).collect(Collectors.toList());
-        return dto;
+
+    public Stream<TicketWithMovieInfoDTO> getAllUserTickets (HttpServletRequest request) {
+        int userId = (Integer) request.getSession().getAttribute(USER_ID);
+        String sql = "SELECT m.title AS title, p.start_time AS projection_date, p.start_time AS projection_time, \n" +
+                "t.rownumber AS rownumber, t.seat_number AS seat_number\n" +
+                " FROM tickets AS t \n" +
+                "JOIN projections AS p ON (t.projection_id = p.id)\n" +
+                "JOIN movies AS m ON (p.movie_id = m.id)\n" +
+                "WHERE t.user_id = " + userId;
+            return jdbcTemplate.queryForStream(sql, new TicketRowMapper());
     }
+
 
     public ArrayList<TicketsWithoutUserAndProjectionDTO> getSeatsForProjection(int projectionId) {
         Hall hall = projectionRepository.findById(projectionId).orElseThrow().getHallForProjection();
@@ -122,5 +137,18 @@ public class TicketService {
             ticket.setSeatNumber(ticket.getSeatNumber()+1);
         }
         return ticketList;
+    }
+
+    private class TicketRowMapper implements RowMapper<TicketWithMovieInfoDTO>{
+        @Override
+        public TicketWithMovieInfoDTO mapRow(ResultSet rs, int rowNum) throws SQLException {
+            TicketWithMovieInfoDTO dto = new TicketWithMovieInfoDTO();
+            dto.setMovieTitle(rs.getString("title"));
+            dto.setDate(LocalDate.parse(rs.getDate("projection_date").toString()));
+            dto.setTime(LocalTime.parse(rs.getTime("projection_time").toString()));
+            dto.setRownumber(rs.getInt("rownumber"));
+            dto.setSeatNumber(rs.getInt("seat_number"));
+            return dto;
+        }
     }
 }

@@ -1,6 +1,7 @@
 package com.example.arenacinema_springproject.controllers;
 
 import com.example.arenacinema_springproject.models.dto.TicketResponseDTO;
+import com.example.arenacinema_springproject.models.dto.TicketWithMovieInfoDTO;
 import com.example.arenacinema_springproject.models.dto.TicketsWithoutUserAndProjectionDTO;
 import com.example.arenacinema_springproject.models.dto.TicketAddDTO;
 import com.example.arenacinema_springproject.models.entities.Ticket;
@@ -29,17 +30,8 @@ public class TicketController extends BaseController{
     }
 
     @GetMapping("/tickets")
-    public List<TicketResponseDTO> getUserTickets(HttpServletRequest request){
+    public Stream<TicketWithMovieInfoDTO> getUserTickets(HttpServletRequest request){
         validateLogin(request);
-        int userId = (Integer) request.getSession().getAttribute(USER_ID);
-        return ticketService.getAllUserTickets(userId);
+        return ticketService.getAllUserTickets(request);
     }
-
-
-    /*@GetMapping("/tickets/{projectionId}")
-        public List<TicketsWithoutUserAndProjectionDTO> getSeatsForProjection(@PathVariable int projectionId, HttpServletRequest request){
-        validateLogin(request);
-        List<TicketsWithoutUserAndProjectionDTO> seatsForProjection = ticketService.getSeatsForProjection(projectionId).stream().collect(Collectors.toList());
-        return seatsForProjection;
-    }*/
 }
