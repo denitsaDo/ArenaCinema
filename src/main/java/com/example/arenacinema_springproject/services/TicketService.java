@@ -85,7 +85,6 @@ public class TicketService {
 
     }
 
-
     public Stream<TicketWithMovieInfoDTO> getAllUserTickets (HttpServletRequest request) {
         int userId = (Integer) request.getSession().getAttribute(USER_ID);
         String sql = "SELECT m.title AS title, p.start_time AS projection_date, p.start_time AS projection_time, \n" +
@@ -96,7 +95,6 @@ public class TicketService {
                 "WHERE t.user_id = " + userId;
             return jdbcTemplate.queryForStream(sql, new TicketRowMapper());
     }
-
 
     public ArrayList<TicketsWithoutUserAndProjectionDTO> getSeatsForProjection(int projectionId) {
         Hall hall = projectionRepository.findById(projectionId).orElseThrow().getHallForProjection();
