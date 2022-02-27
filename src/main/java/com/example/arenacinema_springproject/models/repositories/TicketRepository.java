@@ -1,10 +1,7 @@
 package com.example.arenacinema_springproject.models.repositories;
 
-import com.example.arenacinema_springproject.models.dto.TicketAddDTO;
-import com.example.arenacinema_springproject.models.dto.TicketResponseDTO;
 import com.example.arenacinema_springproject.models.entities.Projection;
 import com.example.arenacinema_springproject.models.entities.Ticket;
-import org.springframework.data.domain.Example;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

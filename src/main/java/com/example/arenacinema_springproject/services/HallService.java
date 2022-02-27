@@ -43,17 +43,24 @@ public class HallService {
     }
 
 
-    public Hall getHallById(int id) {
-        return hallRepository.findById(id).orElseThrow(() -> new NotFoundException("Hall not found"));
+    public HallWithCinemaDTO getHallById(int id) {
+        Hall h = hallRepository.findById(id).orElseThrow(() -> new NotFoundException("Hall not found"));
+        HallWithCinemaDTO dto = new HallWithCinemaDTO();
+        dto.setId(h.getId());
+        dto.setName(h.getName());
+        dto.setRowsNumber(h.getRowsNumber());
+        dto.setSeatsPerRow(h.getSeatsPerRow());
+        dto.setCinemaForThisHall(modelMapper.map(h.getCinemaIn(), CinemaWithoutHallDTO.class));
+        return dto;
     }
 
 
-    public void delete(Hall hall) {
-        hallRepository.delete(hallRepository.findById(hall.getId()).orElseThrow(() -> new NotFoundException("No such hall.")));
+    public void delete(int id) {
+        hallRepository.delete(hallRepository.findById(id).orElseThrow(() -> new NotFoundException("No such hall.")));
     }
 
     public HallWithCinemaDTO edit(HallEditDTO hall) {
-//        validateHallData(modelMapper.map(hall, HallAddDTO.class));
+        validateHallData(modelMapper.map(hall, HallAddDTO.class));
         Optional<Hall> opt = hallRepository.findById(hall.getId());
         if(opt.isPresent()){
             Hall h = modelMapper.map(hall, Hall.class);

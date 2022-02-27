@@ -3,6 +3,7 @@ package com.example.arenacinema_springproject.services;
 import com.example.arenacinema_springproject.exceptions.BadRequestException;
 import com.example.arenacinema_springproject.exceptions.NoContentException;
 import com.example.arenacinema_springproject.exceptions.NotFoundException;
+import com.example.arenacinema_springproject.models.dto.TypeAddDto;
 import com.example.arenacinema_springproject.models.entities.Type;
 import com.example.arenacinema_springproject.models.repositories.TypeRepository;
 import org.modelmapper.ModelMapper;
@@ -21,7 +22,8 @@ public class TypeService {
     @Autowired
     private ModelMapper modelMapper;
 
-    public Type add(String name) {
+    public Type add(TypeAddDto type) {
+        String name = type.getName();
         if (name == null || name.isBlank()){
             throw new BadRequestException("Type is mandatory!");
         }

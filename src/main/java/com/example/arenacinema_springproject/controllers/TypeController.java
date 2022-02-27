@@ -22,8 +22,7 @@ public class TypeController extends BaseController{
     public ResponseEntity<Type> add(@RequestBody TypeAddDto type, HttpServletRequest request) {
         validateLogin(request);
         adminLogin(request);
-        String name = type.getName();
-        Type t = typeService.add(name);
+        Type t = typeService.add(type);
         return ResponseEntity.ok(t);
     }
 

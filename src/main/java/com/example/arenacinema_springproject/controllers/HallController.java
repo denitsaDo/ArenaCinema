@@ -37,8 +37,7 @@ public class HallController extends BaseController{
     public void delete(@PathVariable int id, HttpServletRequest request) {
         validateLogin(request);
         adminLogin(request);
-        Hall h = hallService.getHallById(id);
-        hallService.delete(h);
+        hallService.delete(id);
 
     }
 
@@ -53,15 +52,7 @@ public class HallController extends BaseController{
 
     @GetMapping("/halls/{id}")
     public ResponseEntity <HallWithCinemaDTO> getById(@PathVariable int id){
-        Hall h = hallService.getHallById(id);
-        HallWithCinemaDTO dto = new HallWithCinemaDTO();
-        dto.setId(h.getId());
-        dto.setName(h.getName());
-        dto.setRowsNumber(h.getRowsNumber());
-        dto.setSeatsPerRow(h.getSeatsPerRow());
-        dto.setCinemaForThisHall(modelMapper.map(h.getCinemaIn(), CinemaWithoutHallDTO.class));
-        return ResponseEntity.ok(dto);
+        HallWithCinemaDTO h = hallService.getHallById(id);
+        return ResponseEntity.ok(h);
     }
-
-
 }

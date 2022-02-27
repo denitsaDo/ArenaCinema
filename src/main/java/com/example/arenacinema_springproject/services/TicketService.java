@@ -1,7 +1,6 @@
 package com.example.arenacinema_springproject.services;
 
 import com.example.arenacinema_springproject.exceptions.BadRequestException;
-import com.example.arenacinema_springproject.models.dto.TicketResponseDTO;
 import com.example.arenacinema_springproject.models.dto.TicketWithMovieInfoDTO;
 import com.example.arenacinema_springproject.models.dto.TicketsWithoutUserAndProjectionDTO;
 import com.example.arenacinema_springproject.models.dto.TicketAddDTO;
@@ -49,8 +48,8 @@ public class TicketService {
 
 
 
-    public Ticket addTicketInService(TicketAddDTO ticket, int id) {
-        int userId= id;
+    public Ticket addTicketInService(TicketAddDTO ticket, HttpServletRequest request) {
+        int userId = (Integer) request.getSession().getAttribute(USER_ID);
         int projectionId = ticket.getProjectionId();
         int row = ticket.getRownumber();
         int seat = ticket.getSeatNumber();
@@ -135,6 +134,17 @@ public class TicketService {
             ticket.setSeatNumber(ticket.getSeatNumber()+1);
         }
         return ticketList;
+    }
+
+    private class OccupiedSeatsRowMapper implements RowMapper<TicketsWithoutUserAndProjectionDTO>{
+
+        @Override
+        public TicketsWithoutUserAndProjectionDTO mapRow(ResultSet rs, int rowNum) throws SQLException {
+            TicketsWithoutUserAndProjectionDTO dto = new TicketsWithoutUserAndProjectionDTO();
+            dto.setRownumber(rs.getInt("rownumber"));
+            dto.setSeatNumber(rs.getInt("seat_number"));
+            return dto;
+        }
     }
 
     private class TicketRowMapper implements RowMapper<TicketWithMovieInfoDTO>{

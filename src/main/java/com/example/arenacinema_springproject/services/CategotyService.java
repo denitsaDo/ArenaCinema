@@ -2,6 +2,7 @@ package com.example.arenacinema_springproject.services;
 
 import com.example.arenacinema_springproject.exceptions.BadRequestException;
 import com.example.arenacinema_springproject.exceptions.NotFoundException;
+import com.example.arenacinema_springproject.models.dto.CategoryAddDTO;
 import com.example.arenacinema_springproject.models.dto.CategoryResponseDTO;
 import com.example.arenacinema_springproject.models.entities.Category;
 import com.example.arenacinema_springproject.models.repositories.CategoryRepository;
@@ -21,7 +22,9 @@ public class CategotyService {
 
     public static final int MAX_LENGTH = 50;
 
-    public CategoryResponseDTO add(String name, String description) {
+    public CategoryResponseDTO add(CategoryAddDTO categoryAddDTO) {
+        String name = categoryAddDTO.getName();
+        String description = categoryAddDTO.getDescription();
         if (name == null || name.isBlank()){
             throw new BadRequestException("Category name is mandatory!");
         }

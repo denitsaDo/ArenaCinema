@@ -4,9 +4,7 @@ package com.example.arenacinema_springproject.controllers;
 import com.example.arenacinema_springproject.exceptions.BadRequestException;
 import com.example.arenacinema_springproject.exceptions.ConstraintValidationException;
 import com.example.arenacinema_springproject.exceptions.CreatedException;
-import com.example.arenacinema_springproject.exceptions.UnauthorizedException;
 import com.example.arenacinema_springproject.models.dto.*;
-import com.example.arenacinema_springproject.models.entities.Ticket;
 import com.example.arenacinema_springproject.models.entities.User;
 import com.example.arenacinema_springproject.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,12 +12,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import org.modelmapper.ModelMapper;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
-
 import java.util.List;
 
 @RestController
@@ -31,8 +26,6 @@ public class UserController extends BaseController{
     private UserService userService;
     @Autowired
     private TicketController ticketController;
-    @Autowired
-    private ModelMapper modelMapper;
 
 
 
@@ -100,8 +93,7 @@ public class UserController extends BaseController{
     @PostMapping("/users/ticket")
     public void buyTicket(@RequestBody TicketAddDTO ticket, HttpServletRequest request){
         validateLogin(request);
-        int userId = (Integer) request.getSession().getAttribute(USER_ID);
-        ticketController.add(ticket, userId);
+        ticketController.add(ticket, request);
         throw new CreatedException("Ticket added.");
     }
 

@@ -3,7 +3,6 @@ package com.example.arenacinema_springproject.controllers;
 import com.example.arenacinema_springproject.models.dto.CategoryAddDTO;
 import com.example.arenacinema_springproject.models.dto.CategoryResponseDTO;
 import com.example.arenacinema_springproject.models.entities.Category;
-import com.example.arenacinema_springproject.models.entities.City;
 import com.example.arenacinema_springproject.services.CategotyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -21,9 +20,7 @@ public class CategoryController extends BaseController{
     public ResponseEntity<CategoryResponseDTO> add(@RequestBody CategoryAddDTO categoryAddDTO, HttpServletRequest request){
         validateLogin(request);
         adminLogin(request);
-        String name = categoryAddDTO.getName();
-        String description = categoryAddDTO.getDescription();
-        CategoryResponseDTO category = categoryService.add(name, description);
+        CategoryResponseDTO category = categoryService.add(categoryAddDTO);
         return ResponseEntity.ok(category);
     }
 
