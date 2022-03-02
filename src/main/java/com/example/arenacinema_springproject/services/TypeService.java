@@ -6,7 +6,6 @@ import com.example.arenacinema_springproject.exceptions.NotFoundException;
 import com.example.arenacinema_springproject.models.dto.TypeAddDto;
 import com.example.arenacinema_springproject.models.entities.Type;
 import com.example.arenacinema_springproject.models.repositories.TypeRepository;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,8 +18,6 @@ public class TypeService {
 
     @Autowired
     private TypeRepository typeRepository;
-    @Autowired
-    private ModelMapper modelMapper;
 
     public Type add(TypeAddDto type) {
         String name = type.getName();

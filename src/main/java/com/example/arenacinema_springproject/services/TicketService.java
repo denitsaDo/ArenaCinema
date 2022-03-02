@@ -42,8 +42,6 @@ public class TicketService {
     @Autowired
     private HallRepository hallRepository;
     @Autowired
-    private ModelMapper modelMapper;
-    @Autowired
     JdbcTemplate jdbcTemplate;
 
 

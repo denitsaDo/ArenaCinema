@@ -1,12 +1,11 @@
 package com.example.arenacinema_springproject.models.entities;
 
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-import javax.persistence.Entity;
+
 import javax.persistence.*;
 import java.util.Date;
 import java.util.Set;
@@ -41,12 +40,6 @@ public class User {
     private Date dateOfBirth;
     @Column
     private boolean isAdmin;
-
-//    @OneToMany(mappedBy = "user")
-//    Set<MovieRating> ratings;
-
-//    @OneToMany(mappedBy = "owner")
-//    Set<Ticket> userTickets;
 
     @OneToMany(mappedBy = "userRatesMovie")
     Set<UsersRateMovies> ratings;

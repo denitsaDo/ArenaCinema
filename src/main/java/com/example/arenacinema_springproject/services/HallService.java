@@ -3,17 +3,17 @@ package com.example.arenacinema_springproject.services;
 
 import com.example.arenacinema_springproject.exceptions.BadRequestException;
 import com.example.arenacinema_springproject.exceptions.NotFoundException;
-import com.example.arenacinema_springproject.models.dto.*;
-import com.example.arenacinema_springproject.models.entities.Cinema;
+import com.example.arenacinema_springproject.models.dto.CinemaWithoutHallDTO;
+import com.example.arenacinema_springproject.models.dto.HallAddDTO;
+import com.example.arenacinema_springproject.models.dto.HallEditDTO;
+import com.example.arenacinema_springproject.models.dto.HallWithCinemaDTO;
 import com.example.arenacinema_springproject.models.entities.Hall;
 import com.example.arenacinema_springproject.models.repositories.CinemaRepository;
 import com.example.arenacinema_springproject.models.repositories.HallRepository;
-import org.aspectj.asm.IModelFilter;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service

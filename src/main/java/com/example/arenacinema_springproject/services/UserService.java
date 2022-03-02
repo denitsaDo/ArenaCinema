@@ -1,5 +1,5 @@
 package com.example.arenacinema_springproject.services;
-import com.example.arenacinema_springproject.controllers.BaseController;
+
 import com.example.arenacinema_springproject.exceptions.*;
 import com.example.arenacinema_springproject.models.dto.*;
 import com.example.arenacinema_springproject.models.entities.User;
@@ -9,7 +9,6 @@ import com.example.arenacinema_springproject.models.repositories.UserRepository;
 import com.example.arenacinema_springproject.models.repositories.UsersRateMoviesRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 

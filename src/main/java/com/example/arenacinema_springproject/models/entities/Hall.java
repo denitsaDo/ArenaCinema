@@ -1,6 +1,5 @@
 package com.example.arenacinema_springproject.models.entities;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -26,10 +25,8 @@ public class Hall {
     private int seatsPerRow;
     @ManyToOne
     @JoinColumn(name = "cinema_id")
-    //@JsonBackReference
     private Cinema cinemaIn;
 
     @OneToMany(mappedBy = "hallForProjection")
-    //@JsonManagedReference  //overcomes circular reference problem in city->cinema but doesn`t give needed functionality
     private Set<Projection> projections;
 }

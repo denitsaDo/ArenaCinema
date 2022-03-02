@@ -20,6 +20,5 @@ public class City {
     @Column
     private String name;
     @OneToMany(mappedBy = "citySelected", cascade = CascadeType.ALL)
-    //@JsonManagedReference    //overcomes circular reference problem   city->cinema but doesn`t give needed functionality
     private Set<Cinema> townCinemas;
 }

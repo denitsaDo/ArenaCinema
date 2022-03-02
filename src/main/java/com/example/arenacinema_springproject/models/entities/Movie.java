@@ -36,9 +36,6 @@ public class Movie {
     @JoinColumn(name = "category_id")
     private Category category;
 
-    //@OneToMany(mappedBy = "movie")
-    //Set<MovieRating> ratings;
-
     @OneToMany(mappedBy = "movieForProjection")
     private Set<Projection> projections;
 

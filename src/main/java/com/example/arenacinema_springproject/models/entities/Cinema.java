@@ -21,7 +21,6 @@ public class Cinema {
     private String name;
     @ManyToOne
     @JoinColumn(name = "city_id")
-    //@JsonBackReference     //this helps to overcome circular reference problem   city->cinema
     private City citySelected;
     @Column
     private String phoneNumber;
@@ -32,6 +31,5 @@ public class Cinema {
     private String email;
 
     @OneToMany(mappedBy = "cinemaIn")
-    //@JsonManagedReference  //overcomes circular reference problem in city->cinema but doesn`t give needed functionality
     private Set<Hall> halls;
 }

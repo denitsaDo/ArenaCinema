@@ -4,7 +4,6 @@ import com.example.arenacinema_springproject.models.dto.ProjectionAddDTO;
 import com.example.arenacinema_springproject.models.dto.ProjectionByIdDTO;
 import com.example.arenacinema_springproject.models.dto.ProjectionEditDTO;
 import com.example.arenacinema_springproject.models.dto.ProjectionResponseDTO;
-import com.example.arenacinema_springproject.models.entities.Projection;
 import com.example.arenacinema_springproject.services.ProjectionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
