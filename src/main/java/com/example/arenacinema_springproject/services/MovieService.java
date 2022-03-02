@@ -2,10 +2,7 @@ package com.example.arenacinema_springproject.services;
 
 import com.example.arenacinema_springproject.exceptions.BadRequestException;
 import com.example.arenacinema_springproject.exceptions.NotFoundException;
-import com.example.arenacinema_springproject.models.dto.MovieAddDTO;
-import com.example.arenacinema_springproject.models.dto.MovieEditDTO;
-import com.example.arenacinema_springproject.models.dto.MovieResponseDTO;
-import com.example.arenacinema_springproject.models.dto.MovieResponseRatingDTO;
+import com.example.arenacinema_springproject.models.dto.*;
 import com.example.arenacinema_springproject.models.entities.Movie;
 import com.example.arenacinema_springproject.models.repositories.CategoryRepository;
 import com.example.arenacinema_springproject.models.repositories.MovieRepository;
@@ -15,12 +12,15 @@ import org.apache.commons.io.FilenameUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 
 import java.io.File;
 import java.nio.file.Files;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.Optional;
 
@@ -162,15 +162,20 @@ public class MovieService {
         String sql = "SELECT ROUND (AVG(r.rating), 0)\n" +
                 "FROM users_rate_movies AS r \n" +
                 "JOIN movies AS m ON r.movie_id = m.id\n" +
-                "WHERE m.id = " + movieId;
-        if (jdbcTemplate.queryForObject(sql, Integer.class) == null){
-            throw new BadRequestException("This movie is still not rated");
-        }
-        else {
-            int rating = jdbcTemplate.queryForObject(sql, Integer.class); //ratings are between 1 and 5
-            MovieResponseRatingDTO movieRating = new MovieResponseRatingDTO();
-            movieRating.setRating(rating);
-            return movieRating;
+                "WHERE m.id = ?";
+        MovieResponseRatingDTO ratedMovie = jdbcTemplate.queryForObject(sql,new MovieRowMapper(),new Object[] {movieId});
+
+        return ratedMovie;
+    }
+
+    private class MovieRowMapper implements RowMapper<MovieResponseRatingDTO> {
+        @Override
+        public MovieResponseRatingDTO mapRow(ResultSet rs, int rowNum) throws SQLException {
+            MovieResponseRatingDTO movie = new MovieResponseRatingDTO();
+            movie.setRating(rs.getInt(1));
+            return movie;
         }
     }
+
+
 }

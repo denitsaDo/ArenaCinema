@@ -126,26 +126,29 @@ public class CinemaService {
                 "t.name AS type_name, p.start_time AS projection_date, p.start_time AS projection_time, \n" +
                 "((h.rows_number * h.seats_per_row) - (SELECT count(*) FROM kinoarena.tickets where tickets.projection_id = p.id))  AS free_seats\n" +
                 "FROM cinemas AS c\n" +
-                "LEFT JOIN halls AS h ON( c.id = h.cinema_id)\n" +
-                "LEFT JOIN projections AS p ON(h.id = p.hall_id)\n" +
-                "LEFT JOIN movies AS m ON(m.id = p.movie_id)\n" +
-                "LEFT JOIN cities ON(cities.id = c.city_id)\n" +
-                "LEFT JOIN types AS t ON(p.type_id = t.id)";
+                "JOIN halls AS h ON( c.id = h.cinema_id)\n" +
+                "JOIN projections AS p ON(h.id = p.hall_id)\n" +
+                "JOIN movies AS m ON(m.id = p.movie_id)\n" +
+                "JOIN cities ON(cities.id = c.city_id)\n" +
+                "JOIN types AS t ON(p.type_id = t.id)";
 
         if (cinemaWithFilters.getCity() != null && cinemaWithFilters.getType() != null) {
-            sql+= "WHERE cities.name LIKE " + "'%" + cinemaWithFilters.getCity() + "%'" + "AND t.name LIKE " + "'%" + cinemaWithFilters.getType() + "%'";
+            sql += "WHERE cities.name LIKE '%' ? '%'  AND t.name LIKE '%' ? '%'";
+            return jdbcTemplate.queryForStream(sql, new CinemaRowMapper(), cinemaWithFilters.getCity(), cinemaWithFilters.getType());
         }
         else {
-            if (cinemaWithFilters.getCity() != null ) {
-                sql+= "WHERE cities.name LIKE " + "'%" + cinemaWithFilters.getCity() + "%'" ;
+            if (cinemaWithFilters.getCity() != null) {
+                sql+= "WHERE cities.name LIKE '%' ? '%'" ;
+                return jdbcTemplate.queryForStream(sql, new CinemaRowMapper(), cinemaWithFilters.getCity());
             }
-
-            if ((cinemaWithFilters.getType() != null) ) {
-                sql+= "WHERE t.name LIKE " + "'%" + cinemaWithFilters.getType() + "%'";
+            if (cinemaWithFilters.getType() != null) {
+                sql+= "WHERE t.name LIKE '%' ? '%'";
+                return jdbcTemplate.queryForStream(sql, new CinemaRowMapper(), cinemaWithFilters.getType());
             }
         }
 
         return jdbcTemplate.queryForStream(sql, new CinemaRowMapper());
+
     }
 
     private class CinemaRowMapper implements RowMapper<CinemaInfoDTO> {

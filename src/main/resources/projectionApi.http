@@ -10,8 +10,6 @@ Content-Type: application/json
 
 }
 
-### get by id
-GET localhost:9999/projections/1
 
 ### edit
 PUT localhost:9999/projections
@@ -27,3 +25,7 @@ Content-Type: application/json
 
 ### remove
 DELETE localhost:9999/projections/5
+
+
+### get by id
+GET localhost:9999/projections/1

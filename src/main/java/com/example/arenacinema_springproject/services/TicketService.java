@@ -88,7 +88,7 @@ public class TicketService {
         int userId = (Integer) request.getSession().getAttribute(USER_ID);
         String sql = "SELECT m.title AS title, p.start_time AS projection_date, p.start_time AS projection_time, \n" +
                 "t.rownumber AS rownumber, t.seat_number AS seat_number\n" +
-                " FROM tickets AS t \n" +
+                "FROM tickets AS t \n" +
                 "JOIN projections AS p ON (t.projection_id = p.id)\n" +
                 "JOIN movies AS m ON (p.movie_id = m.id)\n" +
                 "WHERE t.user_id = " + userId;
@@ -122,9 +122,9 @@ public class TicketService {
 
 
     private Stream<TicketsWithoutUserAndProjectionDTO> getOccupiedSeatsForProjection(int projectionId) {
-        String sql = "SELECT rownumber , seat_number FROM tickets WHERE projection_id =" + projectionId;
+        String sql = "SELECT rownumber , seat_number FROM tickets WHERE projection_id = ?" ;
 
-        return jdbcTemplate.queryForStream(sql,new OccupiedSeatsRowMapper());
+        return jdbcTemplate.queryForStream(sql,new OccupiedSeatsRowMapper(), projectionId);
     }
 
     private ArrayList<TicketsWithoutUserAndProjectionDTO> fixIndexesOfTicketWithoutUserDtoList(ArrayList<TicketsWithoutUserAndProjectionDTO> ticketList){

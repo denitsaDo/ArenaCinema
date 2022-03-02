@@ -84,12 +84,7 @@ public class ProjectionService {
             modifiedProjection.setTypeForProjection(typeRepository.findById(projection.getTypeId()).orElseThrow());
             modifiedProjection.setStartTime( projection.getStartTime());
             modifiedProjection.setProjectionTickets(opt.get().getProjectionTickets());
-
             projectionRepository.save(modifiedProjection);
-//            CinemaWithCityAndHallsDTO dto = new CinemaWithCityAndHallsDTO();
-//            modelMapper.map(c,dto);
-//            dto.setCityForCinema(modelMapper.map(c.getCitySelected(), CityWithoutCinemasDTO.class));
-//            return dto;
             ProjectionResponseDTO dto = new ProjectionResponseDTO();
             modelMapper.map(modifiedProjection, dto);
             return dto;

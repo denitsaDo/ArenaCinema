@@ -37,6 +37,6 @@ GET localhost:9999/cinemas
 Content-Type: application/json
 
 {
-  "city" : "burgas",
-  "type" : "3D real"
+  "city" : "bur",
+  "type" : null
 }
