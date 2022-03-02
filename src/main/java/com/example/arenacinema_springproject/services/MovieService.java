@@ -9,6 +9,7 @@ import com.example.arenacinema_springproject.models.repositories.MovieRepository
 
 import lombok.SneakyThrows;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.tika.Tika;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -146,6 +147,7 @@ public class MovieService {
 
     @SneakyThrows
     public String uploadFile(MultipartFile file, int id) {
+        validateFile(file);
         String extension = FilenameUtils.getExtension(file.getOriginalFilename());
         String name = System.nanoTime() + "." + extension;
         Files.copy(file.getInputStream(), new File("/Users/dezizlava/Desktop/ArenaCinema/uploads" + File.separator + name).toPath());
@@ -177,5 +179,16 @@ public class MovieService {
         }
     }
 
+    @SneakyThrows
+    public static void validateFile(MultipartFile multipartFile) {
+        Tika tika = new Tika();
+
+        String detectedType = tika.detect(multipartFile.getInputStream());
+
+        if (!detectedType.contains("image")){
+            throw new BadRequestException("Wrong media type.");
+        }
+
+    }
 
 }
