@@ -1,2 +1,27 @@
-ArenaCinema Project.
-Прегледа на кина и прожекции в тях, с възжможност за филтриране по град или по тип на прожекцията. Логин и регистрация. След логин потребителя може да си запази билети за определени места, за определена прожекция, както и да следи кои са свободни и кои не. Възможност за админ операции - да се добавят/редактира/изтриват кина, зала, прожекции.
+“Arena Cinema” final project
+	
+	➤ IT Talents Season 13 
+
+Technologies, APIs & Software
+
+	➤	Web application, based on Spring. 
+	➤	Technologies used are:
+	➤	Java 17
+	➤	Spring Framework;
+	➤	Spring Boot + Tomcat Servlet Container
+	➤	Spring Data: JPA + Hibernate; JdbcTemplate
+	➤	SpringMVC: RESTful Webservice
+	➤	Lombok
+	➤	Bean Validation API 
+	➤	IntelliJ Maven, MySQL, Postman, GIT
+
+Main functionality
+
+	➤	Registration and login
+	➤	Edit profile and change password
+	➤	Buy ticket 
+	➤	Check free/occupied seats for a projection
+	➤	Rate a movie 
+	➤	Get movie rating
+	➤	Review cinemas and projections in them (optional filter by city and/or projection type)
+	➤	Admin profile for managing movies, cinemas, projections, halls, categories and types
